@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#111111" id="themeColor">
+  <meta name="description" content="Get in touch with Lou Reyes for graphic design projects, creative collaborations, and general inquiries.">
+
+  <title>Contact — Lou Reyes</title>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem("lou-reyes-theme");
+      document.documentElement.dataset.theme =
+        saved === "light" ? "light" : "dark";
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/archive.css">
+  <link rel="stylesheet" href="css/contact.css">
+</head>
+
+<body>
+
+  <!-- ======================================================
+       01. HEADER
+  ====================================================== -->
+
+  <header class="site-header">
+
+    <a
+      href="index.html"
+      class="archive-brand"
+      aria-label="Lou Reyes homepage"
+    >
+      LOU REYES
+    </a>
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuScreen"
+      aria-label="Open navigation"
+    >
+      <span class="menu-lines" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+  </header>
+
+
+  <!-- ======================================================
+       02. FULLSCREEN NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="menu-screen"
+    id="menuScreen"
+    aria-label="Main navigation"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="menu-left">
+
+      <div class="menu-links">
+        <a href="index.html">Home</a>
+        <a href="archive.html">The Archive</a>
+        <a href="about.html">The Designer</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </div>
+
+      <div class="menu-footer">
+
+        
+        <div class="theme-controls">
+
+          <span class="micro">APPEARANCE</span>
+
+          <div class="theme-options" role="group" aria-label="Appearance">
+
+            <button type="button" id="lightTheme">
+              <span aria-hidden="true">☼</span>
+              <span>LIGHT</span>
+            </button>
+
+            <button type="button" id="darkTheme">
+              <span aria-hidden="true">☾</span>
+              <span>DARK</span>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="menu-meta micro">
+          <span>LOU REYES / 2026</span>
+          <span>TORONTO, CANADA</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu-right">
+      <img
+        src="portfolio/assets/contact.webp"
+        alt="VIRTÙ editorial artwork"
+      >
+    </div>
+
+  </nav>
+
+
+  <!-- ======================================================
+       03. CONTACT EXPERIENCE
+  ====================================================== -->
+
+  <main id="mainContent">
+
+    <section class="contact-experience">
+
+      <!-- LEFT / VISUAL EDITORIAL PANEL -->
+
+      <div class="contact-visual">
+
+        <div class="contact-visual-art" aria-hidden="true">
+
+          <img
+            src="portfolio/assets/contact.webp"
+            alt=""
+            class="contact-art-image"
+          >
+
+        </div>
+
+        <div class="contact-visual-top">
+
+          <span class="micro">
+            THE CORRESPONDENCE
+          </span>
+
+          <span class="micro">
+            001 / CONTACT
+          </span>
+
+        </div>
+
+        <div class="contact-visual-content">
+
+          <span class="micro contact-kicker">
+            AN OPEN INVITATION
+          </span>
+
+          <h1>
+            LET'S<br>
+            <em>TALK.</em>
+          </h1>
+
+          <p>
+            Every meaningful collaboration
+            begins with a conversation.
+          </p>
+
+        </div>
+
+        <div class="contact-visual-bottom">
+
+          <span class="micro">
+            TORONTO, CANADA
+          </span>
+
+          <span class="micro">
+            INDEPENDENT / CREATIVE
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- RIGHT / CONTACT DETAILS -->
+
+      <div class="contact-content">
+
+        <div class="contact-content-top">
+
+          <span class="micro muted">
+            CONTACT / LOU REYES
+          </span>
+
+          <span class="micro muted">
+            INQUIRIES & COLLABORATIONS
+          </span>
+
+        </div>
+
+
+        <div class="contact-introduction">
+
+          <span class="micro muted">
+            START A CONVERSATION
+          </span>
+
+          <h2>
+            Have something<br>
+            <em>in mind?</em>
+          </h2>
+
+          <p>
+            Whether it's a design project, a collaboration,
+            or simply an idea worth discussing, I'd love
+            to hear about it.
+          </p>
+
+        </div>
+
+
+        <!-- CONTACT FORM -->
+
+        <form class="contact-form" id="contactForm">
+
+          <div class="contact-form-row">
+
+            <div class="contact-field">
+
+              <label for="contactName" class="micro">
+                YOUR NAME
+              </label>
+
+              <input
+                id="contactName"
+                name="name"
+                type="text"
+                placeholder="How should I address you?"
+                autocomplete="name"
+                required
+              >
+
+            </div>
+
+            <div class="contact-field">
+
+              <label for="contactEmail" class="micro">
+                EMAIL ADDRESS
+              </label>
+
+              <input
+                id="contactEmail"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="contact-field">
+
+            <label for="contactSubject" class="micro">
+              SUBJECT
+            </label>
+
+            <select
+              id="contactSubject"
+              name="subject"
+              required
+            >
+              <option value="" disabled selected>
+                What would you like to discuss?
+              </option>
+
+              <option value="Design Project">
+                Design Project
+              </option>
+
+              <option value="Creative Collaboration">
+                Creative Collaboration
+              </option>
+
+              <option value="Professional Opportunity">
+                Professional Opportunity
+              </option>
+
+              <option value="General Inquiry">
+                General Inquiry
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="contact-field contact-message-field">
+
+            <label for="contactMessage" class="micro">
+              YOUR MESSAGE
+            </label>
+
+            <textarea
+              id="contactMessage"
+              name="message"
+              rows="5"
+              placeholder="Tell me a little about your idea..."
+              required
+            ></textarea>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="contact-submit"
+          >
+            <span>SEND YOUR MESSAGE</span>
+            <span aria-hidden="true">↗</span>
+          </button>
+
+          <p
+            class="contact-form-note"
+            id="contactFormNote"
+            role="status"
+            aria-live="polite"
+          >
+            Your email application will open with the message prepared.
+          </p>
+
+        </form>
+
+
+        <!-- DIRECT CONTACT -->
+
+        <div class="contact-direct">
+
+          <div class="contact-direct-heading">
+
+            <span class="micro muted">
+              PREFER A DIRECT APPROACH?
+            </span>
+
+            <span class="micro muted">
+              002 / DETAILS
+            </span>
+
+          </div>
+
+          <div class="contact-direct-row">
+
+            <div>
+              <span class="micro muted">
+                EMAIL
+              </span>
+
+              <a
+                href="#"
+                id="contactEmailLink"
+                class="contact-email-link"
+              >
+                EMAIL ME ↗
+              </a>
+            </div>
+
+            <div>
+              <span class="micro muted">
+                LOCATION
+              </span>
+
+              <span class="contact-location">
+                Toronto, Canada
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         04. CLOSING
+    ================================================== -->
+
+    <section class="contact-closing">
+
+      <span class="micro muted">
+        THE WORK CONTINUES
+      </span>
+
+      <a href="archive.html" class="contact-closing-link">
+
+        <span>
+          Back to<br>
+          <em>the Archive.</em>
+        </span>
+
+        <span class="contact-closing-arrow" aria-hidden="true">
+          ↗
+        </span>
+
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================
+       05. FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <span class="micro">
+      © 2026 LOU REYES
+    </span>
+
+    <span class="micro muted">
+      TORONTO, CANADA
+    </span>
+
+    <a href="index.html" class="micro">
+      BACK TO HOME ↗
+    </a>
+
+  </footer>
+
+
+  <script src="js/contact.js"></script>
+
+</body>
+</html>

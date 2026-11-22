@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#111111" id="themeColor">
+  <meta name="description" content="A project from the design portfolio of Lou Reyes." id="pageDescription">
+
+  <title>Project — Lou Reyes</title>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem("lou-reyes-theme");
+      document.documentElement.dataset.theme =
+        saved === "light" ? "light" : "dark";
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/archive.css">
+  <link rel="stylesheet" href="css/work.css">
+  <link rel="stylesheet" href="css/page-transition.css">
+
+    <style>
+      @view-transition {
+        navigation: auto;
+      }
+    </style>
+
+    <style>
+      #mainContent {
+        visibility: hidden;
+      }
+
+      html.work-ready #mainContent {
+        visibility: visible;
+      }
+    </style>
+</head>
+
+<body>
+
+  <!-- ======================================================
+       01. HEADER
+  ====================================================== -->
+
+    <header class="site-header">
+
+    <a
+      href="index.html"
+      class="archive-brand"
+      aria-label="Lou Reyes homepage"
+    >
+      LOU REYES
+    </a>
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuScreen"
+      aria-label="Open navigation"
+    >
+      <span class="menu-lines" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+  </header>
+
+
+  <!-- ======================================================
+       02. FULLSCREEN NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="menu-screen"
+    id="menuScreen"
+    aria-label="Main navigation"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="menu-left">
+
+      <div class="menu-links">
+        <a href="index.html">Home</a>
+        <a href="archive.html">The Archive</a>
+        <a href="about.html">The Designer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <div class="menu-footer">
+
+        
+        <div class="theme-controls">
+
+          <span class="micro">APPEARANCE</span>
+
+          <div class="theme-options" role="group" aria-label="Appearance">
+
+            <button type="button" id="lightTheme">
+              <span aria-hidden="true">☼</span>
+              <span>LIGHT</span>
+            </button>
+
+            <button type="button" id="darkTheme">
+              <span aria-hidden="true">☾</span>
+              <span>DARK</span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="menu-meta micro">
+          <span>LOU REYES / 2026</span>
+          <span>TORONTO, CANADA</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu-right">
+      <img
+        src="portfolio/editorial/virtu/landscape.webp"
+        alt="VIRTÙ editorial artwork"
+      >
+    </div>
+
+  </nav>
+
+
+  <!-- ======================================================
+       03. PROJECT HERO
+  ====================================================== -->
+
+  <main id="mainContent">
+
+    <section class="work-hero">
+
+      <img id="workHeroImage" alt="">
+
+      <div class="work-hero-content">
+
+        <div class="work-hero-top micro">
+
+          <a href="archive.html" id="workBack">
+            <span aria-hidden="true">←</span>
+            <span>BACK TO COLLECTION</span>
+          </a>
+
+          <span id="workEyebrow">
+            THE PROJECT
+          </span>
+
+        </div>
+
+        <div class="work-hero-bottom">
+
+          <div class="work-hero-heading">
+
+            <h1 id="workTitle">PROJECT.</h1>
+
+            <p id="workHeroDescription"></p>
+
+          </div>
+
+          <span class="micro work-hero-year" id="workHeroYear"></span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         04. DYNAMIC PROJECT PRESENTATION
+    ================================================== -->
+
+    <section class="work-presentation">
+
+      <div class="work-minimal-heading">
+        <span class="micro" id="workPresentationLabel">
+          THE PUBLICATION
+        </span>
+
+        <span class="micro" id="workPresentationDetail">
+          AN INTERACTIVE EDITORIAL ARCHIVE
+        </span>
+      </div>
+
+      <div id="workPresentation"></div>
+
+    </section>
+
+
+    <!-- ==================================================
+         05. NEXT PROJECT
+    ================================================== -->
+
+    <a href="archive.html" class="work-next" id="workNext">
+
+      <span class="micro muted">
+        CONTINUE EXPLORING
+      </span>
+
+      <div class="work-next-row">
+
+        <h2 id="workNextTitle">NEXT PROJECT</h2>
+
+        <span class="work-next-arrow" aria-hidden="true">↗</span>
+
+      </div>
+
+      <span class="micro muted" id="workNextCategory"></span>
+
+    </a>
+
+  </main>
+
+
+  <!-- ======================================================
+       06. FULLSCREEN IMAGE VIEWER
+  ====================================================== -->
+
+  <div
+    class="work-lightbox"
+    id="workLightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Project image viewer"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="work-lightbox-toolbar">
+
+      <span class="micro" id="lightboxTitle">
+        PROJECT IMAGE
+      </span>
+
+      <button type="button" class="micro" id="lightboxClose">
+        CLOSE ✕
+      </button>
+
+    </div>
+
+    <div class="work-lightbox-stage" id="lightboxStage">
+
+      <img id="lightboxImage" alt="" draggable="false">
+
+    </div>
+
+    <div class="work-lightbox-footer">
+
+      <span class="micro" id="lightboxCounter">
+        01 / 01
+      </span>
+
+      <div class="work-lightbox-zoom">
+
+        <button type="button" id="lightboxZoomOut" aria-label="Zoom out">−</button>
+
+        <span id="lightboxZoomLevel">100%</span>
+
+        <button type="button" id="lightboxZoomIn" aria-label="Zoom in">+</button>
+
+        <button type="button" id="lightboxZoomReset">RESET</button>
+
+      </div>
+
+      <div class="work-lightbox-arrows">
+
+        <button type="button" id="lightboxPrev" aria-label="Previous image">←</button>
+
+        <button type="button" id="lightboxNext" aria-label="Next image">→</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================================
+       07. FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <span class="micro">© 2026 LOU REYES</span>
+
+    <a href="contact.html" class="micro">
+      GET IN TOUCH ↗
+    </a>
+
+  </footer>
+
+
+  <script src="js/portfolio-data.js"></script>
+  <script src="js/work.js"></script>
+  <script src="js/featured-work-return.js"></script>
+  <script src="js/page-transition.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1236 @@
+
+/* ==========================================================
+   LOU REYES — THE ARCHIVE
+   CINEMATIC COLLECTION INDEX
+========================================================== */
+
+
+/* ==========================================================
+   01. FONTS & VARIABLES
+========================================================== */
+
+@font-face {
+  font-family: "Boska";
+  src: url("../fonts/Boska-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Boska";
+  src: url("../fonts/Boska-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+
+:root,
+html[data-theme="dark"] {
+  --bg: #111111;
+  --surface: #191919;
+  --ink: #e9e7e1;
+  --muted: #96928b;
+  --line: rgba(233, 231, 225, .18);
+
+  --serif: "Boska", Georgia, serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+
+  --archive-text: #f2efe9;
+  --archive-secondary: #c7c2b9;
+  --archive-shade: rgba(0, 0, 0, .24);
+}
+
+html[data-theme="light"] {
+  --bg: #e9e7e1;
+  --surface: #dedbd4;
+  --ink: #191918;
+  --muted: #77746f;
+  --line: rgba(25, 25, 24, .18);
+
+  --archive-text: #f2efe9;
+  --archive-secondary: #ded9d0;
+  --archive-shade: rgba(0, 0, 0, .22);
+}
+
+
+/* ==========================================================
+   02. GLOBAL
+========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 5px;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.micro {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+
+/* ==========================================================
+   03. HEADER
+========================================================== */
+
+.site-header {
+  position: relative;
+  z-index: 100;
+
+  width: 100%;
+  height: 100px;
+  padding: 0 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.archive-brand {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+
+.menu-button {
+  position: relative;
+  z-index: 110;
+
+  width: 34px;
+  height: 34px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.menu-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+
+  gap: 7px;
+  width: 21px;
+}
+
+.menu-lines i {
+  display: block;
+
+  width: 21px;
+  height: 1px;
+
+  background: currentColor;
+  transform-origin: center;
+
+  transition:
+    width .25s ease,
+    transform .35s ease;
+}
+
+.menu-lines i:last-child {
+  width: 14px;
+}
+
+.menu-button:hover .menu-lines i:last-child {
+  width: 21px;
+}
+
+.menu-button.active .menu-lines i:first-child {
+  transform: translateY(4px) rotate(45deg);
+}
+
+/* MENU CLOSE ICON — VISIBLE OVER ARTWORK */
+
+.menu-button.active {
+  color: #f2efe9;
+}
+
+.menu-button.active .menu-lines i {
+  background: currentColor;
+}
+
+.menu-button.active .menu-lines i:last-child {
+  width: 21px;
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+
+/* ==========================================================
+   04. FULLSCREEN NAVIGATION
+========================================================== */
+
+.menu-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+
+  background: var(--surface);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity .5s var(--ease),
+    visibility .5s;
+}
+
+.menu-screen.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.menu-left {
+  padding: 125px 8% 50px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-links a {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+
+  font: 400 clamp(52px, 6.5vw, 110px)/.95 var(--serif);
+
+  transition:
+    padding .5s var(--ease),
+    color .3s;
+}
+
+.menu-links a:hover {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.menu-links a[aria-current="page"] {
+  color: var(--muted);
+}
+
+.menu-footer {
+  margin-top: 38px;
+}
+
+.theme-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.theme-controls > .micro {
+  color: var(--muted);
+}
+
+.theme-options {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+
+  border: 1px solid var(--line);
+}
+
+.theme-options button {
+  min-width: 95px;
+  min-height: 36px;
+  padding: 9px 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--ink);
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .04em;
+
+  opacity: 1;
+
+  transition:
+    background .25s ease,
+    color .25s ease;
+}
+
+.theme-options button + button {
+  border-left: 1px solid var(--line);
+}
+
+.theme-options button span:first-child {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.theme-options button:hover:not(.active) {
+  background: var(--line);
+}
+
+.theme-options button.active {
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.menu-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-top: 35px;
+  color: var(--muted);
+}
+
+.menu-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(.8) brightness(.6);
+}
+
+.menu-right::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    var(--surface),
+    transparent 55%
+  );
+
+  pointer-events: none;
+}
+
+
+/* ==========================================================
+   05. ARCHIVE SHOWCASE
+========================================================== */
+
+.archive-showcase {
+  position: relative;
+  isolation: isolate;
+
+  width: 100%;
+  min-height: 720px;
+  height: calc(100svh - 100px);
+
+  overflow: hidden;
+
+  /* Deliberately dark for the cinematic artwork
+     in both site themes. */
+  background: #111111;
+}
+
+
+/* ==========================================================
+   06. BACKGROUND REVEAL
+========================================================== */
+
+.archive-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.archive-background-image {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  opacity: 0;
+  transform: scale(1.045);
+
+  transition:
+    opacity .8s ease,
+    transform 1.35s var(--ease);
+}
+
+.archive-background-image.is-visible {
+  opacity: .68;
+  transform: scale(1);
+}
+
+.archive-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, .55),
+      rgba(0, 0, 0, .23) 50%,
+      rgba(0, 0, 0, .55)
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .40),
+      rgba(0, 0, 0, .12) 45%,
+      rgba(0, 0, 0, .70)
+    );
+}
+
+
+/* ==========================================================
+   07. TOP METADATA
+========================================================== */
+
+.archive-top {
+  position: absolute;
+  z-index: 8;
+
+  top: 35px;
+  left: 4.5%;
+  right: 4.5%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  color: #b1aca4;
+}
+
+
+/* ==========================================================
+   08. CENTRAL TITLE
+========================================================== */
+
+.archive-center {
+  position: absolute;
+  z-index: 6;
+
+  top: 49%;
+  left: 50%;
+
+  width: 100%;
+  padding: 35px 2%;
+
+  transform: translate(-50%, -50%);
+
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Subtle contrast behind the typography. */
+
+.archive-center::before {
+  content: "";
+
+  position: absolute;
+  z-index: -1;
+  inset: -20px 0;
+
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(0, 0, 0, .09) 25%,
+    rgba(0, 0, 0, .27) 50%,
+    rgba(0, 0, 0, .09) 75%,
+    transparent
+  );
+
+  pointer-events: none;
+}
+
+.archive-title {
+  position: relative;
+  display: block;
+
+  width: 100%;
+  margin: 0;
+
+  font-family: var(--serif);
+  font-size: clamp(90px, 13.5vw, 240px);
+  font-weight: 400;
+  line-height: .92;
+  letter-spacing: -.065em;
+
+  text-align: center;
+  white-space: nowrap;
+
+  color: var(--archive-text);
+
+  text-shadow:
+    0 3px 10px rgba(0, 0, 0, .32),
+    0 0 20px rgba(0, 0, 0, .12);
+
+  transition:
+    opacity .24s ease,
+    transform .42s var(--ease),
+    filter .4s ease,
+    font-size .4s var(--ease);
+}
+
+.archive-title.long-title {
+  font-size: clamp(48px, 8vw, 150px);
+}
+
+.archive-title.is-changing {
+  opacity: 0;
+  transform: translateY(13px);
+  filter: blur(7px);
+}
+
+.archive-subtitle {
+  position: relative;
+
+  margin: 22px 0 0;
+
+  color: var(--archive-secondary);
+
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .24em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+
+/* ==========================================================
+   09. SIX-CARD HORIZONTAL GALLERY
+========================================================== */
+
+.archive-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(8px, 1vw, 18px);
+  padding: 0 3.2%;
+}
+
+.archive-card {
+  position: relative;
+
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  max-width: 300px;
+
+  aspect-ratio: 3 / 4.35;
+
+  display: block;
+  overflow: hidden;
+
+  background: #242321;
+  border: 1px solid rgba(255, 255, 255, .12);
+
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .25);
+
+  transform: translateY(0);
+
+  transition:
+    transform .65s var(--ease),
+    opacity .6s ease,
+    border-color .4s ease,
+    box-shadow .6s ease;
+
+  cursor: pointer;
+}
+
+.archive-card-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.archive-card-image img {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  /* A display filter, not image recompression. */
+  filter: saturate(.85) brightness(.82);
+
+  transition:
+    opacity .65s ease,
+    filter .65s ease;
+}
+
+.archive-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    180deg,
+    transparent 45%,
+    rgba(0, 0, 0, .65)
+  );
+}
+
+
+/* ==========================================================
+   10. LABELS INSIDE THE CARDS
+========================================================== */
+
+.archive-card-meta {
+  position: absolute;
+  z-index: 2;
+
+  left: 13px;
+  right: 13px;
+  bottom: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  color: #ffffff;
+
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.archive-card-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.archive-card-number {
+  flex-shrink: 0;
+  opacity: .75;
+}
+
+
+/* ==========================================================
+   11. CARD INTERACTIONS
+========================================================== */
+
+.archive-card:hover,
+.archive-card.is-active {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, .42);
+
+  box-shadow: 0 28px 75px rgba(0, 0, 0, .32);
+}
+
+.archive-card.is-active .archive-card-image img {
+  opacity: .48;
+  filter: saturate(.75) brightness(.78);
+}
+
+.archive-showcase.has-selection
+.archive-card:not(.is-active) {
+  opacity: .68;
+}
+
+.archive-showcase.has-selection
+.archive-card:not(.is-active):hover {
+  opacity: 1;
+}
+
+
+/* ==========================================================
+   12. BOTTOM INFORMATION
+========================================================== */
+
+.archive-bottom {
+  position: absolute;
+  z-index: 8;
+
+  left: 4.5%;
+  right: 4.5%;
+  bottom: 31px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 25px;
+}
+
+.archive-description {
+  max-width: 340px;
+  margin: 0;
+
+  color: #d5d0c7;
+
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+/* ==========================================================
+   13. ARCHIVE CLOSING
+========================================================== */
+
+.archive-closing {
+  margin: 0 4.5%;
+  padding: 65px 0 100px;
+
+  border-top: 1px solid var(--line);
+}
+
+.archive-closing p {
+  max-width: 1500px;
+  margin: 45px 0 65px;
+
+  font-family: var(--serif);
+  font-size: clamp(55px, 8vw, 125px);
+  font-weight: 400;
+
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+
+.archive-closing p em {
+  color: var(--muted);
+}
+
+.return-home {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 70px;
+  min-width: 220px;
+  padding: 15px 0;
+
+  border-bottom: 1px solid var(--ink);
+
+  font-size: 11px;
+  letter-spacing: .14em;
+
+  transition: gap .4s var(--ease);
+}
+
+.return-home:hover {
+  gap: 90px;
+}
+
+
+/* ==========================================================
+   14. FOOTER
+========================================================== */
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  padding: 30px 4.5%;
+
+  border-top: 1px solid var(--line);
+}
+
+.site-footer a {
+  transition: opacity .3s;
+}
+
+.site-footer a:hover {
+  opacity: .5;
+}
+
+
+
+/* ==========================================================
+   15. RESPONSIVE — TABLET / 1000px
+========================================================== */
+
+@media (max-width: 1000px) {
+
+  /* HEADER */
+
+  .site-header {
+    height: 84px;
+    padding: 0 5%;
+  }
+
+  .archive-brand {
+    font-size: 23px;
+  }
+
+  /* NAVIGATION */
+
+  .menu-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-right {
+    display: none;
+  }
+
+  .menu-left {
+    min-width: 0;
+    padding: 115px 7% 45px;
+  }
+
+  .menu-links a {
+    font-size: clamp(58px, 8vw, 90px);
+  }
+
+  /* ARCHIVE SHOWCASE */
+
+  .archive-showcase {
+    height: calc(100svh - 84px);
+    min-height: 650px;
+  }
+
+  .archive-title {
+    font-size: clamp(75px, 13vw, 145px);
+  }
+
+  .archive-title.long-title {
+    font-size: clamp(40px, 8vw, 90px);
+  }
+
+  .archive-cards {
+    gap: 9px;
+    padding: 0 3%;
+  }
+
+  .archive-card {
+    aspect-ratio: 3 / 4.4;
+  }
+
+  .archive-card-meta {
+    left: 9px;
+    right: 9px;
+    bottom: 11px;
+    font-size: 8px;
+  }
+
+  .archive-top,
+  .archive-bottom {
+    left: 5%;
+    right: 5%;
+  }
+
+}
+
+
+/* ==========================================================
+   16. RESPONSIVE — MOBILE / 700px
+========================================================== */
+
+@media (max-width: 700px) {
+
+  /* HEADER */
+
+  .site-header {
+    height: 72px;
+    padding: 0 5%;
+  }
+
+  .archive-brand {
+    font-size: 21px;
+  }
+
+  .menu-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* FULLSCREEN NAVIGATION */
+
+  .menu-left {
+    min-height: 100%;
+    padding: 100px 6% 35px;
+    justify-content: center;
+  }
+
+  .menu-links a {
+    padding: 10px 0;
+    font-size: clamp(46px, 10vw, 72px);
+    line-height: 1;
+  }
+
+  .menu-footer {
+    margin-top: 32px;
+  }
+
+  .theme-controls {
+    gap: 12px;
+  }
+
+  .theme-options button {
+    min-width: 95px;
+    min-height: 38px;
+  }
+
+  .menu-meta {
+    margin-top: 30px;
+    font-size: 9px;
+  }
+
+  /* ARCHIVE SHOWCASE */
+
+  .archive-showcase {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: auto;
+    min-height: calc(100svh - 72px);
+
+    padding: 0 0 38px;
+  }
+
+  /* BACKGROUND */
+
+  .archive-background-image {
+    object-position: center;
+  }
+
+  .archive-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, .65),
+        rgba(0, 0, 0, .35) 35%,
+        rgba(0, 0, 0, .75)
+      );
+  }
+
+  /* TOP METADATA */
+
+  .archive-top {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
+
+    width: 100%;
+    padding: 28px 5% 0;
+
+    font-size: 9px;
+  }
+
+  .archive-top span:last-child {
+    display: none;
+  }
+
+  /* CENTRAL TITLE */
+
+  .archive-center {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    width: 100%;
+    padding: 66px 5% 48px;
+
+    transform: none;
+  }
+
+  .archive-center::before {
+    inset: 20px 0;
+  }
+
+  .archive-title {
+    font-size: clamp(62px, 16vw, 108px);
+    letter-spacing: -.06em;
+    line-height: .95;
+  }
+
+  .archive-title.long-title {
+    font-size: clamp(36px, 8.5vw, 62px);
+  }
+
+  .archive-subtitle {
+    margin-top: 15px;
+
+    font-size: 9px;
+    letter-spacing: .15em;
+    line-height: 1.6;
+  }
+
+  /* COLLECTION CARDS */
+
+  .archive-cards {
+    position: relative;
+    inset: auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    width: 90%;
+    margin: 0 auto;
+    padding: 0;
+
+    gap: 14px;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  .archive-card {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+
+    aspect-ratio: 3 / 4.2;
+  }
+
+  .archive-card:hover,
+  .archive-card.is-active {
+    transform: translateY(-4px);
+  }
+
+  .archive-card-meta {
+    left: 12px;
+    right: 12px;
+    bottom: 13px;
+
+    font-size: 9px;
+    letter-spacing: .1em;
+  }
+
+  /* BOTTOM INFORMATION */
+
+  .archive-bottom {
+    position: relative;
+
+    left: auto;
+    right: auto;
+    bottom: auto;
+
+    width: 90%;
+    margin: 35px auto 0;
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 22px;
+  }
+
+  .archive-description {
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 1.75;
+  }
+
+  /* CLOSING */
+
+  .archive-closing {
+    margin: 0 5%;
+    padding: 65px 0 80px;
+  }
+
+  .archive-closing p {
+    margin: 35px 0 45px;
+    font-size: clamp(37px, 7vw, 55px);
+  }
+
+  /* FOOTER */
+
+  .site-footer {
+    padding: 25px 5%;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .site-footer > span:nth-child(2) {
+    display: none;
+  }
+
+}
+
+
+/* ==========================================================
+   17. RESPONSIVE — SMALL MOBILE / 420px
+========================================================== */
+
+@media (max-width: 420px) {
+
+  /* NAVIGATION */
+
+  .menu-left {
+    padding: 95px 6% 30px;
+  }
+
+  .menu-links a {
+    font-size: clamp(43px, 11vw, 55px);
+  }
+
+  .menu-meta {
+    gap: 12px;
+    font-size: 8px;
+  }
+
+  /* ARCHIVE TITLE */
+
+  .archive-center {
+    padding: 55px 5% 38px;
+  }
+
+  .archive-title {
+    font-size: clamp(54px, 15vw, 67px);
+  }
+
+  .archive-title.long-title {
+    font-size: clamp(31px, 8.2vw, 40px);
+  }
+
+  .archive-subtitle {
+    font-size: 8px;
+    letter-spacing: .12em;
+  }
+
+  /* CARDS */
+
+  .archive-cards {
+    gap: 10px;
+  }
+
+  .archive-card {
+    aspect-ratio: 3 / 4.35;
+  }
+
+  .archive-card-meta {
+    left: 9px;
+    right: 9px;
+    bottom: 10px;
+    font-size: 8px;
+  }
+
+  /* BOTTOM */
+
+  .archive-bottom {
+    margin-top: 28px;
+  }
+
+  .archive-description {
+    font-size: 11px;
+  }
+
+  /* CLOSING */
+
+  .archive-closing p {
+    font-size: 37px;
+  }
+
+}
+
+
+/* ==========================================================
+   17. ACCESSIBILITY
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+
+}

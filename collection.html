@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#111111" id="themeColor">
+  <meta name="description" content="Explore the creative collections of Lou Reyes.">
+
+  <title>Collection — Lou Reyes</title>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem("lou-reyes-theme");
+      document.documentElement.dataset.theme =
+        saved === "light" ? "light" : "dark";
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/archive.css">
+  <link rel="stylesheet" href="css/collection.css">
+  <link rel="stylesheet" href="css/collection-work-spa.css">
+  <link rel="stylesheet" href="css/page-transition.css">
+
+  
+
+  <style>
+    #mainContent {
+      visibility: hidden;
+    }
+
+    html.collection-ready #mainContent {
+      visibility: visible;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======================================================
+       01. HEADER
+  ====================================================== -->
+
+  <header class="site-header">
+
+    <a
+      href="index.html"
+      class="archive-brand"
+      aria-label="Lou Reyes homepage"
+    >
+      LOU REYES
+    </a>
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuScreen"
+      aria-label="Open navigation"
+    >
+      <span class="menu-lines" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+  </header>
+
+
+  <!-- ======================================================
+       02. FULLSCREEN NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="menu-screen"
+    id="menuScreen"
+    aria-label="Main navigation"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="menu-left">
+
+      <div class="menu-links">
+        <a href="index.html">Home</a>
+        <a href="archive.html" aria-current="page">The Archive</a>
+        <a href="about.html">The Designer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <div class="menu-footer">
+
+        
+        <div class="theme-controls">
+
+          <span class="micro">APPEARANCE</span>
+
+          <div class="theme-options" role="group" aria-label="Appearance">
+
+            <button type="button" id="lightTheme">
+              <span aria-hidden="true">☼</span>
+              <span>LIGHT</span>
+            </button>
+
+            <button type="button" id="darkTheme">
+              <span aria-hidden="true">☾</span>
+              <span>DARK</span>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="menu-meta micro">
+          <span>LOU REYES / 2026</span>
+          <span>TORONTO, CANADA</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu-right">
+      <img
+        src="portfolio/assets/landscape.webp"
+        alt="VIRTÙ editorial artwork"
+      >
+    </div>
+
+  </nav>
+
+
+  <!-- ======================================================
+       03. COLLECTION PAGE
+  ====================================================== -->
+
+  <main id="mainContent">
+
+    <a href="archive.html" class="collection-back micro">
+      <span class="collection-back-arrow">←</span>
+      <span>BACK TO ARCHIVE</span>
+    </a>
+    
+    <!-- CINEMATIC COLLECTION HERO -->
+
+    <section class="collection-hero">
+
+      <img id="collectionHeroImage" alt="">
+
+      <div class="collection-hero-content">
+
+        <div class="collection-topline micro">
+          <span id="collectionEyebrow">THE COLLECTION</span>
+        </div>
+
+        <div class="collection-hero-bottom">
+
+          <div class="collection-hero-main">
+            <h1 id="collectionTitle">COLLECTION.</h1>
+
+            <p id="collectionDescription"></p>
+          </div>
+
+          <span class="collection-hero-meta micro" id="collectionCount"></span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PROJECTS -->
+
+    <section class="collection-projects">
+
+      <div class="collection-projects-head">
+
+        <div>
+          <span class="micro muted">
+            AN EXPLORATION OF FORM & FEELING
+          </span>
+
+          <h2>THE <em>WORKS.</em></h2>
+        </div>
+
+        <span class="micro muted" id="collectionTotal"></span>
+
+      </div>
+
+      <div class="collection-grid" id="collectionGrid"></div>
+
+    </section>
+
+
+    <!-- NEXT STEP -->
+
+    <section class="collection-ending">
+
+      <span class="micro muted">
+        THE COMPLETE PRACTICE
+      </span>
+
+      <h2>
+        There is always<br>
+        <em>more to explore.</em>
+      </h2>
+
+      <a href="archive.html" class="collection-return">
+        <span>EXPLORE ALL COLLECTIONS</span>
+        <span aria-hidden="true">↗</span>
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================
+       04. FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <span class="micro">© 2026 LOU REYES</span>
+
+    <span class="micro muted">
+      INDEPENDENT DESIGN PRACTICE
+    </span>
+
+    <a href="contact.html" class="micro">
+      GET IN TOUCH ↗
+    </a>
+
+  </footer>
+
+
+  <script src="js/portfolio-data.js"></script>
+  <script src="js/collection.js"></script>
+  <script src="js/page-transition.js"></script>
+  <script src="js/collection-work-spa.js"></script>
+
+</body>
+</html>

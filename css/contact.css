@@ -1,0 +1,742 @@
+
+/* ==========================================================
+   LOU REYES — CONTACT PAGE
+========================================================== */
+
+
+/* ==========================================================
+   01. CONTACT EXPERIENCE
+========================================================== */
+
+.contact-experience {
+  display: grid;
+  grid-template-columns: 48% 52%;
+
+  min-height: calc(100svh - 75px);
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+/* ==========================================================
+   02. LEFT — VISUAL PANEL
+========================================================== */
+
+.contact-visual {
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-height: 850px;
+
+  padding: 45px 7% 55px;
+
+  background: #171717;
+  color: #f0eee8;
+
+  overflow: hidden;
+}
+
+
+/* BACKGROUND ATMOSPHERE */
+
+.contact-visual::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+    radial-gradient(
+      ellipse at 55% 40%,
+      rgba(190, 180, 165, .11),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      #22211f,
+      #111111 75%
+    );
+}
+
+
+/* TOP / BOTTOM DETAILS */
+
+.contact-visual-top,
+.contact-visual-bottom {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  color: #c4c0ba;
+}
+
+
+/* MAIN CONTENT */
+
+.contact-visual-content {
+  position: relative;
+  z-index: 2;
+
+  margin-top: auto;
+  margin-bottom: 75px;
+}
+
+.contact-kicker {
+  display: block;
+
+  margin-bottom: 28px;
+
+  color: #d0cbc3;
+}
+
+
+/* BOSKA HEADING */
+
+.contact-visual h1 {
+  margin: 0;
+
+  font-family: var(--serif);
+  font-size: clamp(95px, 10vw, 190px);
+  font-weight: 400;
+  font-style: normal;
+
+  line-height: .88;
+  letter-spacing: -.065em;
+}
+
+.contact-visual h1 em {
+  display: block;
+
+  margin-top: 5px;
+
+  font-family: var(--serif);
+  font-size: .95em;
+  font-weight: 400;
+  font-style: italic;
+
+  letter-spacing: -.045em;
+}
+
+
+/* HELVETICA DESCRIPTION */
+
+.contact-visual-content p {
+  max-width: 360px;
+
+  margin: 38px 0 0;
+
+  color: #e0ddd8;
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+
+/* ==========================================================
+   03. ARCHITECTURAL PHOTOGRAPHY
+========================================================== */
+
+.contact-visual-art {
+  position: absolute;
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.contact-art-image {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter:
+    grayscale(100%)
+    brightness(.48)
+    contrast(1.12);
+}
+
+.contact-visual-art::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .18) 0%,
+      rgba(0, 0, 0, .12) 35%,
+      rgba(0, 0, 0, .78) 100%
+    );
+}
+
+
+/* ==========================================================
+   04. RIGHT — CONTACT CONTENT
+========================================================== */
+
+.contact-content {
+  padding: 45px 8% 80px;
+}
+
+.contact-content-top {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+
+/* INTRODUCTION */
+
+.contact-introduction {
+  margin-top: 110px;
+}
+
+
+/* BOSKA HEADING */
+
+.contact-introduction h2 {
+  margin: 28px 0 30px;
+
+  font-family: var(--serif);
+  font-size: clamp(55px, 6vw, 105px);
+  font-weight: 400;
+  font-style: normal;
+
+  line-height: .94;
+  letter-spacing: -.055em;
+}
+
+.contact-introduction h2 em {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+}
+
+
+/* HELVETICA DESCRIPTION */
+
+.contact-introduction p {
+  max-width: 480px;
+  margin: 0;
+
+  color: var(--muted);
+
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+
+/* ==========================================================
+   05. CONTACT FORM
+========================================================== */
+
+.contact-form {
+  margin-top: 65px;
+}
+
+.contact-form-row {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 25px;
+}
+
+.contact-field {
+  min-width: 0;
+  margin-bottom: 38px;
+}
+
+
+/* LABELS */
+
+.contact-field label {
+  display: block;
+
+  margin-bottom: 16px;
+
+  color: var(--muted);
+}
+
+
+/* FORM CONTROLS */
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+  display: block;
+
+  width: 100%;
+
+  padding: 0 0 17px;
+
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+
+  outline: none;
+
+  background-color: transparent;
+  color: var(--ink);
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+
+  box-sizing: border-box;
+
+  transition: border-color .3s;
+}
+
+
+/* PLACEHOLDERS */
+
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: var(--muted);
+  opacity: .85;
+}
+
+
+/* KEYBOARD FOCUS */
+
+.contact-field input:focus,
+.contact-field select:focus,
+.contact-field textarea:focus {
+  border-color: var(--ink);
+}
+
+.contact-field input:focus-visible,
+.contact-field select:focus-visible,
+.contact-field textarea:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+
+/* SELECT */
+
+.contact-field select {
+  appearance: none;
+  cursor: pointer;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23918e88' stroke-width='1.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+
+  padding-right: 24px;
+}
+
+.contact-field select option {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+
+/* MESSAGE */
+
+.contact-field textarea {
+  min-height: 115px;
+  resize: vertical;
+}
+
+.contact-message-field {
+  margin-bottom: 20px;
+}
+
+
+/* ==========================================================
+   SUBMIT BUTTON — HELVETICA
+========================================================== */
+
+.contact-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  width: 100%;
+
+  padding: 22px 0;
+
+  border: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+
+  background: transparent;
+  color: var(--ink);
+
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+
+  cursor: pointer;
+}
+
+.contact-submit span:last-child {
+  font-size: 22px;
+  font-weight: 400;
+
+  transition: transform .3s var(--ease);
+}
+
+.contact-submit:hover span:last-child {
+  transform: translate(5px, -5px);
+}
+
+.contact-submit:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+
+
+/* STATUS MESSAGE */
+
+.contact-form-note {
+  margin: 14px 0 0;
+
+  color: var(--muted);
+
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* ==========================================================
+   06. DIRECT CONTACT
+========================================================== */
+
+.contact-direct {
+  margin-top: 95px;
+}
+
+.contact-direct-heading {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-direct-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+
+  padding-top: 28px;
+}
+
+.contact-direct-row > div > .micro {
+  display: block;
+  margin-bottom: 12px;
+}
+
+
+/* EMAIL & LOCATION — HELVETICA */
+
+.contact-email-link,
+.contact-location {
+  display: inline-block;
+
+  color: var(--ink);
+
+  font-family: var(--sans);
+  font-size: clamp(17px, 1.5vw, 23px);
+  font-weight: 400;
+  font-style: normal;
+
+  line-height: 1.4;
+  letter-spacing: -.02em;
+
+  text-decoration: none;
+}
+
+.contact-email-link {
+  overflow-wrap: anywhere;
+
+  border-bottom: 1px solid transparent;
+
+  transition: border-color .3s;
+}
+
+.contact-email-link:hover {
+  border-color: var(--ink);
+}
+
+.contact-email-link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+
+
+/* ==========================================================
+   07. CONTACT CLOSING
+========================================================== */
+
+.contact-closing {
+  padding: 100px 4.5% 120px;
+}
+
+.contact-closing-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 40px;
+
+  margin-top: 35px;
+
+  color: var(--ink);
+  text-decoration: none;
+}
+
+
+/* ENTIRE HEADING — BOSKA */
+
+.contact-closing-link > span:first-child {
+  font-family: var(--serif);
+  font-size: clamp(60px, 8vw, 145px);
+  font-weight: 400;
+  font-style: normal;
+
+  line-height: .94;
+  letter-spacing: -.055em;
+}
+
+.contact-closing-link em {
+  font-family: var(--serif);
+  font-size: 1em;
+  font-weight: 400;
+  font-style: italic;
+
+  letter-spacing: -.035em;
+}
+
+
+/* ARROW */
+
+.contact-closing-arrow {
+  align-self: flex-end;
+
+  font-size: clamp(50px, 6vw, 100px);
+  line-height: 1;
+
+  transition: transform .4s var(--ease);
+}
+
+.contact-closing-link:hover .contact-closing-arrow {
+  transform: translate(8px, -8px);
+}
+
+.contact-closing-link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 8px;
+}
+
+
+/* ==========================================================
+   08. TABLET — 1000px
+========================================================== */
+
+@media (max-width: 1000px) {
+
+  .contact-experience {
+    grid-template-columns: 45% 55%;
+  }
+
+  .contact-visual {
+    min-height: 800px;
+
+    padding: 40px 7% 45px;
+  }
+
+  .contact-visual h1 {
+    font-size: clamp(70px, 10vw, 120px);
+  }
+
+  .contact-content {
+    padding: 40px 7% 70px;
+  }
+
+  .contact-introduction {
+    margin-top: 80px;
+  }
+
+  .contact-introduction h2 {
+    font-size: clamp(55px, 6vw, 80px);
+  }
+
+  .contact-form {
+    margin-top: 55px;
+  }
+
+  .contact-form-row {
+    gap: 18px;
+  }
+
+}
+
+
+/* ==========================================================
+   09. MOBILE — 700px
+========================================================== */
+
+@media (max-width: 700px) {
+
+  .contact-experience {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-visual {
+    min-height: 520px;
+    height: 70svh;
+
+    padding: 30px 5% 40px;
+  }
+
+  .contact-visual h1 {
+    font-size: clamp(80px, 17vw, 135px);
+  }
+
+  .contact-visual-content {
+    margin-bottom: 45px;
+  }
+
+  .contact-visual-content p {
+    margin-top: 25px;
+    font-size: 15px;
+  }
+
+  .contact-content {
+    padding: 50px 5% 85px;
+  }
+
+  .contact-introduction {
+    margin-top: 75px;
+  }
+
+  .contact-introduction h2 {
+    font-size: clamp(55px, 11vw, 85px);
+  }
+
+  .contact-introduction p {
+    font-size: 16px;
+  }
+
+  .contact-form {
+    margin-top: 50px;
+  }
+
+  .contact-direct {
+    margin-top: 85px;
+  }
+
+  .contact-closing {
+    padding: 75px 5% 90px;
+  }
+
+  .contact-closing-link > span:first-child {
+    font-size: clamp(48px, 10vw, 80px);
+  }
+
+}
+
+
+/* ==========================================================
+   10. SMALL MOBILE — 420px
+========================================================== */
+
+@media (max-width: 420px) {
+
+  .contact-visual {
+    height: auto;
+    min-height: 520px;
+  }
+
+  .contact-visual h1 {
+    font-size: clamp(65px, 16vw, 80px);
+  }
+
+  .contact-visual-top,
+  .contact-visual-bottom {
+    font-size: 8px;
+  }
+
+  .contact-visual-top span:last-child,
+  .contact-content-top span:last-child {
+    display: none;
+  }
+
+  .contact-form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .contact-introduction h2 {
+    font-size: 55px;
+  }
+
+  .contact-direct-row {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .contact-closing-link > span:first-child {
+    font-size: 45px;
+  }
+
+  .contact-closing-arrow {
+    font-size: 45px;
+  }
+
+}
+
+
+/* ==========================================================
+   11. ACCESSIBILITY
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .contact-submit span:last-child,
+  .contact-closing-arrow,
+  .contact-email-link {
+    transition: none;
+  }
+
+}

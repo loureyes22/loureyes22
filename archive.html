@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#111111" id="themeColor">
+  <meta name="description"
+        content="Explore the creative archive of Lou Reyes, including editorial design, packaging, digital experiences, and photography.">
+
+  <title>The Archive — Lou Reyes</title>
+
+  <script>
+    (function () {
+      const theme = localStorage.getItem("lou-reyes-theme");
+
+      document.documentElement.dataset.theme =
+        theme === "light" ? "light" : "dark";
+    })();
+  </script>
+
+  
+  <link
+    rel="preload"
+    href="fonts/Boska-Regular.otf"
+    as="font"
+    type="font/otf"
+    crossorigin
+  >
+
+  
+  <script>
+    /* Keep an arriving Archive hidden until its
+      cards, title and fonts are prepared. */
+
+    try {
+      const raw = sessionStorage.getItem(
+        "lou-archive-collection-transition"
+      );
+
+      if (raw) {
+        const pending = JSON.parse(raw);
+
+        if (
+          pending.direction === "backward" &&
+          Date.now() - pending.timestamp < 15000
+        ) {
+          document.documentElement.classList.add(
+            "archive-arrival-pending"
+          );
+        }
+      }
+    } catch (error) {
+      // Normal Archive rendering remains available.
+    }
+  </script>
+
+
+
+  <link rel="stylesheet" href="css/archive.css">
+  <link rel="stylesheet" href="css/archive-collection-transition.css">
+</head>
+
+<body>
+
+  <!-- ======================================================
+       01. HEADER
+  ====================================================== -->
+
+  <header class="site-header">
+
+    <a
+      href="index.html"
+      class="archive-brand"
+      aria-label="Lou Reyes homepage"
+    >
+      LOU REYES
+    </a>
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuScreen"
+      aria-label="Open navigation"
+    >
+      <span class="menu-lines" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+  </header>
+
+  <!-- ======================================================
+       02. FULLSCREEN NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="menu-screen"
+    id="menuScreen"
+    aria-label="Main navigation"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="menu-left">
+
+      <div class="menu-links">
+        <a href="index.html">Home</a>
+        <a href="archive.html" aria-current="page">The Archive</a>
+        <a href="about.html">The Designer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <div class="menu-footer">
+
+        <div class="theme-controls">
+
+          <span class="micro">APPEARANCE</span>
+
+          <div class="theme-options" role="group" aria-label="Appearance">
+
+            <button type="button" id="lightTheme">
+              <span aria-hidden="true">☼</span>
+              <span>LIGHT</span>
+            </button>
+
+            <button type="button" id="darkTheme">
+              <span aria-hidden="true">☾</span>
+              <span>DARK</span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="menu-meta micro">
+          <span>LOU REYES / 2026</span>
+          <span>TORONTO, CANADA</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu-right">
+      <img
+        src="portfolio/assets/landscape.webp"
+        alt="VIRTÙ editorial artwork"
+      >
+    </div>
+
+  </nav>
+
+  <!-- ======================================================
+       03. ARCHIVE
+  ====================================================== -->
+
+  <main id="mainContent">
+
+    <section
+      class="archive-showcase"
+      id="archiveShowcase"
+      aria-labelledby="archiveTitle"
+    >
+
+      <!-- CINEMATIC BACKGROUND -->
+
+      <div class="archive-background" aria-hidden="true">
+        <img class="archive-background-image"
+             id="archiveBackgroundA" alt="">
+
+        <img class="archive-background-image"
+             id="archiveBackgroundB" alt="">
+      </div>
+
+      <div class="archive-overlay" aria-hidden="true"></div>
+
+      <!-- TOP METADATA -->
+
+      <div class="archive-top micro">
+        <span>01 — THE COMPLETE PRACTICE</span>
+        <span>AN ONGOING COLLECTION / 2026</span>
+      </div>
+
+      <!-- CENTRAL TYPOGRAPHY -->
+
+      <div class="archive-center">
+
+        <h1 class="archive-title" id="archiveTitle">
+          ARCHIVE
+        </h1>
+
+        <p class="archive-subtitle" id="archiveSubtitle">
+          SIX COLLECTIONS — ONE PRACTICE
+        </p>
+
+      </div>
+
+      <!-- SIX CATEGORY CARDS -->
+
+      <nav
+        class="archive-cards"
+        id="archiveGrid"
+        aria-label="Explore portfolio collections"
+      >
+        <!-- Generated by archive.js -->
+      </nav>
+
+      <!-- BOTTOM NAVIGATION -->
+
+      <div class="archive-bottom">
+
+        <p
+          class="archive-description"
+          id="archiveDescription"
+          aria-live="off"
+        >
+          Explore the collections. Hover over a card
+          to discover its contents.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ====================================================
+         04. CLOSING
+    ==================================================== -->
+
+    <section class="archive-closing">
+
+      <span class="micro muted">
+        THE ARCHIVE / LOU REYES
+      </span>
+
+      <p>
+        Every project begins with an idea.
+        <em>Every idea leaves a&nbsp;trace.</em>
+      </p>
+
+      <a href="index.html" class="return-home">
+        <span>RETURN TO HOME</span>
+        <span aria-hidden="true">↗</span>
+      </a>
+
+    </section>
+
+  </main>
+
+  <!-- ======================================================
+       05. FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <span class="micro">© 2026 LOU REYES</span>
+
+    <span class="micro muted">
+      TORONTO, CANADA
+    </span>
+
+    <a href="contact.html" class="micro">
+      GET IN TOUCH ↗
+    </a>
+
+  </footer>
+
+  <!-- ======================================================
+       06. SCRIPTS
+  ====================================================== -->
+
+  <script src="js/portfolio-data.js"></script>
+  <script src="js/archive.js"></script>
+  <script src="js/archive-collection-transition.js"></script>
+
+</body>
+</html>

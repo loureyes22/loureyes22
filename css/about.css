@@ -1,0 +1,676 @@
+
+/* ==========================================================
+   LOU REYES — ABOUT PAGE
+========================================================== */
+
+
+/* ==========================================================
+   01. PHOTOGRAPHIC HERO
+========================================================== */
+
+.about-hero {
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  height: 78svh;
+  min-height: 0;
+
+  padding: 70px 5%;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  background: #111111;
+  color: #f0eee8;
+}
+
+
+/* ==========================================================
+   HERO PHOTOGRAPH
+========================================================== */
+
+.about-hero-background {
+  position: absolute;
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+}
+
+.about-hero-background img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center 55%;
+
+  filter: grayscale(1);
+}
+
+
+/* ==========================================================
+   DARK READABILITY OVERLAY
+========================================================== */
+
+.about-hero::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, .97) 0%,
+      rgba(0, 0, 0, .93) 28%,
+      rgba(0, 0, 0, .73) 48%,
+      rgba(0, 0, 0, .32) 75%,
+      rgba(0, 0, 0, .18) 100%
+    );
+
+  pointer-events: none;
+}
+
+
+/* ==========================================================
+   HERO CONTENT
+========================================================== */
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 660px;
+
+  padding: 15px 0;
+}
+
+.about-hero-eyebrow {
+  display: block;
+
+  color: #c3c0ba;
+
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+
+.about-hero-content h1 {
+  margin: 30px 0 38px;
+
+  font: 400 clamp(90px, 8.5vw, 165px)/.88 var(--serif);
+  letter-spacing: -.065em;
+
+  color: #f0eee8;
+}
+
+.about-hero-content h1 em {
+  display: block;
+  font-weight: 400;
+}
+
+
+/* INTRODUCTION */
+
+.about-hero-lead {
+  max-width: 580px;
+  margin: 0 0 32px;
+
+  color: #f0eee8;
+
+  font-size: clamp(21px, 1.5vw, 27px);
+  line-height: 1.5;
+  letter-spacing: -.02em;
+}
+
+
+/* PERSONAL STORY */
+
+.about-hero-bio {
+  max-width: 560px;
+}
+
+.about-hero-bio p {
+  margin: 0 0 20px;
+
+  color: #e0ddd8;
+
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.about-hero-bio p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   02. PROFESSIONAL PRACTICE
+========================================================== */
+
+.about-services {
+  position: relative;
+  isolation: isolate;
+
+  margin-top: 65px;
+
+  padding: 95px 5% 105px;
+
+  background: var(--surface);
+
+  overflow: hidden;
+}
+
+
+/* ARCHITECTURAL PHOTOGRAPH — RIGHT SIDE */
+
+.about-services::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 48%;
+
+  z-index: -1;
+
+  background-image:
+    url("../portfolio/assets/contact.webp");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: grayscale(1);
+  opacity: .28;
+
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      black 45%
+    );
+
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      black 45%
+    );
+
+  pointer-events: none;
+}
+
+
+/* LIGHT THEME */
+
+html[data-theme="light"] .about-services::before {
+  opacity: .15;
+}
+
+
+/* ==========================================================
+   SECTION HEADING
+========================================================== */
+
+.about-services-heading {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  justify-content: flex-start;
+
+  margin-bottom: 55px;
+}
+
+.about-services-heading > div {
+  max-width: 900px;
+}
+
+.about-services-heading h2 {
+  margin: 0 0 25px;
+
+  font: 400 clamp(95px, 10vw, 175px)/.88 var(--serif);
+  letter-spacing: -.055em;
+}
+
+.about-services-heading h2 em {
+  display: block;
+  font-weight: 400;
+}
+
+.about-services-heading p {
+  max-width: 490px;
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+
+/* ==========================================================
+   CAPABILITIES GRID
+========================================================== */
+
+.about-services-grid {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.about-service {
+  min-height: 175px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 30px;
+
+  background: var(--bg);
+}
+
+.about-service h3 {
+  margin: 0 0 25px;
+
+  font: 400 clamp(28px, 2.8vw, 43px)/1.12 var(--serif);
+  letter-spacing: -.035em;
+}
+
+.about-service p {
+  max-width: 260px;
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+
+/* ==========================================================
+   03. PERSONAL INTERESTS
+========================================================== */
+
+.about-interests {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, .9fr)
+    minmax(0, 1fr);
+
+  align-items: center;
+  gap: 12%;
+
+  padding: 105px 5% 110px;
+}
+
+
+/* PHOTOGRAPH */
+
+.about-interests-visual {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+
+  overflow: hidden;
+}
+
+.about-interests-visual img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* INTERESTS TEXT */
+
+.about-interests-content {
+  max-width: 590px;
+}
+
+.about-interests-content h2 {
+  margin: 0 0 40px;
+
+  font: 400 clamp(65px, 7vw, 110px)/.95 var(--serif);
+  letter-spacing: -.055em;
+}
+
+.about-interests-content h2 em {
+  display: block;
+
+  margin-left: 8%;
+
+  font-weight: 400;
+}
+
+.about-interests-content p {
+  margin: 0 0 24px;
+
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.about-interests-content p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   04. CLOSING
+========================================================== */
+
+.about-closing {
+  padding: 105px 5% 115px;
+
+  background: var(--surface);
+}
+
+.about-closing-content {
+  max-width: 1100px;
+}
+
+.about-closing h2 {
+  margin: 0 0 30px;
+
+  font: 400 clamp(75px, 9vw, 150px)/.9 var(--serif);
+  letter-spacing: -.065em;
+}
+
+.about-closing h2 em {
+  display: block;
+  font-weight: 400;
+}
+
+.about-closing-content > p {
+  max-width: 500px;
+  margin: 0 0 55px;
+
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+
+/* CLOSING LINKS */
+
+.about-closing-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  gap: 30px 60px;
+}
+
+.about-closing-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 65px;
+  min-width: 250px;
+
+  padding: 17px 0;
+
+  border-bottom: 1px solid var(--ink);
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+
+  transition: opacity .3s ease;
+}
+
+.about-closing-links a:hover {
+  opacity: .6;
+}
+
+
+/* ==========================================================
+   05. TABLET
+========================================================== */
+
+@media (max-width: 1000px) {
+
+  .about-hero {
+    min-height: 720px;
+  }
+
+  .about-hero-content h1 {
+    font-size: clamp(80px, 9vw, 135px);
+  }
+
+  .about-services-heading h2 {
+    font-size: clamp(75px, 9vw, 125px);
+  }
+
+  .about-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-services::before {
+    width: 55%;
+  }
+
+  .about-interests {
+    gap: 7%;
+  }
+
+  .about-interests-content h2 {
+    font-size: clamp(55px, 7vw, 90px);
+  }
+
+}
+
+
+/* ==========================================================
+   06. MOBILE
+========================================================== */
+
+@media (max-width: 700px) {
+
+  /* HERO */
+
+  .about-hero {
+    min-height: 0;
+
+    padding: 105px 5% 75px;
+
+    align-items: flex-start;
+  }
+
+  .about-hero-background img {
+    object-position: 58% center;
+  }
+
+  .about-hero::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, .82) 0%,
+        rgba(0, 0, 0, .9) 55%,
+        rgba(0, 0, 0, .97) 100%
+      );
+  }
+
+  .about-hero-content h1 {
+    margin: 25px 0 35px;
+
+    font-size: clamp(70px, 13vw, 110px);
+  }
+
+  .about-hero-lead {
+    font-size: 21px;
+  }
+
+  .about-hero-bio p {
+    font-size: 16px;
+  }
+
+
+  /* PRACTICE */
+
+  .about-services {
+    margin-top: 40px;
+
+    padding-top: 70px;
+    padding-bottom: 80px;
+  }
+
+  .about-services-heading {
+    margin-bottom: 40px;
+  }
+
+  .about-services-heading h2 {
+    font-size: clamp(75px, 13vw, 110px);
+  }
+
+  .about-services-heading p {
+    font-size: 15px;
+  }
+
+  .about-services::before {
+    width: 75%;
+    opacity: .2;
+
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, black 55%);
+
+    mask-image:
+      linear-gradient(to right, transparent, black 55%);
+  }
+
+  .about-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .about-service {
+    min-height: 160px;
+    padding: 20px;
+  }
+
+  .about-service h3 {
+    font-size: clamp(24px, 5vw, 35px);
+  }
+
+  .about-service p {
+    font-size: 13px;
+  }
+
+
+  /* INTERESTS */
+
+  .about-interests {
+    grid-template-columns: 1fr;
+    gap: 45px;
+
+    padding-top: 75px;
+    padding-bottom: 85px;
+  }
+
+  .about-interests-content h2 {
+    font-size: clamp(65px, 12vw, 90px);
+  }
+
+  .about-interests-content p {
+    font-size: 15px;
+  }
+
+
+  /* CLOSING */
+
+  .about-closing {
+    padding-top: 75px;
+    padding-bottom: 85px;
+  }
+
+  .about-closing h2 {
+    font-size: clamp(68px, 12vw, 105px);
+  }
+
+  .about-closing-content > p {
+    margin-bottom: 40px;
+    font-size: 15px;
+  }
+
+  .about-closing-links {
+    gap: 20px;
+  }
+
+  .about-closing-links a {
+    width: 100%;
+    max-width: 350px;
+  }
+
+}
+
+
+/* ==========================================================
+   07. SMALL MOBILE
+========================================================== */
+
+@media (max-width: 420px) {
+
+  .about-hero-content h1 {
+    font-size: clamp(65px, 13vw, 85px);
+  }
+
+  .about-services-heading h2,
+  .about-interests-content h2 {
+    font-size: clamp(55px, 12vw, 80px);
+  }
+
+  .about-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-service {
+    min-height: 130px;
+  }
+
+  .about-closing h2 {
+    font-size: clamp(58px, 12vw, 80px);
+  }
+
+  .about-closing-links a {
+    min-width: 0;
+  }
+
+}
+
+
+/* ==========================================================
+   08. ACCESSIBILITY
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .about-closing-links a {
+    transition: none;
+  }
+
+}

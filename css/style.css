@@ -1,0 +1,2064 @@
+
+/* ==========================================================
+   LOU REYES — OFFICIAL PORTFOLIO
+   BASE STYLES
+========================================================== */
+
+
+/* ==========================================================
+   01. FONTS
+========================================================== */
+
+@font-face {
+  font-family: "Boska";
+  src: url("../fonts/Boska-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Boska";
+  src: url("../fonts/Boska-Italic.otf") format("otf");
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+
+/* ==========================================================
+   02. THEME VARIABLES
+========================================================== */
+
+/* DARK MODE — DEFAULT */
+
+:root,
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #111111;
+  --surface: #191919;
+  --ink: #e9e7e1;
+  --muted: #b5b1aa;
+
+  --line: rgba(233, 231, 225, .18);
+  --grid-line: rgba(233, 231, 225, .045);
+
+  --menu-hover: #b9afa0;
+  --theme-border: rgba(233, 231, 225, .25);
+  --theme-active-bg: #e9e7e1;
+  --theme-active-ink: #171717;
+
+  --monogram-stroke: rgba(233, 231, 225, .28);
+
+  --serif: "Boska", Georgia, serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+/* LIGHT MODE */
+
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #e9e7e1;
+  --surface: #dedbd4;
+  --ink: #191918;
+  --muted: #77746f;
+
+  --line: rgba(25, 25, 24, .18);
+  --grid-line: rgba(25, 25, 24, .055);
+
+  --menu-hover: #82776a;
+  --theme-border: rgba(25, 25, 24, .25);
+  --theme-active-bg: #191918;
+  --theme-active-ink: #e9e7e1;
+
+  --monogram-stroke: rgba(25, 25, 24, .23);
+}
+
+
+/* ==========================================================
+   03. GLOBAL
+========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 4px;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+::selection {
+  background: #b7b4ac;
+  color: #171717;
+}
+
+.micro {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+
+/* ==========================================================
+   04. THEME COLOUR TRANSITIONS
+========================================================== */
+
+body,
+.site-header,
+.living-sticky,
+.menu-screen,
+.gallery-viewport::after,
+.about,
+.contact,
+.theme-option {
+  transition:
+    background-color .45s ease,
+    color .45s ease,
+    border-color .45s ease;
+}
+
+
+
+/* ==========================================================
+   06. FIXED MINIMAL HEADER
+========================================================== */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  padding: 0 70px;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  z-index: 100;
+
+  pointer-events: none;
+  background: transparent;
+}
+
+.menu-button {
+  position: relative;
+  z-index: 110;
+
+  width: 34px;
+  height: 34px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  background: transparent;
+  color: var(--ink);
+
+  pointer-events: auto;
+}
+
+.menu-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+
+  gap: 7px;
+  width: 21px;
+}
+
+.menu-lines i {
+  display: block;
+
+  width: 21px;
+  height: 1px;
+
+  background: currentColor;
+  transform-origin: center;
+
+  transition:
+    width .25s ease,
+    transform .35s ease;
+}
+
+.menu-lines i:last-child {
+  width: 14px;
+}
+
+.menu-button:hover .menu-lines i:last-child {
+  width: 21px;
+}
+
+.menu-button.active .menu-lines i:first-child {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.menu-button.active .menu-lines i:last-child {
+  width: 21px;
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+
+
+/* ==========================================================
+   07. FULLSCREEN NAVIGATION
+========================================================== */
+
+.menu-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+
+  background: var(--surface);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity .5s var(--ease),
+    visibility .5s;
+}
+
+.menu-screen.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.menu-left {
+  min-width: 0;
+  padding: 125px 8% 50px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-links a {
+  display: block;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+
+  font: 400 clamp(52px, 6.5vw, 110px)/.95 var(--serif);
+
+  transition:
+    padding .5s var(--ease),
+    color .3s;
+}
+
+.menu-links a:hover {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.menu-links a[aria-current="page"] {
+  color: var(--muted);
+}
+
+.menu-footer {
+  margin-top: 38px;
+}
+
+.theme-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.theme-controls > .micro {
+  color: #96928b;
+}
+
+.theme-options {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--line);
+}
+
+.theme-options button {
+  min-width: 95px;
+  min-height: 36px;
+  padding: 9px 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--ink);
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  opacity: 1;
+
+  transition:
+    background .25s ease,
+    color .25s ease;
+}
+
+.theme-options button + button {
+  border-left: 1px solid var(--line);
+}
+
+.theme-options button span:first-child {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.theme-options button:hover:not(.active) {
+  background: var(--line);
+}
+
+.theme-options button.active {
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.menu-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-top: 35px;
+  color: #96928b;
+}
+
+.menu-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(.8) brightness(.6);
+}
+
+.menu-right::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    var(--surface),
+    transparent 55%
+  );
+
+  pointer-events: none;
+}
+
+
+
+/* ==========================================================
+   09. LIVING TRANSITION
+========================================================== */
+
+.living-transition {
+  --scroll-hold: 45;
+
+  position: relative;
+  height: calc(440vh + var(--scroll-hold) * 1vh);
+
+  overflow-anchor: none;
+}
+
+.living-sticky {
+  position: sticky;
+  top: 0;
+
+  height: 100svh;
+  min-height: 560px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  background: var(--bg);
+}
+
+
+/* ==========================================================
+   10. ARCHITECTURAL GRID
+========================================================== */
+
+.living-grid {
+  position: absolute;
+  inset: 0 4.5%;
+  z-index: 0;
+
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+
+  pointer-events: none;
+}
+
+.living-grid i {
+  border-left: 1px solid var(--grid-line);
+}
+
+.living-grid i:last-child {
+  border-right: 1px solid var(--grid-line);
+}
+
+
+/* ==========================================================
+   11. SPLASH
+========================================================== */
+
+.living-splash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+.living-name {
+  position: absolute;
+  margin: 0;
+
+  font-family: var(--serif);
+  font-size: clamp(110px, 16.5vw, 310px);
+  font-weight: 400;
+
+  letter-spacing: -.065em;
+  line-height: .85;
+  white-space: nowrap;
+
+  will-change: transform, opacity;
+}
+
+.living-name-left {
+  top: 50%;
+  left: 6%;
+  transform: translateY(-50%);
+}
+
+.living-name-right {
+  top: 50%;
+  right: 5%;
+  transform: translateY(-10%);
+}
+
+/* ==========================================================
+   SPLASH TYPOGRAPHY — HOVER WORD TRANSITION
+========================================================== */
+
+.living-name-original,
+.living-name-hover {
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.living-name-original {
+  opacity: 1;
+}
+
+.living-name-hover {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.living-name-left .living-name-hover {
+  left: 0;
+}
+
+.living-name-right .living-name-hover {
+  right: 0;
+}
+
+/* Entire hero activates both words together */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .living-sticky:hover .living-name-original {
+    opacity: 0;
+  }
+
+  .living-sticky:hover .living-name-hover {
+    opacity: 1;
+  }
+
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .living-name-original,
+  .living-name-hover {
+    transition: none;
+  }
+
+}
+
+/* ==========================================================
+   12. MONOGRAM AND SPLASH DETAILS
+========================================================== */
+
+.living-monogram {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+}
+
+.living-monogram span {
+  font: italic 400 clamp(150px, 23vw, 370px)/1 var(--serif);
+
+  color: transparent;
+  -webkit-text-stroke: 1px var(--monogram-stroke);
+
+  transform: rotate(-12deg) translateY(15%);
+  opacity: .7;
+}
+
+.living-side {
+  position: absolute;
+  top: 35%;
+  right: 3%;
+
+  writing-mode: vertical-rl;
+  color: var(--muted);
+}
+
+.living-description {
+  position: absolute;
+  bottom: 7%;
+  left: 4.5%;
+
+  max-width: 300px;
+}
+
+.living-description p {
+  max-width: 280px;
+  margin: 14px 0 0;
+
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.living-edition {
+  position: absolute;
+  right: 4.5%;
+  bottom: 7%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.living-edition strong {
+  font: 400 58px/1 var(--serif);
+}
+
+
+/* ==========================================================
+   13. VIRTÙ ARTWORK
+========================================================== */
+
+.living-image {
+  position: absolute;
+  z-index: 4;
+
+  top: 15%;
+  left: 40.5%;
+  width: 19%;
+  height: 70%;
+
+  overflow: hidden;
+  background: transparent;
+
+  pointer-events: none;
+}
+
+.living-image img {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter: saturate(.85);
+}
+
+.living-image-portrait {
+  z-index: 1;
+  opacity: 0;
+}
+
+
+.living-image-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+
+  background: transparent;
+  pointer-events: none;
+}
+
+
+/* ==========================================================
+   14. INTRODUCTION
+========================================================== */
+
+.living-introduction {
+  position: absolute;
+  z-index: 6;
+
+  top: 50%;
+  left: 50%;
+  width: min(600px, 78%);
+
+  transform: translate(-50%, -45%);
+
+  opacity: 0;
+  pointer-events: none;
+
+  text-align: center;
+
+  color: #f1efea;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, .8);
+}
+
+.living-introduction > .micro {
+  display: block;
+  margin-bottom: 25px;
+
+  color: #c4c1ba;
+}
+
+.living-introduction h2 {
+  margin: 0;
+
+  font: 400 clamp(24px, 3vw, 43px)/1.18 var(--serif);
+  letter-spacing: -.025em;
+}
+
+.living-introduction h2 em {
+  color: #b0aaa2;
+}
+
+.living-introduction p {
+  max-width: 380px;
+  margin: 28px auto 0;
+
+  color: #d0ccc5;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+
+/* ==========================================================
+   15. FEATURED WORK
+========================================================== */
+
+.living-featured {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+
+  padding: 10vh 4.5% 7vh;
+
+  overflow: hidden;
+
+  opacity: 1;
+  pointer-events: none;
+  background: transparent;
+}
+
+
+/* Individual text reveals */
+
+.living-featured .section-top,
+.living-featured .section-desc,
+.living-featured .gallery-bottom {
+  opacity: 0;
+}
+
+
+/* ==========================================================
+   16. LAG-FREE GALLERY COVER
+========================================================== */
+
+.gallery-viewport {
+  position: relative;
+  overflow: hidden;
+
+  opacity: 1;
+}
+
+.gallery-viewport::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+
+  background: var(--bg);
+  pointer-events: none;
+
+  transform: translate3d(
+    calc(var(--gallery-cover-progress, 0) * 100%),
+    0,
+    0
+  );
+
+  will-change: transform;
+}
+
+/* The gallery remains rendered at full opacity.
+   Only the cover moves during the scroll transition. */
+
+
+/* ==========================================================
+   17. FEATURED WORK HEADING
+========================================================== */
+
+.section-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 30px;
+
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-top h2 {
+  margin: 0;
+
+  font-family: var(--serif);
+  font-size: clamp(55px, 7vw, 110px);
+  font-weight: 400;
+
+  letter-spacing: -.045em;
+  line-height: .9;
+}
+
+.section-top h2 em {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -.03em;
+}
+
+.section-desc {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+
+  padding: 18px 0 24px;
+}
+
+.section-desc p {
+  max-width: 330px;
+  margin: 0;
+
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+
+/* ==========================================================
+   18. FEATURED CAROUSEL
+========================================================== */
+
+.gallery-track {
+  display: flex;
+  gap: 22px;
+
+  transition: transform .85s var(--ease);
+}
+
+.gallery-card {
+  flex: 0 0 clamp(260px, 38svh, 400px);
+  min-width: 0;
+
+  cursor: pointer;
+
+  transition: opacity .4s ease;
+}
+
+.gallery-card:not(.selected) {
+  opacity: 1;
+}
+
+.gallery-card:hover {
+  opacity: 1;
+}
+
+.gallery-image {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 3 / 4.25;
+
+  overflow: hidden;
+  background: #111112;
+}
+
+.gallery-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter: saturate(.85);
+
+  transition:
+    transform .9s var(--ease),
+    filter .6s ease;
+}
+
+.gallery-card:hover img {
+  transform: scale(1.035);
+  filter: saturate(1);
+}
+
+.gallery-card h3 {
+  margin: 12px 0 7px;
+  font: 400 29px/1 var(--serif);
+}
+
+.gallery-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+
+/* ==========================================================
+   19. CAROUSEL NAVIGATION
+========================================================== */
+
+.gallery-bottom {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+
+  padding: 46px 0 18px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.gallery-counter {
+  font-size: clamp(60px, 8vw, 110px);
+  font-weight: 300;
+
+  letter-spacing: -.1em;
+  line-height: .7;
+}
+
+.gallery-counter strong {
+  font-weight: 300;
+}
+
+.gallery-counter span {
+  font-size: 17px;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+.gallery-arrows {
+  display: flex;
+  gap: 10px;
+}
+
+.gallery-arrows button {
+  background: none;
+  border: 1px solid var(--line);
+
+  font-size: 22px;
+  padding: 10px 23px;
+
+  transition:
+    background-color .3s ease,
+    color .3s ease;
+}
+
+.gallery-arrows button:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+
+/* ==========================================================
+   20. TRANSITION PROGRESS
+========================================================== */
+
+.living-progress {
+  position: absolute;
+  z-index: 10;
+
+  bottom: 2.5%;
+  left: 4.5%;
+  right: 4.5%;
+
+  display: flex;
+  align-items: center;
+  gap: 22px;
+
+  pointer-events: none;
+}
+
+.living-progress-label {
+  min-width: 155px;
+  color: var(--muted);
+}
+
+.living-progress-track {
+  flex: 1;
+  height: 1px;
+
+  background: var(--line);
+}
+
+.living-progress-fill {
+  width: 0;
+  height: 100%;
+
+  background: var(--ink);
+}
+
+.living-progress-number {
+  color: var(--muted);
+}
+
+
+
+/* ==========================================================
+   21. HOMEPAGE DIRECTORY — BASE
+========================================================== */
+
+.directory {
+  position: relative;
+  padding: 115px 4.5% 45px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* HEADING */
+
+.directory-heading {
+  margin-bottom: 68px;
+}
+
+.directory-heading-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.directory-heading h2 {
+  margin: 70px 0 22px;
+
+  font-family: var(--serif);
+  font-size: clamp(58px, 8vw, 145px);
+  font-weight: 400;
+
+  line-height: .88;
+  letter-spacing: -.045em;
+}
+
+.directory-heading h2 em {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -.045em;
+}
+
+.directory-heading > p {
+  max-width: 440px;
+  margin: 0;
+
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+/* THREE-COLUMN SYSTEM */
+
+.directory-panels {
+  display: flex;
+  width: 100%;
+  min-height: 640px;
+  gap: 1px;
+
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.directory-panel {
+  position: relative;
+
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  min-width: 0;
+  min-height: 640px;
+  overflow: hidden;
+
+  padding: 34px;
+
+  background: var(--bg);
+  color: var(--ink);
+
+  transition:
+    flex-grow .8s var(--ease),
+    background-color .5s ease;
+}
+
+.directory-panel.is-active {
+  flex-grow: 2.4;
+  background: var(--surface);
+}
+
+/* TRIGGER */
+
+.directory-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 0;
+  border: 0;
+
+  background: transparent;
+  color: inherit;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.directory-index {
+  position: absolute;
+  top: 34px;
+  left: 34px;
+
+  color: var(--muted);
+}
+
+.directory-panel-title {
+  display: block;
+
+  max-width: 100%;
+
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 62px);
+  font-weight: 400;
+
+  line-height: .95;
+  letter-spacing: -.035em;
+
+  transition:
+    transform .7s var(--ease),
+    color .35s ease;
+}
+
+.directory-panel.is-active .directory-panel-title {
+  transform: translateY(-5px);
+}
+
+.directory-symbol {
+  position: absolute;
+  top: 30px;
+  right: 32px;
+
+  font-family: var(--sans);
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+
+  color: var(--muted);
+
+  transition:
+    transform .5s var(--ease),
+    color .35s ease;
+}
+
+.directory-panel.is-active .directory-symbol {
+  transform: rotate(45deg);
+  color: var(--ink);
+}
+
+/* EXPANDING CONTENT */
+
+.directory-panel-content {
+  max-height: 0;
+  min-width: 0;
+
+  margin-top: 0;
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+
+  pointer-events: none;
+
+  transition:
+    max-height .8s var(--ease),
+    margin-top .6s var(--ease),
+    opacity .4s ease,
+    transform .6s var(--ease),
+    visibility .4s ease;
+}
+
+.directory-panel.is-active .directory-panel-content {
+  max-height: 500px;
+  margin-top: 34px;
+
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+
+  pointer-events: auto;
+}
+
+.directory-panel-content > .micro {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.directory-panel-content h3 {
+  max-width: 480px;
+  margin: 0 0 20px;
+
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.2vw, 58px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+
+.directory-panel-content h3 em {
+  display: block;
+  font-weight: 400;
+}
+
+.directory-panel-content p {
+  max-width: 430px;
+  margin: 0;
+
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* DISCIPLINES / INFORMATION TAGS */
+
+.directory-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+
+  margin: 30px 0 35px;
+}
+
+.directory-tags span {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 30px;
+  padding: 7px 10px;
+
+  border: 1px solid var(--line);
+
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .08em;
+  line-height: 1.3;
+}
+
+/* DESTINATION LINK */
+
+.directory-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+
+  width: 100%;
+  padding: 17px 0;
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  color: var(--ink);
+
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .12em;
+
+  transition:
+    color .3s ease,
+    padding .4s var(--ease);
+}
+
+.directory-link:hover {
+  padding-left: 10px;
+  color: var(--menu-hover);
+}
+
+.directory-link span:last-child {
+  font-size: 23px;
+  line-height: 1;
+}
+
+
+/* ==========================================================
+   SITE FOOTER
+========================================================== */
+
+.site-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+
+  width: 100%;
+  padding: 28px 5%;
+
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.site-footer > :first-child {
+  justify-self: start;
+}
+
+.site-footer > :nth-child(2) {
+  justify-self: center;
+}
+
+.site-footer > :last-child {
+  justify-self: end;
+}
+
+.site-footer a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity .25s ease;
+}
+
+.site-footer a:hover {
+  opacity: .6;
+}
+
+@media (max-width: 700px) {
+  .site-footer {
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 24px 5%;
+  }
+
+  .site-footer > :nth-child(2) {
+    display: none;
+  }
+}
+
+
+/* ==========================================================
+   23. TABLET — 1000px
+========================================================== */
+
+@media (max-width: 1000px) {
+
+  /* NAVIGATION */
+
+  .menu-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-right {
+    display: none;
+  }
+
+  .menu-left {
+    min-width: 0;
+    padding: 115px 7% 45px;
+  }
+
+  .menu-links a {
+    font-size: clamp(58px, 8vw, 90px);
+  }
+
+
+  /* HERO */
+
+  .living-name {
+    font-size: 15vw;
+  }
+
+  /* FEATURED WORK */
+
+  .gallery-card {
+    flex-basis: clamp(240px, 36svh, 340px);
+  }
+
+  .living-featured {
+    padding-top: 12vh;
+  }
+
+  .section-top h2 {
+    font-size: 7vw;
+  }
+
+  /* HOMEPAGE DIRECTORY */
+
+  .directory {
+    padding: 90px 4.5% 40px;
+  }
+
+  .directory-panels,
+  .directory-panel {
+    min-height: 560px;
+  }
+
+  .directory-panel {
+    padding: 25px;
+  }
+
+  .directory-index {
+    top: 25px;
+    left: 25px;
+  }
+
+  .directory-symbol {
+    top: 22px;
+    right: 25px;
+  }
+
+  .directory-panel-title {
+    font-size: clamp(25px, 3.5vw, 44px);
+  }
+
+  .directory-panel-content h3 {
+    font-size: clamp(30px, 3.5vw, 46px);
+  }
+
+  .directory-panel.is-active .directory-panel-content {
+    max-height: 550px;
+  }
+
+  /* EXISTING ABOUT / CONTACT */
+
+  .about {
+    gap: 5%;
+    padding-inline: 6%;
+  }
+
+  .about-visual {
+    height: 550px;
+  }
+
+}
+
+
+/* ==========================================================
+   24. SMALL TABLET — 900px
+========================================================== */
+
+@media (max-width: 900px) {
+
+  /* NAVIGATION */
+
+  .menu-left {
+    padding-inline: 7%;
+  }
+  
+  .menu-links a {
+    font-size: clamp(58px, 8vw, 90px);
+  }
+
+  /* HOMEPAGE DIRECTORY */
+
+  .directory-panels,
+  .directory-panel {
+    min-height: 520px;
+  }
+
+  .directory-panel {
+    padding: 22px;
+  }
+
+  .directory-index {
+    top: 22px;
+    left: 22px;
+  }
+
+  .directory-symbol {
+    top: 19px;
+    right: 22px;
+  }
+
+  .directory-panel-title {
+    font-size: clamp(24px, 3.6vw, 36px);
+  }
+
+  .directory-panel-content h3 {
+    font-size: clamp(28px, 3.5vw, 40px);
+  }
+
+  .directory-panel-content p {
+    font-size: 13px;
+  }
+
+  .directory-tags {
+    margin: 22px 0 25px;
+  }
+
+  .directory-tags span {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  /* EXISTING ABOUT / CONTACT */
+
+  .about {
+    padding-block: 110px;
+  }
+
+  .about-copy h2 {
+    font-size: clamp(65px, 8vw, 100px);
+  }
+
+  .contact {
+    padding: 100px 5% 80px;
+  }
+
+  .contact h2 {
+    font-size: clamp(65px, 15vw, 150px);
+    margin: 80px 0;
+  }
+
+  .contact-action {
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+
+}
+
+
+/* ==========================================================
+   25. MOBILE — 700px
+========================================================== */
+
+@media (max-width: 700px) {
+
+  /* HEADER */
+
+  .site-header {
+    height: 85px;
+    padding: 20px 6%;
+  }
+
+  .menu-button {
+    gap: 13px;
+  }
+
+  .menu-lines {
+    width: 27px;
+  }
+
+  
+  /* NAVIGATION */
+
+  .menu-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-left {
+    min-height: 100%;
+    padding: 100px 6% 35px;
+    justify-content: center;
+  }
+
+  .menu-links a {
+    padding: 10px 0;
+    font-size: clamp(46px, 10vw, 72px);
+    line-height: 1;
+  }
+
+  .menu-footer {
+    margin-top: 32px;
+  }
+
+  .theme-controls {
+    gap: 12px;
+  }
+
+  .theme-options button {
+    min-width: 95px;
+    min-height: 38px;
+  }
+
+  .menu-meta {
+    margin-top: 30px;
+    font-size: 9px;
+  }
+
+  .menu-right {
+    display: none;
+  }
+
+
+  /* SPLASH */
+
+  .living-name {
+    font-size: clamp(65px, 16vw, 120px);
+  }
+
+  .living-name-left {
+    top: 17%;
+    left: 6%;
+  }
+
+  .living-name-right {
+    top: 77%;
+    right: 6%;
+  }
+
+  .living-monogram span {
+    font-size: 35vw;
+  }
+
+  .living-side {
+    display: none;
+  }
+
+  .living-description {
+    left: 6%;
+    bottom: 5%;
+    max-width: 220px;
+  }
+
+  .living-description p {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .living-edition {
+    right: 6%;
+    bottom: 5%;
+  }
+
+  .living-edition strong {
+    font-size: 40px;
+  }
+
+  /* VIRTÙ ARTWORK */
+
+  .living-image {
+    top: 26%;
+    left: 27%;
+    width: 46%;
+    height: 48%;
+  }
+
+  /* INTRODUCTION */
+
+  .living-introduction {
+    width: 86%;
+  }
+
+  .living-introduction h2 {
+    font-size: clamp(24px, 5.5vw, 36px);
+  }
+
+  .living-introduction p {
+    font-size: 10px;
+  }
+
+  /* FEATURED WORK */
+
+  .living-featured {
+    padding: 12vh 6% 7vh;
+  }
+
+  .section-top {
+    align-items: flex-start;
+  }
+
+  .section-top h2 {
+    font-size: clamp(42px, 9vw, 70px);
+  }
+
+  #featuredCount {
+    display: none;
+  }
+
+  .section-desc {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .section-desc p {
+    max-width: 320px;
+    font-size: 10px;
+  }
+
+  .gallery-track {
+    gap: 15px;
+  }
+
+  .gallery-card {
+    flex-basis: clamp(190px, 33svh, 280px);
+  }
+
+  .gallery-card h3 {
+    font-size: 23px;
+  }
+
+  .gallery-bottom {
+    padding-top: 28px;
+  }
+
+  .gallery-counter {
+    font-size: 65px;
+  }
+
+  .gallery-arrows button {
+    padding: 8px 16px;
+  }
+
+  .living-progress {
+    left: 6%;
+    right: 6%;
+    gap: 12px;
+  }
+
+  .living-progress-label {
+    min-width: 115px;
+    font-size: 8px;
+  }
+
+  .living-progress-number {
+    font-size: 8px;
+  }
+
+  /* HOMEPAGE DIRECTORY */
+
+  .directory {
+    padding: 75px 6% 35px;
+  }
+
+  .directory-heading {
+    margin-bottom: 40px;
+  }
+
+  .directory-heading h2 {
+    margin: 45px 0 20px;
+    font-size: clamp(55px, 12vw, 85px);
+  }
+
+  .directory-heading > p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .directory-panels {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .directory-panel {
+    flex: 0 0 auto;
+    min-height: 150px;
+    padding: 65px 24px 24px;
+  }
+
+  .directory-panel.is-active {
+    flex-grow: 0;
+  }
+
+  .directory-index {
+    top: 22px;
+    left: 24px;
+  }
+
+  .directory-symbol {
+    top: 18px;
+    right: 24px;
+  }
+
+  .directory-panel-title {
+    font-size: clamp(36px, 8vw, 56px);
+  }
+
+  .directory-panel.is-active .directory-panel-content {
+    max-height: 750px;
+    margin-top: 30px;
+  }
+
+  .directory-panel-content h3 {
+    font-size: clamp(36px, 7vw, 52px);
+  }
+
+  .directory-panel-content p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .directory-tags {
+    margin: 25px 0 30px;
+  }
+
+  /* EXISTING ABOUT / CONTACT */
+
+  .about {
+    grid-template-columns: 1fr;
+    gap: 65px;
+    padding: 90px 6%;
+  }
+
+  .about-visual {
+    height: 520px;
+    max-width: 540px;
+  }
+
+  .about-copy h2 {
+    font-size: clamp(70px, 13vw, 110px);
+  }
+
+  .contact {
+    padding: 90px 6% 75px;
+  }
+
+  .contact h2 {
+    font-size: clamp(65px, 14vw, 110px);
+  }
+
+  .contact-action {
+    grid-template-columns: 1fr;
+    gap: 65px;
+  }
+
+}
+
+
+/* ==========================================================
+   26. COMPACT MOBILE — 550px
+========================================================== */
+
+@media (max-width: 550px) {
+
+  /* SPLASH */
+
+  .living-name {
+    font-size: 17vw;
+  }
+
+  .living-monogram span {
+    font-size: 38vw;
+  }
+
+  .living-description {
+    max-width: 175px;
+  }
+
+  .living-description p {
+    font-size: 9px;
+  }
+
+  .living-edition strong {
+    font-size: 35px;
+  }
+
+  /* FEATURED WORK */
+
+  .living-featured {
+    padding-top: 11vh;
+  }
+
+  .section-top h2 {
+    font-size: 10vw;
+  }
+
+  .gallery-card {
+    flex-basis: clamp(175px, 30svh, 240px);
+  }
+
+  .gallery-card h3 {
+    font-size: 21px;
+  }
+
+  .gallery-bottom {
+    padding-top: 22px;
+  }
+
+  .gallery-counter {
+    font-size: 55px;
+  }
+
+  /* HOMEPAGE DIRECTORY */
+
+  .directory {
+    padding: 65px 5% 30px;
+  }
+
+  .directory-heading h2 {
+    font-size: clamp(48px, 12vw, 65px);
+  }
+
+  .directory-panel {
+    min-height: 135px;
+    padding: 60px 20px 22px;
+  }
+
+  .directory-index {
+    top: 20px;
+    left: 20px;
+  }
+
+  .directory-symbol {
+    top: 16px;
+    right: 20px;
+  }
+
+  .directory-panel-title {
+    font-size: clamp(34px, 9vw, 48px);
+  }
+
+  .directory-panel-content h3 {
+    font-size: clamp(34px, 8vw, 44px);
+  }
+
+  .directory-tags span {
+    font-size: 10px;
+  }
+
+  .directory-link {
+    font-size: 11px;
+  }
+
+  /* EXISTING ABOUT / CONTACT */
+
+  .about-visual {
+    height: 420px;
+  }
+
+  .about-copy h2 {
+    font-size: 15vw;
+  }
+
+  .contact-heading {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact h2 {
+    margin: 65px 0;
+  }
+
+  .contact-primary h3 {
+    font-size: clamp(32px, 8vw, 45px);
+  }
+
+  .contact-email {
+    gap: 15px;
+    font-size: 10px;
+    letter-spacing: .07em;
+  }
+
+}
+
+
+/* ==========================================================
+   27. SMALL MOBILE — 420px
+========================================================== */
+
+@media (max-width: 420px) {
+
+  /* HEADER / NAVIGATION */
+
+  .site-header {
+    padding-inline: 5%;
+  }
+
+  .menu-button {
+    gap: 10px;
+  }
+
+  .menu-button .micro {
+    font-size: 9px;
+  }
+
+  .menu-left {
+    padding: 95px 6% 30px;
+  }
+
+  .menu-links a {
+    font-size: clamp(43px, 11vw, 55px);
+  }
+
+  .menu-meta {
+    gap: 12px;
+    font-size: 8px;
+  }
+
+  /* SPLASH */
+
+  .living-description {
+    max-width: 150px;
+  }
+
+  .living-edition .micro {
+    font-size: 8px;
+  }
+
+  /* FEATURED WORK */
+
+  .living-featured {
+    padding-inline: 5%;
+  }
+
+  .gallery-card {
+    flex-basis: 180px;
+  }
+
+  .gallery-arrows button {
+    padding: 7px 13px;
+  }
+
+  /* HOMEPAGE DIRECTORY */
+
+  .directory-panel {
+    min-height: 125px;
+    padding: 55px 18px 20px;
+  }
+
+  .directory-index {
+    left: 18px;
+  }
+
+  .directory-symbol {
+    right: 18px;
+  }
+
+  .directory-panel-title {
+    font-size: 36px;
+  }
+
+  .directory-panel-content h3 {
+    font-size: 36px;
+  }
+
+  .directory-panel-content p {
+    font-size: 13px;
+  }
+
+  .directory-panel.is-active .directory-panel-content {
+    margin-top: 24px;
+    max-height: 850px;
+  }
+
+  /* EXISTING ABOUT / CONTACT */
+
+  .about-facts {
+    gap: 15px;
+  }
+
+}

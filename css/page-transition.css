@@ -1,0 +1,99 @@
+
+/* ==========================================================
+   LOU REYES — COLLECTION / WORK PAGE TRANSITION
+========================================================== */
+
+body.page-transition-active {
+  overflow: hidden !important;
+}
+
+.page-transition-image {
+  position: fixed;
+  z-index: 99999;
+
+  display: block;
+  margin: 0;
+  padding: 0;
+
+  object-fit: cover;
+  object-position: center;
+
+  pointer-events: none;
+  user-select: none;
+
+  max-width: none;
+  max-height: none;
+
+  filter: none !important;
+
+  will-change: transform, width, height;
+}
+
+.page-transition-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+
+  background: var(--bg, #111111);
+  pointer-events: none;
+}
+
+.page-transition-image,
+.page-transition-cover {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Prevent the source image from appearing twice. */
+
+.page-transition-source-hidden {
+  visibility: hidden !important;
+}
+
+/* The destination text arrives after the image settles. */
+
+.page-transition-content-hidden {
+  opacity: 0 !important;
+}
+
+.page-transition-content-arrive {
+  animation: pageTransitionContent .8s ease both;
+}
+
+@keyframes pageTransitionContent {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-content-arrive {
+    animation: none;
+  }
+}
+
+
+/* ==========================================================
+   NAVIGATION HANDOFF — KEEP THE COVER VISIBLE
+========================================================== */
+
+@keyframes holdOutgoingCover {
+  from { opacity: 1; }
+  to   { opacity: 1; }
+}
+
+::view-transition-old(root) {
+  animation: holdOutgoingCover 200ms linear both;
+  z-index: 2;
+}
+
+::view-transition-new(root) {
+  animation: none;
+  z-index: 1;
+}

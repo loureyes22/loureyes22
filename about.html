@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#111111" id="themeColor">
+
+  <meta
+    name="description"
+    content="Meet Lou Reyes, a Toronto-based graphic designer working across editorial design, visual identity, packaging, digital experiences, posters, and photography."
+  >
+
+  <title>The Designer — Lou Reyes</title>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem("lou-reyes-theme");
+
+      document.documentElement.dataset.theme =
+        saved === "light" ? "light" : "dark";
+    })();
+  </script>
+
+  <link
+    rel="preload"
+    href="fonts/Boska-Regular.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  >
+
+  <link rel="stylesheet" href="css/archive.css">
+  <link rel="stylesheet" href="css/about.css">
+</head>
+
+<body>
+
+  <!-- ======================================================
+       01. HEADER
+  ====================================================== -->
+
+  <header class="site-header">
+
+    <a
+      href="index.html"
+      class="archive-brand"
+      aria-label="Lou Reyes homepage"
+    >
+      LOU REYES
+    </a>
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuScreen"
+      aria-label="Open navigation"
+    >
+      <span class="menu-lines" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+  </header>
+
+
+  <!-- ======================================================
+       02. FULLSCREEN NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="menu-screen"
+    id="menuScreen"
+    aria-label="Main navigation"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="menu-left">
+
+      <div class="menu-links">
+        <a href="index.html">Home</a>
+        <a href="archive.html">The Archive</a>
+        <a href="about.html" aria-current="page">The Designer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <div class="menu-footer">
+
+        <div class="theme-controls">
+
+          <span class="micro">APPEARANCE</span>
+
+          <div
+            class="theme-options"
+            role="group"
+            aria-label="Appearance"
+          >
+
+            <button type="button" id="lightTheme">
+              <span aria-hidden="true">☼</span>
+              <span>LIGHT</span>
+            </button>
+
+            <button type="button" id="darkTheme">
+              <span aria-hidden="true">☾</span>
+              <span>DARK</span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="menu-meta micro">
+          <span>LOU REYES / 2026</span>
+          <span>TORONTO, CANADA</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu-right">
+
+      <img
+        src="portfolio/assets/sunset.webp"
+        alt="VIRTÙ editorial artwork"
+      >
+
+    </div>
+
+  </nav>
+
+
+  <!-- ======================================================
+       03. ABOUT PAGE
+  ====================================================== -->
+
+  <main id="mainContent">
+
+
+    <!-- ====================================================
+         03A. PHOTOGRAPHIC HERO
+    ==================================================== -->
+
+    <section class="about-hero">
+
+      <div class="about-hero-background" aria-hidden="true">
+
+        <img
+          src="portfolio/assets/night.jpg"
+          alt=""
+          fetchpriority="high"
+        >
+
+      </div>
+
+      <div class="about-hero-content">
+
+        <span class="about-hero-eyebrow">
+          LOU REYES / GRAPHIC DESIGNER
+        </span>
+
+        <h1>
+          Hello,<br>
+          <em>I'm Lou.</em>
+        </h1>
+
+        <p class="about-hero-lead">
+          I'm a graphic designer based in Toronto,
+          with a particular interest in typography,
+          imagery, and visual storytelling.
+        </p>
+
+        <div class="about-hero-bio">
+
+          <p>
+            I've always enjoyed art, especially drawing
+            and digital imagery. Graphic design wasn't
+            originally my first choice, but my curiosity
+            about Photoshop and image editing eventually
+            led me toward it.
+          </p>
+
+          <p>
+            My brother encouraged me to try making
+            posters in Canva. I enjoyed experimenting
+            with different ideas, and what started
+            as something simple became an interest
+            I wanted to explore further.
+          </p>
+
+          <p>
+            What I enjoy most is the freedom to create
+            something my own. There's a satisfaction
+            in seeing an idea become something
+            I've made myself.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================
+         03B. PROFESSIONAL PRACTICE
+    ==================================================== -->
+
+    <section class="about-services">
+
+      <div class="about-services-heading">
+
+        <div>
+
+          <h2>
+            What<br>
+            <em>I do.</em>
+          </h2>
+
+          <p>
+            My practice moves between different
+            disciplines, combining an interest in
+            visual storytelling with typography,
+            imagery, and composition.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="about-services-grid">
+
+        <div class="about-service">
+          <h3>Editorial Design</h3>
+          <p>Publications, layouts, and typography.</p>
+        </div>
+
+        <div class="about-service">
+          <h3>Visual Identity</h3>
+          <p>Branding, identity systems, and art direction.</p>
+        </div>
+
+        <div class="about-service">
+          <h3>Packaging</h3>
+          <p>Product presentation and packaging design.</p>
+        </div>
+
+        <div class="about-service">
+          <h3>Digital Experiences</h3>
+          <p>Websites, interfaces, and digital design.</p>
+        </div>
+
+        <div class="about-service">
+          <h3>Photography</h3>
+          <p>Architecture, nature, and visual observations.</p>
+        </div>
+
+        <div class="about-service">
+          <h3>Poster Design</h3>
+          <p>Expressive compositions, typography, and imagery.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================
+         03C. PERSONAL INTERESTS
+    ==================================================== -->
+
+    <section class="about-interests">
+
+      <div class="about-interests-visual">
+
+        <img
+          src="portfolio/assets/sunset.webp"
+          alt="Sunset over the water"
+          loading="lazy"
+        >
+
+      </div>
+
+      <div class="about-interests-content">
+
+        <h2>
+          Beyond<br>
+          <em>the screen.</em>
+        </h2>
+
+        <p>
+          Outside of design, my interests include
+          film, video games, music, fashion,
+          photography, and architecture.
+        </p>
+
+        <p>
+          These interests influence the things
+          I notice, from the lighting in a photograph
+          to the typography of a magazine
+          or the composition of a film poster.
+        </p>
+
+        <p>
+          I enjoy experimenting with different
+          styles rather than limiting myself
+          to one particular aesthetic.
+          Professionally, I'm especially interested
+          in poster design and fashion editorial
+          work, where imagery and typography
+          come together.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================
+         03D. CLOSING
+    ==================================================== -->
+
+    <section class="about-closing">
+
+      <div class="about-closing-content">
+
+        <h2>
+          Let's make<br>
+          <em>something.</em>
+        </h2>
+
+        <p>
+          Interested in seeing what I've made
+          or starting a conversation?
+        </p>
+
+        <div class="about-closing-links">
+
+          <a href="archive.html">
+            <span>EXPLORE THE ARCHIVE</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+
+          <a href="contact.html">
+            <span>GET IN TOUCH</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================
+       04. FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <span class="micro">© 2026 LOU REYES</span>
+
+    <span class="micro muted">TORONTO, CANADA</span>
+
+    <a href="index.html" class="micro">
+      BACK TO HOME ↗
+    </a>
+
+  </footer>
+
+  <script src="js/about.js"></script>
+
+</body>
+</html>

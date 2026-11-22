@@ -1,0 +1,80 @@
+
+/* ==========================================================
+   LOU REYES — PERSISTENT COLLECTION / WORK VIEW
+========================================================== */
+
+body.spa-work-active {
+  overflow: hidden !important;
+}
+
+/* Work page displayed over the existing Collection. */
+
+.spa-work-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+
+  padding: 0;
+  margin: 0;
+  border: 0;
+
+  background: var(--bg, #111111);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.spa-work-frame.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Background underneath the expanding artwork. */
+
+.spa-transition-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 9001;
+
+  background: var(--bg, #111111);
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The cover stays in this document during the animation. */
+
+.spa-transition-image {
+  position: fixed;
+  z-index: 9002;
+
+  display: block;
+  margin: 0;
+  padding: 0;
+
+  max-width: none;
+  max-height: none;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter: none !important;
+
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Avoid showing two copies of the thumbnail. */
+
+.spa-source-hidden {
+  visibility: hidden !important;
+}
+

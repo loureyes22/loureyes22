@@ -1,0 +1,652 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta
+  name="description"
+  content="Lou Reyes is a graphic designer based in Toronto, Canada, exploring typography, editorial design, visual identity, and digital experiences."
+>
+
+  <title>Lou Reyes — Graphic Design Portfolio</title>
+
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem("lou-reyes-theme");
+        document.documentElement.dataset.theme =
+          saved === "light" || saved === "dark"
+            ? saved
+            : "dark";
+      } catch (error) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home-featured-transition.css">
+
+  <link
+    rel="preload"
+    as="image"
+    href="portfolio/editorial/virtu/landscape.jpg"
+    fetchpriority="high"
+  >
+</head>
+
+<body>
+  
+
+  <!-- ======================================================
+       01. FIXED MINIMAL HEADER
+  ====================================================== -->
+
+  <header class="site-header">
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuScreen"
+      aria-label="Open navigation"
+    >
+      
+
+      <span class="menu-lines" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+  </header>
+
+
+  
+  <!-- ======================================================
+      02. FULLSCREEN NAVIGATION
+  ====================================================== -->
+
+  <nav
+    class="menu-screen"
+    id="menuScreen"
+    aria-label="Main navigation"
+    aria-hidden="true"
+    inert
+  >
+
+    <div class="menu-left">
+
+      <div class="menu-links">
+        <a href="#home" aria-current="page">Home</a>
+        <a href="archive.html">The Archive</a>
+        <a href="about.html">The Designer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <div class="menu-footer">
+
+        <div class="theme-controls">
+
+          <span class="micro">APPEARANCE</span>
+
+          <div
+            class="theme-options"
+            role="group"
+            aria-label="Appearance"
+          >
+
+            <button type="button" id="lightTheme">
+              <span aria-hidden="true">☼</span>
+              <span>LIGHT</span>
+            </button>
+
+            <button type="button" id="darkTheme">
+              <span aria-hidden="true">☾</span>
+              <span>DARK</span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="menu-meta micro">
+          <span>LOU REYES / 2026</span>
+          <span>TORONTO, CANADA</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu-right">
+      <img
+        src="portfolio/assets/architecture.webp"
+        alt="Architectural study"
+        loading="lazy"
+        decoding="async"
+      >
+    </div>
+
+  </nav>
+
+
+
+  <main id="mainContent">
+
+    <!-- ====================================================
+         03. LIVING TRANSITION
+         SPLASH → INTRODUCTION → FEATURED WORK
+    ==================================================== -->
+
+    <section class="living-transition" id="home">
+
+      <div class="living-sticky">
+
+        <!-- ARCHITECTURAL GRID -->
+
+        <div class="living-grid" aria-hidden="true">
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+
+
+        <!-- SPLASH -->
+
+        <div class="living-splash">
+
+          <h1
+            class="living-name living-name-left"
+            aria-label="Lou Reyes"
+          >
+            <span class="living-name-original">LOU</span>
+            <span class="living-name-hover" aria-hidden="true">PORT</span>
+          </h1>
+
+          <div
+            class="living-name living-name-right"
+            aria-hidden="true"
+          >
+            <span class="living-name-original">REYES</span>
+            <span class="living-name-hover" aria-hidden="true">FOLIO</span>
+          </div>
+
+          <div class="living-monogram" aria-hidden="true">
+            <span>LR</span>
+          </div>
+
+          <span class="living-side micro">
+            DESIGN / ART DIRECTION / VISUAL STORYTELLING
+          </span>
+
+          <div class="living-description">
+
+            <span class="micro">
+              DESIGN / IMAGE / TYPE
+            </span>
+
+            <p>
+              Working at the intersection of design,
+              narrative, and visual culture.
+            </p>
+
+          </div>
+
+          <div class="living-edition">
+            <span class="micro">PORTFOLIO / VOL. 01</span>
+            <strong>26</strong>
+          </div>
+
+        </div>
+
+
+        <!-- VIRTÙ ANIMATED ARTWORK -->
+
+        <div class="living-image" id="livingImage">
+
+          <img
+            class="living-image-portrait"
+            src="portfolio/assets/landscape.webp"
+            alt="VIRTÙ editorial catalogue cover"
+            decoding="async"
+          >
+
+          <img
+            class="living-image-landscape"
+            src="portfolio/assets/landscape.webp"
+            alt="VIRTÙ editorial artwork"
+            fetchpriority="high"
+            decoding="async"
+          >
+
+          <div class="living-image-shade"></div>
+
+        </div>
+
+
+        <!-- INTRODUCTION -->
+
+        <div
+          class="living-introduction"
+          id="livingIntroduction"
+        >
+
+          <span class="micro">
+            01 — THE INTRODUCTION
+          </span>
+
+          <h2>
+            Not simply a collection of work.
+            An ongoing study of
+            <em>composition, atmosphere,</em>
+            and the art of making things
+            <em>matter.</em>
+          </h2>
+
+          <p>
+            I'm Lou Reyes, a designer drawn to the relationship
+            between form and feeling. Through editorial design,
+            identity, packaging, and digital experiences, I explore
+            how visual decisions can tell stories without saying too much.
+          </p>
+
+        </div>
+
+
+        <!-- FEATURED WORK -->
+
+        <section
+          class="featured living-featured"
+          id="featured"
+        >
+
+          <div class="section-top">
+
+            <h2>
+              FEATURED <em>WORK.</em>
+            </h2>
+
+            <span class="micro muted" id="featuredCount">
+              A CURATED SELECTION
+            </span>
+
+          </div>
+
+          <div class="section-desc">
+
+            <span class="micro">
+              02 — THE HIGHLIGHTS
+            </span>
+
+            <p>
+              A selection of projects that best represent my
+              approach to visual storytelling, composition,
+              and creative direction.
+            </p>
+
+          </div>
+
+
+          <!-- LAG-FREE GALLERY REVEAL -->
+
+          <div
+            class="gallery-viewport"
+            id="galleryViewport"
+          >
+
+            <div
+              class="gallery-track"
+              id="galleryTrack"
+            ></div>
+
+          </div>
+
+
+          <!-- CAROUSEL NAVIGATION -->
+
+          <div class="gallery-bottom">
+
+            <div class="gallery-counter">
+              <strong id="galleryCurrent">01</strong>
+              <span id="galleryTotal"> / 01</span>
+            </div>
+
+            <div class="gallery-arrows">
+
+              <button
+                type="button"
+                id="prevProject"
+                aria-label="Previous featured project"
+              >←</button>
+
+              <button
+                type="button"
+                id="nextProject"
+                aria-label="Next featured project"
+              >→</button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- TRANSITION PROGRESS -->
+
+        <div class="living-progress">
+
+          <span class="micro living-progress-label">
+            SCROLL TO UNFOLD
+          </span>
+
+          <div class="living-progress-track">
+            <div class="living-progress-fill"></div>
+          </div>
+
+          <span class="micro living-progress-number">
+            000%
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    
+<!-- ====================================================
+     04. THE DIRECTORY
+     ARCHIVE / ABOUT / CONTACT
+==================================================== -->
+
+<section class="directory" id="directory">
+
+  <div class="directory-heading">
+
+    <div class="directory-heading-top">
+
+      <span class="micro">
+        03 — CONTINUE EXPLORING
+      </span>
+
+      <span class="micro muted">
+        THE DIRECTORY / 03 DESTINATIONS
+      </span>
+
+    </div>
+
+    <h2>
+      Beyond the
+      <em>work.</em>
+    </h2>
+
+    <p>
+      A closer look at the projects, the practice,
+      and the person behind them.
+    </p>
+
+  </div>
+
+
+      <div class="directory-panels">
+
+        <!-- ================================================
+            01. ARCHIVE
+        ================================================= -->
+
+        <article
+          class="directory-panel is-active"
+          data-directory="archive"
+        >
+
+          <button
+            class="directory-trigger"
+            type="button"
+            aria-expanded="true"
+            aria-controls="directoryArchive"
+          >
+
+            <span class="directory-index micro">
+              01 / EXPLORE
+            </span>
+
+            <span class="directory-panel-title">
+              ARCHIVE
+            </span>
+
+            <span class="directory-symbol" aria-hidden="true">
+              +
+            </span>
+
+          </button>
+
+          <div
+            class="directory-panel-content"
+            id="directoryArchive"
+          >
+
+            <span class="micro muted">
+              THE COMPLETE COLLECTION
+            </span>
+
+            <h3>
+              A catalogue of
+              <em>creative work.</em>
+            </h3>
+
+            <p>
+              Beyond the selected projects.
+              Explore a growing collection of work
+              across print, identity, and digital design.
+            </p>
+
+            <div class="directory-tags">
+              <span>EDITORIAL</span>
+              <span>PACKAGING</span>
+              <span>IDENTITY</span>
+              <span>DIGITAL</span>
+              <span>PHOTOGRAPHY</span>
+            </div>
+
+            <a
+              class="directory-link"
+              href="archive.html"
+            >
+              <span>EXPLORE THE ARCHIVE</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+
+          </div>
+
+        </article>
+
+
+        <!-- ================================================
+            02. ABOUT
+        ================================================= -->
+
+        <article
+          class="directory-panel"
+          data-directory="about"
+        >
+
+          <button
+            class="directory-trigger"
+            type="button"
+            aria-expanded="false"
+            aria-controls="directoryAbout"
+          >
+
+            <span class="directory-index micro">
+              02 / DISCOVER
+            </span>
+
+            <span class="directory-panel-title">
+              ABOUT
+            </span>
+
+            <span class="directory-symbol" aria-hidden="true">
+              +
+            </span>
+
+          </button>
+
+          <div
+            class="directory-panel-content"
+            id="directoryAbout"
+            inert
+          >
+
+            <span class="micro muted">
+              THE PERSON & THE PRACTICE
+            </span>
+
+            <h3>
+              Intentional
+              <em>by design.</em>
+            </h3>
+
+            <p>
+              Based in Toronto, Canada.
+              My approach is shaped by typography,
+              storytelling, composition, and an
+              appreciation for the smallest details.
+            </p>
+
+            <div class="directory-tags">
+              <span>GRAPHIC DESIGN</span>
+              <span>TYPOGRAPHY</span>
+              <span>BRANDING</span>
+              <span>VISUAL STORYTELLING</span>
+            </div>
+
+            <a
+              class="directory-link"
+              href="about.html"
+            >
+              <span>MEET THE DESIGNER</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+
+          </div>
+
+        </article>
+
+
+        <!-- ================================================
+            03. CONTACT
+        ================================================= -->
+
+        <article
+          class="directory-panel"
+          data-directory="contact"
+        >
+
+          <button
+            class="directory-trigger"
+            type="button"
+            aria-expanded="false"
+            aria-controls="directoryContact"
+          >
+
+            <span class="directory-index micro">
+              03 / CONNECT
+            </span>
+
+            <span class="directory-panel-title">
+              CONTACT
+            </span>
+
+            <span class="directory-symbol" aria-hidden="true">
+              +
+            </span>
+
+          </button>
+
+          <div
+            class="directory-panel-content"
+            id="directoryContact"
+            inert
+          >
+
+            <span class="micro muted">
+              THE NEXT CONVERSATION
+            </span>
+
+            <h3>
+              Every project
+              <em>begins somewhere.</em>
+            </h3>
+
+            <p>
+              Whether it's a design opportunity,
+              a collaboration, or simply an introduction,
+              I'm always open to a meaningful conversation.
+            </p>
+
+            <div class="directory-tags">
+              <span>DESIGN OPPORTUNITIES</span>
+              <span>COLLABORATIONS</span>
+              <span>GENERAL INQUIRIES</span>
+            </div>
+
+            <a
+              class="directory-link"
+              href="contact.html"
+            >
+              <span>START A CONVERSATION</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+
+          </div>
+
+        </article>
+
+      </div>
+
+  </main>
+
+
+  <!-- ======================================================
+       06. FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <span class="micro">
+      © 2026 LOU REYES
+    </span>
+
+    <span class="micro muted">
+      TORONTO, CANADA
+    </span>
+
+    <a href="index.html" class="micro">
+      BACK TO HOME ↗
+    </a>
+
+  </footer>
+
+
+  <!-- ======================================================
+       07. SCRIPTS
+  ====================================================== -->
+
+  
+  <script src="js/portfolio-data.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/home-featured-transition.js"></script>
+  <script src="js/featured-work-return.js"></script>
+
+</body>
+</html>
