@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#263D32">
+
+    <meta name="description"
+        content="Discover the Chapter & Coffee café menu. Thoughtfully crafted coffee, comforting teas, seasonal drinks, and delicious café favorites.">
+
+    <title>Café Menu — Chapter & Coffee</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="menu.css">
+
+    <script src="menu.js" defer></script>
+</head>
+
+<body>
+
+    <!-- ==================================================
+         HEADER
+    ================================================== -->
+
+    <header class="site-header" id="siteHeader">
+
+        <div class="header-inner">
+
+            <a href="index.html" class="brand" aria-label="Chapter and Coffee home">
+                <span class="brand-name">Chapter <em>&</em> Coffee</span>
+                <span class="brand-tagline">A LITTLE COFFEE. A LOT OF STORIES.</span>
+            </a>
+
+            <nav class="desktop-nav" aria-label="Main navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="books.html" class="nav-link">Books</a>
+                <a href="menu.html" class="nav-link active" aria-current="page">Café Menu</a>
+                <a href="about.html" class="nav-link">Our Story</a>
+                <a href="membership.html" class="nav-link">Membership</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+
+                <a href="membership.html" class="header-member-link">
+                    Join the Club <span aria-hidden="true">↗</span>
+                </a>
+
+                <button
+                    class="menu-toggle"
+                    id="menuToggle"
+                    type="button"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                    aria-controls="mobileNavigation">
+                    <span></span>
+                    <span></span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ==================================================
+         MOBILE NAVIGATION
+    ================================================== -->
+
+    <div class="mobile-navigation" id="mobileNavigation" aria-hidden="true">
+
+        <nav class="mobile-nav-links" aria-label="Mobile navigation">
+            <a href="index.html">Home</a>
+            <a href="books.html">Books</a>
+            <a href="menu.html" aria-current="page">Café Menu</a>
+            <a href="about.html">Our Story</a>
+            <a href="membership.html">Membership</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <p class="mobile-nav-caption">
+            A LITTLE COFFEE. A LOT OF STORIES.
+        </p>
+
+    </div>
+
+    <main id="mainContent">
+
+        <!-- ==================================================
+             CINEMATIC HERO
+        ================================================== -->
+
+        <section class="menu-hero" aria-labelledby="menuHeroTitle">
+
+            <div class="menu-hero-image">
+                <img
+                    src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=2400&q=90"
+                    alt="Freshly brewed coffee in a warm café setting"
+                    fetchpriority="high">
+            </div>
+
+            <div class="menu-hero-overlay"></div>
+
+            <div class="menu-hero-content">
+
+                <p class="menu-eyebrow menu-hero-eyebrow">
+                    THE CHAPTER & COFFEE CAFÉ
+                </p>
+
+                <h1 id="menuHeroTitle">
+                    A little<br>
+                    <em>something warm.</em>
+                </h1>
+
+                <p class="menu-hero-description">
+                    Thoughtfully brewed coffee, comforting favorites,
+                    and little indulgences worth slowing down for.
+                </p>
+
+                <a href="#ourMenu" class="menu-hero-link">
+                    EXPLORE OUR MENU
+                    <span aria-hidden="true">↘</span>
+                </a>
+
+            </div>
+
+            <div class="menu-hero-bottom">
+                <span>CRAFTED WITH CARE. ENJOYED AT YOUR PACE.</span>
+                <span>COFFEE · COMFORT · COMMUNITY</span>
+            </div>
+
+        </section>
+
+        <!-- ==================================================
+             EDITORIAL INTRODUCTION
+        ================================================== -->
+
+        <section class="menu-intro">
+
+            <div class="menu-container menu-intro-layout">
+
+                <div class="menu-intro-heading reveal">
+
+                    <p class="menu-eyebrow">THE ART OF SLOWING DOWN</p>
+
+                    <h2>
+                        Every cup<br>
+                        tells a <em>story.</em>
+                    </h2>
+
+                </div>
+
+                <div class="menu-intro-copy reveal">
+
+                    <p class="menu-intro-lead">
+                        Good coffee has a way of making ordinary moments
+                        feel extraordinary.
+                    </p>
+
+                    <p>
+                        From the first morning espresso to the afternoon
+                        latte that accompanies your favorite chapter,
+                        our café is all about finding comfort in the
+                        little things.
+                    </p>
+
+                    <p>
+                        Explore familiar favorites, discover something
+                        new, and make yourself at home. There's always
+                        room for one more cup.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==================================================
+             MENU COLLECTION
+        ================================================== -->
+
+        <section class="cafe-menu-section" id="ourMenu">
+
+            <div class="menu-container">
+
+                <div class="cafe-menu-heading reveal">
+
+                    <div>
+                        <p class="menu-eyebrow">MADE FOR YOUR MOMENT</p>
+                        <h2>On the <em>menu.</em></h2>
+                    </div>
+
+                    <p>
+                        Something familiar. Something new.
+                        Always something good.
+                    </p>
+
+                </div>
+
+                <!-- CATEGORY NAVIGATION -->
+
+                <div
+                    class="menu-category-navigation reveal"
+                    id="menuCategories"
+                    role="group"
+                    aria-label="Menu categories">
+
+                    <button
+                        type="button"
+                        class="menu-category-button active"
+                        data-category="hot"
+                        aria-pressed="true">
+                        Hot Coffee
+                    </button>
+
+                    <button
+                        type="button"
+                        class="menu-category-button"
+                        data-category="iced"
+                        aria-pressed="false">
+                        Iced Coffee
+                    </button>
+
+                    <button
+                        type="button"
+                        class="menu-category-button"
+                        data-category="tea"
+                        aria-pressed="false">
+                        Tea & Infusions
+                    </button>
+
+                    <button
+                        type="button"
+                        class="menu-category-button"
+                        data-category="noncoffee"
+                        aria-pressed="false">
+                        Non-Coffee
+                    </button>
+
+                    <button
+                        type="button"
+                        class="menu-category-button"
+                        data-category="food"
+                        aria-pressed="false">
+                        Food & Pastries
+                    </button>
+
+                </div>
+
+                <!-- DYNAMIC MENU CONTENT -->
+
+                <div class="menu-display" id="menuDisplay" aria-live="polite">
+
+                    <div class="menu-display-image">
+                        <img id="categoryImage" src="" alt="">
+                    </div>
+
+                    <div class="menu-display-content">
+
+                        <div class="menu-display-header">
+
+                            <p class="menu-eyebrow" id="categoryEyebrow"></p>
+
+                            <h3 id="categoryTitle"></h3>
+
+                            <p id="categoryDescription"></p>
+
+                        </div>
+
+                        <div class="menu-items-list" id="menuItemsList"></div>
+
+                        <p class="menu-display-note" id="categoryNote"></p>
+
+                    </div>
+
+                </div>
+
+                <div class="menu-collection-footer">
+
+                    <span>MADE WITH CARE, SERVED WITH WARMTH.</span>
+
+                    <p>
+                        Your next favorite is waiting.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==================================================
+             SEASONAL FEATURE
+        ================================================== -->
+
+        <section class="seasonal-section">
+
+            <div class="seasonal-image">
+                <img
+                    src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1800&q=90"
+                    alt="A beautifully prepared specialty coffee"
+                    loading="lazy">
+            </div>
+
+            <div class="seasonal-overlay"></div>
+
+            <div class="menu-container seasonal-content reveal">
+
+                <p class="menu-eyebrow">A LITTLE SOMETHING SPECIAL</p>
+
+                <h2>
+                    The season<br>
+                    <em>in a cup.</em>
+                </h2>
+
+                <p>
+                    Some moments deserve something different.
+                    Discover our rotating seasonal inspirations,
+                    made for the changing weather and the
+                    stories that come with it.
+                </p>
+
+                <a href="contact.html" class="seasonal-link">
+                    ASK ABOUT SEASONAL SPECIALS
+                    <span aria-hidden="true">↗</span>
+                </a>
+
+            </div>
+
+            <span class="seasonal-side-note">
+                SMALL MOMENTS. BEAUTIFULLY BREWED.
+            </span>
+
+        </section>
+
+        <!-- ==================================================
+             FEATURED FAVORITES
+        ================================================== -->
+
+        <section class="favorites-section">
+
+            <div class="menu-container">
+
+                <div class="favorites-heading reveal">
+
+                    <div>
+                        <p class="menu-eyebrow">THE EVERYDAY FAVORITES</p>
+
+                        <h2>
+                            Worth coming<br>
+                            <em>back for.</em>
+                        </h2>
+                    </div>
+
+                    <p>
+                        The comforting classics that always
+                        deserve a place at the table.
+                    </p>
+
+                </div>
+
+                <div class="favorites-grid">
+
+                    <article class="favorite-card reveal">
+
+                        <div class="favorite-image">
+                            <img
+                                src="https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=900&q=85"
+                                alt="Cappuccino with delicate latte art"
+                                loading="lazy">
+                        </div>
+
+                        <div class="favorite-info">
+                            <span>THE CLASSIC</span>
+                            <h3>Cappuccino</h3>
+                            <p>Rich espresso, steamed milk, and a beautifully airy finish.</p>
+                            <strong>$4.75</strong>
+                        </div>
+
+                    </article>
+
+                    <article class="favorite-card reveal">
+
+                        <div class="favorite-image">
+                            <img
+                                src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=85"
+                                alt="Refreshing iced coffee"
+                                loading="lazy">
+                        </div>
+
+                        <div class="favorite-info">
+                            <span>THE AFTERNOON FAVORITE</span>
+                            <h3>Iced Vanilla Latte</h3>
+                            <p>Espresso, chilled milk, and a gentle touch of vanilla.</p>
+                            <strong>$5.75</strong>
+                        </div>
+
+                    </article>
+
+                    <article class="favorite-card reveal">
+
+                        <div class="favorite-image">
+                            <img
+                                src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=85"
+                                alt="Freshly baked golden croissants"
+                                loading="lazy">
+                        </div>
+
+                        <div class="favorite-info">
+                            <span>THE PERFECT COMPANION</span>
+                            <h3>Butter Croissant</h3>
+                            <p>Golden, flaky, and wonderfully simple.</p>
+                            <strong>$4.25</strong>
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==================================================
+             COFFEE & BOOKS PAIRING
+        ================================================== -->
+
+        <section class="pairing-section">
+
+            <div class="pairing-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=1500&q=90"
+                    alt="Books arranged for a quiet reading moment"
+                    loading="lazy">
+
+            </div>
+
+            <div class="pairing-content">
+
+                <div class="pairing-content-inner reveal">
+
+                    <p class="menu-eyebrow">THE PERFECT PAIRING</p>
+
+                    <h2>
+                        One more sip.<br>
+                        <em>One more chapter.</em>
+                    </h2>
+
+                    <p>
+                        There's something special about getting
+                        lost in a good book with a warm cup
+                        beside you.
+                    </p>
+
+                    <p>
+                        Choose your drink, discover a story from
+                        our shelves, and settle into your
+                        favorite corner. Reading in our café
+                        is always free.
+                    </p>
+
+                    <a href="books.html" class="pairing-button">
+                        Explore Our Books
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==================================================
+             MEMBERSHIP
+        ================================================== -->
+
+        <section class="menu-membership">
+
+            <div class="menu-container membership-layout">
+
+                <div class="membership-heading reveal">
+
+                    <p class="menu-eyebrow">THE READING CLUB</p>
+
+                    <h2>
+                        A little loyalty.<br>
+                        <em>A lot of love.</em>
+                    </h2>
+
+                </div>
+
+                <div class="membership-copy reveal">
+
+                    <p>
+                        Your coffee breaks can be even more rewarding.
+                        Join the Chapter & Coffee Reading Club and
+                        collect points on eligible café purchases
+                        and book rentals.
+                    </p>
+
+                    <p>
+                        Because every visit deserves a little
+                        something extra.
+                    </p>
+
+                    <a href="membership.html" class="membership-button">
+                        Discover Membership
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==================================================
+             CLOSING
+        ================================================== -->
+
+        <section class="menu-closing">
+
+            <div class="menu-container reveal">
+
+                <p class="menu-eyebrow">YOUR SEAT IS WAITING</p>
+
+                <h2>
+                    Come for the coffee.<br>
+                    <em>Stay for the stories.</em>
+                </h2>
+
+                <a href="about.html" class="menu-closing-link">
+                    Discover Our Story
+                    <span aria-hidden="true">↗</span>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ==================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="site-footer">
+
+        <div class="section-container">
+
+            <div class="footer-main">
+
+                <div class="footer-brand">
+
+                    <a href="index.html" class="footer-wordmark">
+                        Chapter <em>&</em> Coffee
+                    </a>
+
+                    <p>
+                        A welcoming place for good coffee,
+                        great stories, and everything in between.
+                    </p>
+
+                </div>
+
+                <div class="footer-column">
+                    <h3>EXPLORE</h3>
+                    <a href="books.html">Books</a>
+                    <a href="menu.html">Café Menu</a>
+                    <a href="about.html">Our Story</a>
+                </div>
+
+                <div class="footer-column">
+                    <h3>COMMUNITY</h3>
+                    <a href="membership.html">Membership</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+
+                <div class="footer-column">
+                    <h3>CHAPTER & COFFEE</h3>
+                    <p>
+                        A little coffee.<br>
+                        A lot of stories.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+
+                <span>
+                    © <span id="currentYear"></span>
+                    CHAPTER & COFFEE. ALL RIGHTS RESERVED.
+                </span>
+
+                <span>MADE FOR COFFEE LOVERS & STORYTELLERS.</span>
+
+                <a href="#siteHeader">BACK TO TOP ↑</a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>
