@@ -1354,7 +1354,7 @@ function renderIdentity(images, container) {
 
   const tabs = [
     { id: "identity", label: "BRAND IDENTITY" },
-    { id: "mockup", label: "MOCKUPS" },
+    { id: "mockup", label: "APPLICATIONS" },
     { id: "assets", label: "ASSETS" }
   ];
 
@@ -1582,7 +1582,7 @@ function renderIdentity(images, container) {
   const mockupGallery = createStandardGallery(
     mockupImages,
     {
-      instruction: "EXPLORE THE MOCKUPS",
+      instruction: "EXPLORE THE APPLICATIONS",
       isActive: () => !panels.mockup.hidden
     }
   );
