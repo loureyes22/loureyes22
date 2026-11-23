@@ -780,7 +780,7 @@ const PROJECTS = [
     image: "portfolio/posters/movie-posters/thumbnail.webp",
 
     description:
-      "Organica1 is an editorial brochure developed for a conceptual contemporary art exhibition exploring the relationship between art and the natural world. Inspired by organic forms, textures, and botanical imagery, the design combines expressive typography, a muted colour palette, and carefully structured layouts. The brochure balances artistic expression with practical exhibition information, creating a cohesive visual identity that reflects the exhibition's connection to nature.",
+      "A collection of experimental movie posters exploring visual storytelling through typography, imagery, and composition. Each design reinterprets cinematic themes and atmosphere through a distinct visual approach, translating familiar films into expressive graphic compositions.",
 
     images: [
       {
@@ -814,7 +814,7 @@ const PROJECTS = [
     image: "portfolio/posters/game-posters/thumbnail.webp",
 
     description:
-      "Organica1 is an editorial brochure developed for a conceptual contemporary art exhibition exploring the relationship between art and the natural world. Inspired by organic forms, textures, and botanical imagery, the design combines expressive typography, a muted colour palette, and carefully structured layouts. The brochure balances artistic expression with practical exhibition information, creating a cohesive visual identity that reflects the exhibition's connection to nature.",
+      "A series of unofficial video game posters exploring character-driven compositions, typography, and visual identity. Drawing inspiration from established game franchises, each poster experiments with colour, imagery, and layout to capture the personality and atmosphere of its subject.",
 
     images: [
       {
