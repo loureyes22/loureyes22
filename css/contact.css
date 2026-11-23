@@ -67,15 +67,9 @@
 
 /* TOP / BOTTOM DETAILS */
 
-.contact-visual-top,
 .contact-visual-bottom {
   position: relative;
   z-index: 2;
-
-  display: flex;
-  justify-content: space-between;
-
-  gap: 20px;
 
   color: #c4c0ba;
 }
@@ -200,18 +194,11 @@
   padding: 45px 8% 80px;
 }
 
-.contact-content-top {
-  display: flex;
-  justify-content: space-between;
-
-  gap: 20px;
-}
-
 
 /* INTRODUCTION */
 
 .contact-introduction {
-  margin-top: 110px;
+  margin-top: 130px;
 }
 
 
@@ -441,13 +428,7 @@
 }
 
 .contact-direct-heading {
-  display: flex;
-  justify-content: space-between;
-
-  gap: 20px;
-
   padding-bottom: 20px;
-
   border-bottom: 1px solid var(--line);
 }
 
@@ -512,23 +493,12 @@
   padding: 100px 4.5% 120px;
 }
 
-.contact-closing-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 
-  gap: 40px;
+/* BOSKA HEADING */
 
-  margin-top: 35px;
+.contact-closing-heading {
+  margin: 0 0 55px;
 
-  color: var(--ink);
-  text-decoration: none;
-}
-
-
-/* ENTIRE HEADING — BOSKA */
-
-.contact-closing-link > span:first-child {
   font-family: var(--serif);
   font-size: clamp(60px, 8vw, 145px);
   font-weight: 400;
@@ -538,7 +508,7 @@
   letter-spacing: -.055em;
 }
 
-.contact-closing-link em {
+.contact-closing-heading em {
   font-family: var(--serif);
   font-size: 1em;
   font-weight: 400;
@@ -548,26 +518,39 @@
 }
 
 
-/* ARROW */
+/* RETURN LINK */
 
-.contact-closing-arrow {
-  align-self: flex-end;
+.contact-return {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
 
-  font-size: clamp(50px, 6vw, 100px);
-  line-height: 1;
+  gap: 65px;
+  min-width: 250px;
 
-  transition: transform .4s var(--ease);
+  padding: 17px 0;
+
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+
+  text-decoration: none;
+
+  transition: opacity .3s ease;
 }
 
-.contact-closing-link:hover .contact-closing-arrow {
-  transform: translate(8px, -8px);
+.contact-return:hover {
+  opacity: .6;
 }
 
-.contact-closing-link:focus-visible {
+.contact-return:focus-visible {
   outline: 2px solid var(--ink);
-  outline-offset: 8px;
+  outline-offset: 5px;
 }
-
 
 /* ==========================================================
    08. TABLET — 1000px
@@ -670,7 +653,7 @@
     padding: 75px 5% 90px;
   }
 
-  .contact-closing-link > span:first-child {
+  .contact-closing-heading {
     font-size: clamp(48px, 10vw, 80px);
   }
 
@@ -692,14 +675,8 @@
     font-size: clamp(65px, 16vw, 80px);
   }
 
-  .contact-visual-top,
   .contact-visual-bottom {
     font-size: 8px;
-  }
-
-  .contact-visual-top span:last-child,
-  .contact-content-top span:last-child {
-    display: none;
   }
 
   .contact-form-row {
@@ -716,13 +693,16 @@
     gap: 30px;
   }
 
-  .contact-closing-link > span:first-child {
+  .contact-closing-heading {
     font-size: 45px;
   }
 
-  .contact-closing-arrow {
-    font-size: 45px;
+  .contact-return {
+    min-width: 0;
+    width: 100%;
+    max-width: 350px;
   }
+
 
 }
 
@@ -734,7 +714,6 @@
 @media (prefers-reduced-motion: reduce) {
 
   .contact-submit span:last-child,
-  .contact-closing-arrow,
   .contact-email-link {
     transition: none;
   }
