@@ -781,7 +781,6 @@ const PROJECTS = [
 
     description:
       "A collection of experimental movie posters exploring visual storytelling through typography, imagery, and composition. Each design reinterprets cinematic themes and atmosphere through a distinct visual approach, translating familiar films into expressive graphic compositions.",
-
     images: [
       {
         src: "portfolio/posters/movie-posters/american-psycho.webp",
@@ -1057,7 +1056,7 @@ const PROJECTS = [
      LAYOUT: default
 
      01. EVERBLU_
-     02. Lucien Rouche
+     02. EZNEROL
   ======================================================== */
 
 
@@ -1074,7 +1073,7 @@ const PROJECTS = [
     image: "portfolio/identity/everblu/thumbnail.webp",
 
     description:
-      "A typographic visual identity developed for a gaming content creator, including a logo, banners, streaming graphics, and a compact brand style system.",
+      "EVERBLU_ is a sustainable clothing brand concept focused on everyday essentials designed to last. Built around a refined typographic identity, a nature-inspired colour palette, and the principle of longevity, the visual system balances simplicity with a contemporary, understated aesthetic.",
 
     images: [
       {
@@ -1119,7 +1118,7 @@ const PROJECTS = [
       },
 
        {
-        src: "portfolio/identity/everblu/mockup/website.webp",
+        src: "portfolio/identity/everblu/applications/website.webp",
         label: "Website Mockup",
         description: "",
         credits: [
@@ -1131,20 +1130,7 @@ const PROJECTS = [
         ],
         group: "mockup"
       },
-
-      {
-        src: "portfolio/identity/everblu/mockup/tote-bag.webp",
-        label: "Tote Bag Mockup",
-        description: "",
-        credits: [
-          {
-            name: "Shopping Bag Close Up",
-            source: "Mockups-Design",
-            url: "https://mockups-design.com/shopping-bag-close-up/"
-          }
-        ],
-        group: "mockup"
-      },
+      
       {
         src: "portfolio/identity/everblu/assets/primary.webp",
         label: "Primary Logo",
@@ -1178,6 +1164,294 @@ const PROJECTS = [
     livePreview: null
   },
 
+    /* EZNEROL */
+  {
+    id: "eznerol",
+    title: "EZNEROL",
+    category: "identity",
+    layout: "identity",
+    type: "Brand Identity",
+    year: "2026",
+    featured: false,
+
+    image: "portfolio/identity/eznerol/thumbnail.webp",
+
+    description:
+      "A typographic visual identity developed for a gaming content creator, including a logo, banners, streaming graphics, and a compact brand style system.",
+
+    images: [
+      {
+        src: "portfolio/identity/eznerol/brand/cover.webp",
+        label: "Cover",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+      {
+        src: "portfolio/identity/eznerol/brand/overview.webp",
+        label: "Project Overview",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/logo.webp",
+        label: "Logo",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/guidelines.webp",
+        label: "Logo Guidelines",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/variations.webp",
+        label: "Logo Variations",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/usage-correct.webp",
+        label: "Correct Logo Usage",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/usage-wrong.webp",
+        label: "Wrong Logo Usage",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/banner.webp",
+        label: "YouTube / Twitch Channel Banner",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/panels.webp",
+        label: "Twitch Channel Panels",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/brand.webp",
+        label: "Brand Style Guide",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/applications/youtube-profile.webp",
+        label: "Youtube Profile",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "mockup"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/applications/twitch.webp",
+        label: "Twitch Channel Profile",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "mockup"
+      },
+      {
+        src: "portfolio/identity/eznerol/assets/logo.webp",
+        label: "Logo",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/assets/banner.webp",
+        label: "Youtube / Twitch Channel Banner",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/assets/about.webp",
+        label: "About Me Panel",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/assets/youtube.webp",
+        label: "YouTube Panel",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+
+      },
+
+      {
+        src: "portfolio/identity/eznerol/assets/twitter.webp",
+        label: "Twitter Panel",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+        
+      },
+
+      {
+        src: "portfolio/identity/eznerol/assets/instagram.webp",
+        label: "Instagram Panel",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+        
+      },
+      
+     {
+        src: "portfolio/identity/eznerol/assets/specs.webp",
+        label: "Specs Panel",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+        
+      },
+
+    ],
+
+    livePreview: null
+  },
 
   /* ========================================================
      F. PHOTOGRAPHY
