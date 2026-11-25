@@ -1077,7 +1077,7 @@ const PROJECTS = [
 
     images: [
       {
-        src: "portfolio/identity/everblu/brand/cover.webp",
+        src: "portfolio/identity/everblu/brand/01.webp",
         label: "Cover",
         description: "",
         credits: [
@@ -1090,7 +1090,77 @@ const PROJECTS = [
         group: "identity"
       },
       {
-        src: "portfolio/identity/everblu/brand/color.webp",
+        src: "portfolio/identity/everblu/brand/02.webp",
+        label: "Brand Overview",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/everblu/brand/03.webp",
+        label: "The Logo",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+       {
+        src: "portfolio/identity/everblu/brand/04.webp",
+        label: "Logo Variants",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/everblu/brand/05.webp",
+        label: "Logo Clear Space",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/everblu/brand/06.webp",
+        label: "Logo Usage",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+          {
+        src: "portfolio/identity/everblu/brand/07.webp",
         label: "Color Palette",
         description: "",
         credits: [
@@ -1104,7 +1174,7 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/everblu/brand/type.webp",
+        src: "portfolio/identity/everblu/brand/08.webp",
         label: "Typography",
         description: "",
         credits: [
@@ -1117,7 +1187,8 @@ const PROJECTS = [
         group: "identity"
       },
 
-       {
+
+      {
         src: "portfolio/identity/everblu/applications/website.webp",
         label: "Website Mockup",
         description: "",
@@ -1147,7 +1218,35 @@ const PROJECTS = [
 
       {
         src: "portfolio/identity/everblu/assets/secondary.webp",
-        label: "Primary Logo - Secondary Color",
+        label: "Secondary Color",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+      },
+
+      {
+        src: "portfolio/identity/everblu/assets/black.webp",
+        label: "Black on white",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "assets"
+      },
+
+      {
+        src: "portfolio/identity/everblu/assets/white.webp",
+        label: "White on black",
         description: "",
         credits: [
           {
@@ -1177,11 +1276,11 @@ const PROJECTS = [
     image: "portfolio/identity/eznerol/thumbnail.webp",
 
     description:
-      "A typographic visual identity developed for a gaming content creator, including a logo, banners, streaming graphics, and a compact brand style system.",
+      "EZNEROL is a visual identity developed for a gaming content creator through a client collaboration. The project includes a custom logo, YouTube and Twitch banners, and channel panels, establishing a consistent identity across both platforms.",
 
     images: [
       {
-        src: "portfolio/identity/eznerol/brand/cover.webp",
+        src: "portfolio/identity/eznerol/brand/01.webp",
         label: "Cover",
         description: "",
         credits: [
@@ -1194,8 +1293,8 @@ const PROJECTS = [
         group: "identity"
       },
       {
-        src: "portfolio/identity/eznerol/brand/overview.webp",
-        label: "Project Overview",
+        src: "portfolio/identity/eznerol/brand/02.webp",
+        label: "About Eznerol",
         description: "",
         credits: [
           {
@@ -1208,8 +1307,8 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/logo.webp",
-        label: "Logo",
+        src: "portfolio/identity/eznerol/brand/03.webp",
+        label: "Logo Overview",
         description: "",
         credits: [
           {
@@ -1222,8 +1321,8 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/guidelines.webp",
-        label: "Logo Guidelines",
+        src: "portfolio/identity/eznerol/brand/04.webp",
+        label: "Logo Variants",
         description: "",
         credits: [
           {
@@ -1236,8 +1335,8 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/variations.webp",
-        label: "Logo Variations",
+        src: "portfolio/identity/eznerol/brand/05.webp",
+        label: "Logo Clear Space",
         description: "",
         credits: [
           {
@@ -1250,7 +1349,21 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/usage-correct.webp",
+        src: "portfolio/identity/eznerol/brand/06.webp",
+        label: "Minimum Logo Size",
+        description: "",
+        credits: [
+          {
+            name: "",
+            source: "",
+            url: ""
+          }
+        ],
+        group: "identity"
+      },
+
+      {
+        src: "portfolio/identity/eznerol/brand/07.webp",
         label: "Correct Logo Usage",
         description: "",
         credits: [
@@ -1264,8 +1377,8 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/usage-wrong.webp",
-        label: "Wrong Logo Usage",
+        src: "portfolio/identity/eznerol/brand/08.webp",
+        label: "Incorrect Logo Usage",
         description: "",
         credits: [
           {
@@ -1278,8 +1391,8 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/banner.webp",
-        label: "YouTube / Twitch Channel Banner",
+        src: "portfolio/identity/eznerol/brand/09.webp",
+        label: "Color Palette",
         description: "",
         credits: [
           {
@@ -1292,22 +1405,8 @@ const PROJECTS = [
       },
 
       {
-        src: "portfolio/identity/eznerol/brand/panels.webp",
-        label: "Twitch Channel Panels",
-        description: "",
-        credits: [
-          {
-            name: "",
-            source: "",
-            url: ""
-          }
-        ],
-        group: "identity"
-      },
-
-      {
-        src: "portfolio/identity/eznerol/brand/brand.webp",
-        label: "Brand Style Guide",
+        src: "portfolio/identity/eznerol/brand/10.webp",
+        label: "Typography",
         description: "",
         credits: [
           {
