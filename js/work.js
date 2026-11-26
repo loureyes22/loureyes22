@@ -141,6 +141,20 @@ function workGalleryKeyboardAllowed(event) {
 
 }
 
+function activateGalleryArrow(button) {
+
+  if (!button || button.disabled) return;
+
+  button.classList.add("is-activated");
+
+  clearTimeout(button.activationTimer);
+
+  button.activationTimer = setTimeout(() => {
+    button.classList.remove("is-activated");
+  }, 200);
+
+}
+
 function registerGalleryKeyboard(element, navigate) {
 
   function handleKeydown(event) {
@@ -160,8 +174,11 @@ function registerGalleryKeyboard(element, navigate) {
     const direction =
       event.key === "ArrowRight" ? 1 : -1;
 
+    if (navigate(direction) === false) {
+      return;
+    }
+
     event.preventDefault();
-    navigate(direction);
 
   }
 
@@ -413,9 +430,21 @@ function createStandardGallery(entries, options = {}) {
       if (
         panel.hidden ||
         (options.isActive && !options.isActive())
-      ) return;
+      ) {
+        return false;
+      }
 
-      showImage(current + direction);
+      const target = current + direction;
+
+      if (target < 0 || target >= entries.length) {
+        return false;
+      }
+
+      showImage(target);
+
+      activateGalleryArrow(
+        direction === 1 ? next : previous
+      );
 
     }
   );
@@ -1061,8 +1090,16 @@ function renderEditorial(images, container) {
   });
 
   registerGalleryKeyboard(
-    artbook,
-    direction => turnPage(direction)
+    presentation,
+    direction => {
+
+      if (activeTab !== "identity") {
+        return false;
+      }
+
+      showSlide(current + direction);
+
+    }
   );
 
   book.addEventListener("click", () => {
@@ -1660,9 +1697,24 @@ function renderIdentity(images, container) {
     presentation,
     direction => {
 
-      if (activeTab !== "identity") return;
+      if (activeTab !== "identity") {
+        return false;
+      }
 
-      showSlide(current + direction);
+      const target = current + direction;
+
+      if (
+        target < 0 ||
+        target >= identityImages.length
+      ) {
+        return false;
+      }
+
+      showSlide(target);
+
+      activateGalleryArrow(
+        direction === 1 ? next : previous
+      );
 
     }
   );
