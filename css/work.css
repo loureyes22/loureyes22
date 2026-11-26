@@ -393,9 +393,13 @@
 .website-design-arrows button:active:not(:disabled),
 .identity-slide-arrows button:active:not(:disabled),
 .poster-carousel-controls button:active:not(:disabled),
-.uiux-arrows button:active:not(:disabled) {
+.uiux-arrows button:active:not(:disabled),
+.website-design-arrows button.is-activated,
+.identity-slide-arrows button.is-activated {
+
   background: var(--ink);
   color: var(--bg);
+
 }
 
 /* DISABLED */
