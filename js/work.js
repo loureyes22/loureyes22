@@ -1,34 +1,43 @@
-
 "use strict";
 
 /* ==========================================================
    LOU REYES — INDIVIDUAL WORK PAGE
 
-   01. HELPERS
-   02. PROJECT DATA
-   03. PRESENTATION HELPERS
-   04. EDITORIAL ARTBOOK
-   05. PACKAGING GALLERY
-   06. WEBSITE PRESENTATION
-   07. UI/UX SCREEN GALLERY
-   08. DEFAULT GALLERY
-   09. PROJECT RENDERER
-   10. NEXT PROJECT
-   11. IMAGE LIGHTBOX
-   12. THEME
-   13. NAVIGATION
-   14. INITIALIZATION
+   01. CORE HELPERS
+   02. UNIVERSAL GALLERY NAVIGATION
+   03. PROJECT DATA
+   04. SHARED PRESENTATION COMPONENTS
+   05. EDITORIAL
+   06. PACKAGING
+   07. BRAND IDENTITY
+   08. DIGITAL
+   09. UI/UX
+   10. PHOTOGRAPHY
+   11. POSTERS
+   12. DEFAULT PRESENTATION
+   13. IMAGE INFORMATION
+   14. PROJECT RENDERER
+   15. NEXT PROJECT
+   16. LIGHTBOX
+   17. THEME
+   18. FULLSCREEN NAVIGATION
+   19. INITIALIZATION
 ========================================================== */
 
 
 /* ==========================================================
-   01. HELPERS
+   01. CORE HELPERS
 ========================================================== */
 
 const $ = id => document.getElementById(id);
 
 const pad = number =>
   String(number).padStart(2, "0");
+
+
+/* ----------------------------------------------------------
+   PROJECT STATE
+---------------------------------------------------------- */
 
 const workState = {
   project: null,
@@ -40,19 +49,41 @@ const workState = {
   lastFocus: null
 };
 
+
+/* ----------------------------------------------------------
+   URL HELPERS
+---------------------------------------------------------- */
+
 function getProjectId() {
-  const params = new URLSearchParams(window.location.search);
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
   return params.get("project");
+
 }
 
+
 function getCategoryTitle(id) {
-  const category = CATEGORIES.find(item => item.id === id);
+
+  const category = CATEGORIES.find(
+    item => item.id === id
+  );
+
   return category ? category.title : id;
+
 }
+
+
+/* ----------------------------------------------------------
+   IMAGE DATA
+---------------------------------------------------------- */
 
 function getImageData(image, index) {
 
   if (typeof image === "string") {
+
     return {
       src: image,
       label: `IMAGE ${pad(index + 1)}`,
@@ -60,27 +91,46 @@ function getImageData(image, index) {
       credits: [],
       group: "mockup"
     };
+
   }
 
   return {
     src: image.src,
-    label: image.label || `IMAGE ${pad(index + 1)}`,
-    description: image.description || "",
-    credits: Array.isArray(image.credits)
-      ? image.credits
-      : [],
-    group: image.group || "mockup"
+
+    label:
+      image.label ||
+      `IMAGE ${pad(index + 1)}`,
+
+    description:
+      image.description || "",
+
+    credits:
+      Array.isArray(image.credits)
+        ? image.credits
+        : [],
+
+    group:
+      image.group || "mockup"
   };
 
 }
 
+
 function normalizeImages(images) {
+
   return (images || [])
     .map(getImageData)
     .filter(image =>
-      typeof image.src === "string" && image.src
+      typeof image.src === "string" &&
+      image.src
     );
+
 }
+
+
+/* ----------------------------------------------------------
+   ELEMENT CREATION
+---------------------------------------------------------- */
 
 function makeElement(tag, className, text) {
 
@@ -100,21 +150,47 @@ function makeElement(tag, className, text) {
 
 
 /* ==========================================================
-   SHARED GALLERY KEYBOARD CONTROLS
+   02. UNIVERSAL GALLERY NAVIGATION
+
+   Single shared implementation.
+
+   Every gallery uses this controller.
+
+   The controller owns:
+   - Arrow elements and icons
+   - Click handling
+   - Keyboard navigation
+   - Navigation boundaries
+   - Disabled states
+   - Activation feedback
+   - Interaction availability
+
+   Galleries own:
+   - Their current image
+   - Their total image count
+   - Their unique presentation animation
 ========================================================== */
+
+
+/* ----------------------------------------------------------
+   KEYBOARD AVAILABILITY
+---------------------------------------------------------- */
 
 function workGalleryKeyboardAllowed(event) {
 
   if (
     event.defaultPrevented ||
-    (
-      event.key !== "ArrowLeft" &&
-      event.key !== "ArrowRight"
-    ) ||
     event.ctrlKey ||
     event.altKey ||
     event.metaKey ||
     event.shiftKey
+  ) {
+    return false;
+  }
+
+  if (
+    event.key !== "ArrowLeft" &&
+    event.key !== "ArrowRight"
   ) {
     return false;
   }
@@ -141,44 +217,267 @@ function workGalleryKeyboardAllowed(event) {
 
 }
 
-function activateGalleryArrow(button) {
+function setGalleryArrowIcon(button, direction) {
 
-  if (!button || button.disabled) return;
+  const namespace =
+    "http://www.w3.org/2000/svg";
 
-  button.classList.add("is-activated");
+  const svg = document.createElementNS(
+    namespace,
+    "svg"
+  );
 
-  clearTimeout(button.activationTimer);
+  svg.setAttribute("viewBox", "0 0 32 32");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "1.1");
+  svg.setAttribute("stroke-linecap", "square");
+  svg.setAttribute("stroke-linejoin", "miter");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
 
-  button.activationTimer = setTimeout(() => {
-    button.classList.remove("is-activated");
-  }, 200);
+  const path = document.createElementNS(
+    namespace,
+    "path"
+  );
+
+  path.setAttribute(
+    "d",
+    direction === -1
+      ? "M27 16H5 M12 9L5 16L12 23"
+      : "M5 16H27 M20 9L27 16L20 23"
+  );
+
+  svg.appendChild(path);
+
+  button.replaceChildren(svg);
+
+  button.type = "button";
+
+  button.classList.add(
+    "work-gallery-arrow"
+  );
+
+  button.setAttribute(
+    "aria-label",
+    direction === -1
+      ? "Previous image"
+      : "Next image"
+  );
 
 }
 
-function registerGalleryKeyboard(element, navigate) {
+
+/* ----------------------------------------------------------
+   UNIVERSAL NAVIGATION CONTROLLER
+---------------------------------------------------------- */
+
+function createGalleryNavigation({
+  element,
+  previous,
+  next,
+  getIndex,
+  getCount,
+  onNavigate,
+  isActive = () => true,
+  isBusy = () => false
+}) {
+
+  setGalleryArrowIcon(previous, -1);
+  setGalleryArrowIcon(next, 1);
+
+  let activatedButton = null;
+  let activationTimer = null;
+
+
+  /* ========================================================
+     UNIVERSAL BUTTON STATES
+  ======================================================== */
+
+  function sync() {
+
+    const index = getIndex();
+    const count = getCount();
+
+    const unavailable =
+      !isActive() ||
+      isBusy() ||
+      count < 2;
+
+    const activating =
+      activatedButton !== null;
+
+    previous.disabled =
+      unavailable ||
+      index <= 0 ||
+      (
+        activating &&
+        activatedButton !== previous
+      );
+
+    next.disabled =
+      unavailable ||
+      index >= count - 1 ||
+      (
+        activating &&
+        activatedButton !== next
+      );
+
+  }
+
+
+  /* ========================================================
+     CLEAR ACTIVATION
+  ======================================================== */
+
+  function clearActivation() {
+
+    clearTimeout(activationTimer);
+
+    previous.classList.remove(
+      "is-activated"
+    );
+
+    next.classList.remove(
+      "is-activated"
+    );
+
+    activatedButton = null;
+
+    sync();
+
+  }
+
+
+  /* ========================================================
+     ACTIVATE BUTTON
+  ======================================================== */
+
+  function activate(button) {
+
+    clearTimeout(activationTimer);
+
+    previous.classList.remove(
+      "is-activated"
+    );
+
+    next.classList.remove(
+      "is-activated"
+    );
+
+    activatedButton = button;
+
+    button.classList.add(
+      "is-activated"
+    );
+
+    sync();
+
+    activationTimer = setTimeout(() => {
+
+      if (activatedButton === button) {
+        clearActivation();
+      }
+
+    }, 220);
+
+  }
+
+
+  /* ========================================================
+     UNIVERSAL NAVIGATION
+  ======================================================== */
+
+  function move(direction) {
+
+    if (
+      !element.isConnected ||
+      !isActive() ||
+      isBusy()
+    ) {
+      return false;
+    }
+
+    sync();
+
+    const button =
+      direction === -1
+        ? previous
+        : next;
+
+    if (button.disabled) {
+      return false;
+    }
+
+    const target =
+      getIndex() + direction;
+
+    if (
+      target < 0 ||
+      target >= getCount()
+    ) {
+      return false;
+    }
+
+    const result = onNavigate(direction);
+
+    if (result === false) {
+      return false;
+    }
+
+    activate(button);
+
+    return true;
+
+  }
+
+
+  /* ========================================================
+     POINTER CONTROLS
+  ======================================================== */
+
+  previous.addEventListener(
+    "click",
+    () => move(-1)
+  );
+
+  next.addEventListener(
+    "click",
+    () => move(1)
+  );
+
+
+  /* ========================================================
+     KEYBOARD CONTROLS
+  ======================================================== */
 
   function handleKeydown(event) {
+
+    if (!element.isConnected) {
+
+      document.removeEventListener(
+        "keydown",
+        handleKeydown
+      );
+
+      clearTimeout(activationTimer);
+
+      return;
+
+    }
 
     if (!workGalleryKeyboardAllowed(event)) {
       return;
     }
 
-    if (!element.isConnected) {
-      document.removeEventListener(
-        "keydown",
-        handleKeydown
-      );
-      return;
-    }
-
     const direction =
-      event.key === "ArrowRight" ? 1 : -1;
+      event.key === "ArrowRight"
+        ? 1
+        : -1;
 
-    if (navigate(direction) === false) {
-      return;
+    if (move(direction)) {
+      event.preventDefault();
     }
-
-    event.preventDefault();
 
   }
 
@@ -187,11 +486,21 @@ function registerGalleryKeyboard(element, navigate) {
     handleKeydown
   );
 
+
+  /* ========================================================
+     INITIAL STATE
+  ======================================================== */
+
+  sync();
+
+  return {
+    sync
+  };
+
 }
 
-
 /* ==========================================================
-   02. PROJECT DATA
+   03. PROJECT DATA
 ========================================================== */
 
 function findProject() {
@@ -206,8 +515,13 @@ function findProject() {
 
 
 /* ==========================================================
-   03. PRESENTATION HELPERS
+   04. SHARED PRESENTATION COMPONENTS
 ========================================================== */
+
+
+/* ----------------------------------------------------------
+   IMAGE BUTTON
+---------------------------------------------------------- */
 
 function makeImageButton(image, index, className = "") {
 
@@ -227,7 +541,10 @@ function makeImageButton(image, index, className = "") {
 
   img.src = image.src;
   img.alt = image.label;
-  img.loading = index === 0 ? "eager" : "lazy";
+
+  img.loading =
+    index === 0 ? "eager" : "lazy";
+
   img.decoding = "async";
 
   button.appendChild(img);
@@ -242,10 +559,23 @@ function makeImageButton(image, index, className = "") {
 
 
 /* ==========================================================
-   SHARED GALLERY — STANDARD IMAGE VIEW
+   SHARED STANDARD IMAGE GALLERY
+
+   Used by:
+   - Packaging Mockups
+   - Packaging Assets
+   - Identity Applications
+   - Identity Assets
+   - Digital Design Gallery
+
+   All navigation uses createGalleryNavigation().
 ========================================================== */
 
 function createStandardGallery(entries, options = {}) {
+
+  /* --------------------------------------------------------
+     STRUCTURE
+  -------------------------------------------------------- */
 
   const panel = makeElement(
     "div",
@@ -270,6 +600,7 @@ function createStandardGallery(entries, options = {}) {
   imageButton.type = "button";
 
   const imageElement = document.createElement("img");
+
   imageElement.decoding = "async";
 
   imageButton.appendChild(imageElement);
@@ -280,9 +611,15 @@ function createStandardGallery(entries, options = {}) {
     "IMAGES COMING SOON"
   );
 
-  visual.append(imageButton, placeholder);
+  visual.append(
+    imageButton,
+    placeholder
+  );
 
-  /* NAVIGATION */
+
+  /* --------------------------------------------------------
+     CONTROLS
+  -------------------------------------------------------- */
 
   const controls = makeElement(
     "div",
@@ -305,26 +642,24 @@ function createStandardGallery(entries, options = {}) {
     "website-design-arrows"
   );
 
-  const previous = makeElement("button", "", "←");
-  const next = makeElement("button", "", "→");
+  const previous = makeElement("button");
+  const next = makeElement("button");
 
-  previous.type = "button";
-  next.type = "button";
-
-  previous.setAttribute(
-    "aria-label",
-    "Previous image"
+  arrows.append(
+    previous,
+    next
   );
 
-  next.setAttribute(
-    "aria-label",
-    "Next image"
+  controls.append(
+    counter,
+    instruction,
+    arrows
   );
 
-  arrows.append(previous, next);
-  controls.append(counter, instruction, arrows);
 
-  /* PROGRESS */
+  /* --------------------------------------------------------
+     PROGRESS
+  -------------------------------------------------------- */
 
   const progress = makeElement(
     "div",
@@ -338,6 +673,11 @@ function createStandardGallery(entries, options = {}) {
 
   progress.appendChild(progressFill);
 
+
+  /* --------------------------------------------------------
+     ASSEMBLE
+  -------------------------------------------------------- */
+
   gallery.append(
     visual,
     controls,
@@ -346,7 +686,18 @@ function createStandardGallery(entries, options = {}) {
 
   panel.appendChild(gallery);
 
+
+  /* --------------------------------------------------------
+     STATE
+  -------------------------------------------------------- */
+
   let current = 0;
+  let navigation = null;
+
+
+  /* --------------------------------------------------------
+     IMAGE INFORMATION EVENT
+  -------------------------------------------------------- */
 
   function notifyImage(index) {
 
@@ -358,17 +709,27 @@ function createStandardGallery(entries, options = {}) {
 
   }
 
-  /* IMAGE LOADING */
+
+  /* --------------------------------------------------------
+     IMAGE LOADING
+  -------------------------------------------------------- */
 
   imageElement.addEventListener("load", () => {
+
     visual.classList.remove("is-missing");
+
   });
 
   imageElement.addEventListener("error", () => {
+
     visual.classList.add("is-missing");
+
   });
 
-  /* ACTIVE IMAGE */
+
+  /* --------------------------------------------------------
+     DISPLAY IMAGE
+  -------------------------------------------------------- */
 
   function showImage(index) {
 
@@ -395,7 +756,9 @@ function createStandardGallery(entries, options = {}) {
     );
 
     imageButton.onclick = () => {
+
       openLightbox(entry.index);
+
     };
 
     counter.textContent =
@@ -404,89 +767,104 @@ function createStandardGallery(entries, options = {}) {
     progressFill.style.width =
       `${((current + 1) / entries.length) * 100}%`;
 
-    previous.disabled = current === 0;
-    next.disabled = current === entries.length - 1;
+    navigation?.sync();
 
     notifyImage(entry.index);
 
   }
 
-  /* PREVIOUS / NEXT */
 
-  previous.addEventListener("click", () => {
-    showImage(current - 1);
-  });
+  /* --------------------------------------------------------
+     UNIVERSAL NAVIGATION
+  -------------------------------------------------------- */
 
-  next.addEventListener("click", () => {
-    showImage(current + 1);
-  });
+  navigation = createGalleryNavigation({
 
-  /* KEYBOARD NAVIGATION */
+    element: panel,
 
-  registerGalleryKeyboard(
-    panel,
-    direction => {
+    previous,
+    next,
 
-      if (
-        panel.hidden ||
-        (options.isActive && !options.isActive())
-      ) {
-        return false;
-      }
+    getIndex: () => current,
 
-      const target = current + direction;
+    getCount: () => entries.length,
 
-      if (target < 0 || target >= entries.length) {
-        return false;
-      }
+    isActive: () => (
+      !panel.hidden &&
+      (!options.isActive || options.isActive())
+    ),
 
-      showImage(target);
+    onNavigate: direction => {
 
-      activateGalleryArrow(
-        direction === 1 ? next : previous
-      );
+      showImage(current + direction);
 
     }
-  );
 
-  /* EMPTY GALLERY */
+  });
 
-  if (!entries.length) {
 
-    gallery.replaceChildren(
-      makeElement(
-        "p",
-        "shared-gallery-empty",
-        "IMAGES COMING SOON"
+  /* --------------------------------------------------------
+     REFRESH
+  -------------------------------------------------------- */
+
+  function refresh() {
+
+    if (!entries.length) {
+
+      visual.classList.add("is-missing");
+
+      imageElement.removeAttribute("src");
+
+      imageButton.disabled = true;
+
+      counter.textContent = "00 / 00";
+
+      progressFill.style.width = "0%";
+
+      navigation.sync();
+
+      return;
+
+    }
+
+    imageButton.disabled = false;
+
+    showImage(
+      Math.min(
+        current,
+        entries.length - 1
       )
     );
 
-  } else {
-
-    showImage(0);
-
   }
+
+
+  /* --------------------------------------------------------
+     INITIALIZATION
+  -------------------------------------------------------- */
+
+  refresh();
+
+
+  /* --------------------------------------------------------
+     PUBLIC INTERFACE
+  -------------------------------------------------------- */
 
   return {
     panel,
-    refresh: () => {
-      if (entries.length) {
-        showImage(current);
-      }
-    }
+    refresh
   };
 
 }
 
-
-
 /* ==========================================================
-   04. EDITORIAL — INTERACTIVE ARTBOOK
+   05. EDITORIAL — INTERACTIVE ARTBOOK
 ========================================================== */
 
 function renderEditorial(images, container) {
 
   if (!images.length) return;
+
 
   /* --------------------------------------------------------
      01. STRUCTURE
@@ -528,23 +906,10 @@ function renderEditorial(images, container) {
     "artbook-arrows"
   );
 
-  const prev = makeElement("button", "", "←");
-  const next = makeElement("button", "", "→");
+  const previous = makeElement("button");
+  const next = makeElement("button");
 
-  prev.type = "button";
-  next.type = "button";
-
-  prev.setAttribute(
-    "aria-label",
-    "Previous publication spread"
-  );
-
-  next.setAttribute(
-    "aria-label",
-    "Next publication spread"
-  );
-
-  arrows.append(prev, next);
+  arrows.append(previous, next);
 
   controls.append(
     counter,
@@ -557,38 +922,47 @@ function renderEditorial(images, container) {
     "artbook-progress"
   );
 
-  const fill = makeElement(
+  const progressFill = makeElement(
     "div",
     "artbook-progress-fill"
   );
 
-  progress.appendChild(fill);
+  progress.appendChild(progressFill);
 
   const caption = makeElement(
     "div",
     "artbook-caption micro"
   );
 
-  let current = 0;
-  let busy = false;
-  let activeAnimation = null;
-  let destroyed = false;
 
   /* --------------------------------------------------------
-     02. IMAGE ELEMENTS
+     02. STATE
+  -------------------------------------------------------- */
+
+  let current = 0;
+  let busy = false;
+  let destroyed = false;
+
+  let activeAnimation = null;
+  let navigation = null;
+
+
+  /* --------------------------------------------------------
+     03. IMAGE ELEMENTS
   -------------------------------------------------------- */
 
   function createImage() {
 
-    const img = document.createElement("img");
+    const image = document.createElement("img");
 
-    img.alt = "";
-    img.draggable = false;
-    img.decoding = "async";
+    image.alt = "";
+    image.draggable = false;
+    image.decoding = "async";
 
-    return img;
+    return image;
 
   }
+
 
   function createHalf(className) {
 
@@ -601,9 +975,13 @@ function renderEditorial(images, container) {
 
     element.appendChild(image);
 
-    return { element, image };
+    return {
+      element,
+      image
+    };
 
   }
+
 
   const underSpread = makeElement(
     "div",
@@ -645,14 +1023,15 @@ function renderEditorial(images, container) {
   );
 
   sheet.style.visibility = "hidden";
+
   staticHalf.element.style.visibility = "hidden";
 
+
   /* --------------------------------------------------------
-     03. ORIGINAL IMAGE CACHE
+     04. IMAGE CACHE
   -------------------------------------------------------- */
 
   const imageCache = new Map();
-  const generatedURLs = new Set();
 
   function loadOriginal(index) {
 
@@ -667,7 +1046,7 @@ function renderEditorial(images, container) {
         try {
           await image.decode();
         } catch (error) {
-          // Loaded images may still be displayed.
+          // Continue when the image is available.
         }
 
         resolve(image);
@@ -690,18 +1069,13 @@ function renderEditorial(images, container) {
 
   }
 
-  async function createOptimizedImage(index) {
-
-    await loadOriginal(index);
-
-    // Preserve the original full-quality image.
-    return images[index].src;
-
-  }
 
   function prepareImage(index) {
 
-    if (index < 0 || index >= images.length) {
+    if (
+      index < 0 ||
+      index >= images.length
+    ) {
       return Promise.resolve(null);
     }
 
@@ -709,7 +1083,8 @@ function renderEditorial(images, container) {
       return imageCache.get(index);
     }
 
-    const promise = createOptimizedImage(index)
+    const promise = loadOriginal(index)
+      .then(() => images[index].src)
       .catch(error => {
 
         console.warn(
@@ -727,8 +1102,9 @@ function renderEditorial(images, container) {
 
   }
 
+
   /* --------------------------------------------------------
-     04. PREPARE NEIGHBOURING SPREADS
+     05. NEIGHBOURING SPREADS
   -------------------------------------------------------- */
 
   let backgroundPreparing = false;
@@ -787,8 +1163,9 @@ function renderEditorial(images, container) {
 
   }
 
+
   /* --------------------------------------------------------
-     05. IMAGE HELPERS
+     06. IMAGE HELPERS
   -------------------------------------------------------- */
 
   async function assignImage(element, src) {
@@ -824,17 +1201,21 @@ function renderEditorial(images, container) {
 
     }
 
-    if (element.naturalWidth && element.decode) {
+    if (
+      element.naturalWidth &&
+      typeof element.decode === "function"
+    ) {
 
       try {
         await element.decode();
       } catch (error) {
-        // Continue with available image.
+        // Continue with the loaded image.
       }
 
     }
 
   }
+
 
   function setSide(half, side) {
 
@@ -850,6 +1231,7 @@ function renderEditorial(images, container) {
 
   }
 
+
   function nextFrame() {
 
     return new Promise(resolve => {
@@ -858,8 +1240,9 @@ function renderEditorial(images, container) {
 
   }
 
+
   /* --------------------------------------------------------
-     06. CONTROLS
+     07. SHARED CONTROL UPDATES
   -------------------------------------------------------- */
 
   function updateControls() {
@@ -867,29 +1250,27 @@ function renderEditorial(images, container) {
     counter.textContent =
       `${pad(current + 1)} / ${pad(images.length)}`;
 
-    caption.textContent = images[current].label;
+    caption.textContent =
+      images[current].label;
 
-    fill.style.width =
+    progressFill.style.width =
       `${((current + 1) / images.length) * 100}%`;
 
-    prev.disabled =
-      busy || current === 0;
+    navigation?.sync();
 
-    next.disabled =
-      busy || current === images.length - 1;
-
-      
     window.dispatchEvent(
       new CustomEvent("work:image-change", {
-        detail: { index: current }
+        detail: {
+          index: current
+        }
       })
     );
 
-
   }
 
+
   /* --------------------------------------------------------
-     07. RESTING SPREAD
+     08. RESTING SPREAD
   -------------------------------------------------------- */
 
   async function showSpread(index) {
@@ -903,9 +1284,13 @@ function renderEditorial(images, container) {
       src || images[index].src
     );
 
+    if (destroyed) return;
+
     current = index;
 
-    staticHalf.element.style.visibility = "hidden";
+    staticHalf.element.style.visibility =
+      "hidden";
+
     sheet.style.visibility = "hidden";
 
     sheet.style.transform = "";
@@ -916,12 +1301,14 @@ function renderEditorial(images, container) {
     );
 
     updateControls();
+
     prepareNearby();
 
   }
 
+
   /* --------------------------------------------------------
-     08. 3D PAGE TURN
+     09. 3D PAGE TURN
   -------------------------------------------------------- */
 
   async function turnPage(direction) {
@@ -938,6 +1325,7 @@ function renderEditorial(images, container) {
     }
 
     busy = true;
+
     updateControls();
 
     const reducedMotion = window.matchMedia(
@@ -949,6 +1337,7 @@ function renderEditorial(images, container) {
       if (reducedMotion) {
 
         await showSpread(target);
+
         return;
 
       }
@@ -971,9 +1360,20 @@ function renderEditorial(images, container) {
         ? "right"
         : "left";
 
-      setSide(staticHalf, stationarySide);
-      setSide(front, turningSide);
-      setSide(back, stationarySide);
+      setSide(
+        staticHalf,
+        stationarySide
+      );
+
+      setSide(
+        front,
+        turningSide
+      );
+
+      setSide(
+        back,
+        stationarySide
+      );
 
       sheet.classList.remove(
         "turn-forward",
@@ -987,26 +1387,36 @@ function renderEditorial(images, container) {
       );
 
       await Promise.all([
-        assignImage(staticHalf.image, currentSrc),
-        assignImage(front.image, currentSrc),
-        assignImage(back.image, targetSrc)
+        assignImage(
+          staticHalf.image,
+          currentSrc
+        ),
+        assignImage(
+          front.image,
+          currentSrc
+        ),
+        assignImage(
+          back.image,
+          targetSrc
+        )
       ]);
 
       if (destroyed) return;
 
-      sheet.style.transform = "rotateY(0deg)";
+      sheet.style.transform =
+        "rotateY(0deg)";
 
       staticHalf.element.style.visibility =
         "visible";
 
-      sheet.style.visibility = "visible";
+      sheet.style.visibility =
+        "visible";
 
       await nextFrame();
       await nextFrame();
 
       if (destroyed) return;
 
-      // Matching page halves hide this update.
       fullSpread.src = targetSrc;
 
       activeAnimation = sheet.animate(
@@ -1028,9 +1438,13 @@ function renderEditorial(images, container) {
       );
 
       try {
+
         await activeAnimation.finished;
+
       } catch (error) {
-        // Interrupted animation.
+
+        // The animation was interrupted.
+
       }
 
       if (destroyed) return;
@@ -1046,6 +1460,7 @@ function renderEditorial(images, container) {
       current = target;
 
       updateControls();
+
       prepareNearby();
 
     } catch (error) {
@@ -1069,42 +1484,49 @@ function renderEditorial(images, container) {
       busy = false;
 
       if (!destroyed) {
+
         updateControls();
+
         prepareNearby();
+
       }
 
     }
 
   }
 
+
   /* --------------------------------------------------------
-     09. MOUSE AND KEYBOARD EVENTS
+     10. UNIVERSAL NAVIGATION
   -------------------------------------------------------- */
 
-  prev.addEventListener("click", () => {
-    turnPage(-1);
-  });
+  navigation = createGalleryNavigation({
 
-  next.addEventListener("click", () => {
-    turnPage(1);
-  });
+    element: artbook,
 
-  registerGalleryKeyboard(
-    presentation,
-    direction => {
+    previous,
+    next,
 
-      if (activeTab !== "identity") {
-        return false;
-      }
+    getIndex: () => current,
 
-      showSlide(current + direction);
+    getCount: () => images.length,
 
+    isBusy: () => busy || destroyed,
+
+    onNavigate: direction => {
+      turnPage(direction);
     }
-  );
+
+  });
+
+
+  /* --------------------------------------------------------
+     11. LIGHTBOX INTERACTION
+  -------------------------------------------------------- */
 
   book.addEventListener("click", () => {
 
-    if (!busy) {
+    if (!busy && !destroyed) {
       openLightbox(current);
     }
 
@@ -1112,14 +1534,15 @@ function renderEditorial(images, container) {
 
   book.style.cursor = "zoom-in";
 
-  /* --------------------------------------------------------
-     10. INITIALIZATION
-  -------------------------------------------------------- */
-
   book.setAttribute(
     "aria-label",
     "Interactive editorial publication"
   );
+
+
+  /* --------------------------------------------------------
+     12. INITIALIZATION
+  -------------------------------------------------------- */
 
   const referenceImage = new Image();
 
@@ -1154,13 +1577,19 @@ function renderEditorial(images, container) {
 
   showSpread(0);
 
+
   /* --------------------------------------------------------
-     11. CLEANUP
+     13. CLEANUP
   -------------------------------------------------------- */
 
   const observer = new MutationObserver(() => {
 
-    if (book.isConnected || destroyed) return;
+    if (
+      book.isConnected ||
+      destroyed
+    ) {
+      return;
+    }
 
     destroyed = true;
 
@@ -1170,11 +1599,6 @@ function renderEditorial(images, container) {
 
     observer.disconnect();
 
-    for (const url of generatedURLs) {
-      URL.revokeObjectURL(url);
-    }
-
-    generatedURLs.clear();
     imageCache.clear();
 
   });
@@ -1186,19 +1610,14 @@ function renderEditorial(images, container) {
 
 }
 
-
 /* ==========================================================
-   05. PACKAGING — MOCKUPS & DIELINES
-========================================================== */
-
-
-/* ==========================================================
-   PACKAGING — INTERACTIVE GALLERY
+   06. PACKAGING — MOCKUPS & ASSETS
 ========================================================== */
 
 function renderPackaging(images, container) {
 
   if (!images.length) return;
+
 
   /* --------------------------------------------------------
      01. TAB SWITCHER
@@ -1210,6 +1629,7 @@ function renderPackaging(images, container) {
   );
 
   switcher.setAttribute("role", "group");
+
   switcher.setAttribute(
     "aria-label",
     "Packaging presentation mode"
@@ -1230,7 +1650,11 @@ function renderPackaging(images, container) {
   mockupButton.type = "button";
   assetsButton.type = "button";
 
-  switcher.append(mockupButton, assetsButton);
+  switcher.append(
+    mockupButton,
+    assetsButton
+  );
+
 
   /* --------------------------------------------------------
      02. ORGANIZE IMAGES
@@ -1241,46 +1665,45 @@ function renderPackaging(images, container) {
 
   images.forEach((image, index) => {
 
-    const entry = { image, index };
+    const entry = {
+      image,
+      index
+    };
 
     if (image.group === "assets") {
+
       assetImages.push(entry);
+
     } else {
+
       mockupImages.push(entry);
+
     }
 
   });
 
-  /* --------------------------------------------------------
-     03. CREATE GALLERY
-  -------------------------------------------------------- */
-
-  
-  function createPackagingGallery(entries, title) {
-
-    return createStandardGallery(entries, {
-      instruction: title
-    });
-
-  }
-
 
   /* --------------------------------------------------------
-     04. CREATE BOTH VIEWS
+     03. CREATE GALLERIES
   -------------------------------------------------------- */
 
-  const mockups = createPackagingGallery(
+  const mockups = createStandardGallery(
     mockupImages,
-    "EXPLORE THE MOCKUPS"
+    {
+      instruction: "EXPLORE THE MOCKUPS"
+    }
   );
 
-  const assets = createPackagingGallery(
+  const assets = createStandardGallery(
     assetImages,
-    "EXPLORE THE ASSETS"
+    {
+      instruction: "EXPLORE THE ASSETS"
+    }
   );
+
 
   /* --------------------------------------------------------
-     05. TAB SWITCHING
+     04. TAB NAVIGATION
   -------------------------------------------------------- */
 
   function switchView(mode) {
@@ -1311,12 +1734,17 @@ function renderPackaging(images, container) {
     );
 
     if (isMockup) {
+
       mockups.refresh();
+
     } else {
+
       assets.refresh();
+
     }
 
   }
+
 
   mockupButton.addEventListener(
     "click",
@@ -1328,8 +1756,9 @@ function renderPackaging(images, container) {
     () => switchView("assets")
   );
 
+
   /* --------------------------------------------------------
-     06. INITIALIZE
+     05. INITIALIZATION
   -------------------------------------------------------- */
 
   container.append(
@@ -1344,33 +1773,52 @@ function renderPackaging(images, container) {
 
 
 /* ==========================================================
-   BRAND IDENTITY — SLIDES, MOCKUPS & ASSETS
+   07. BRAND IDENTITY
+
+   Brand Identity
+   Applications
+   Assets
 ========================================================== */
 
 function renderIdentity(images, container) {
 
   if (!images.length) return;
 
+
+  /* --------------------------------------------------------
+     01. ORGANIZE IMAGES
+  -------------------------------------------------------- */
+
   const identityImages = [];
-  const mockupImages = [];
+  const applicationImages = [];
   const assetImages = [];
 
   images.forEach((image, index) => {
 
-    const entry = { image, index };
+    const entry = {
+      image,
+      index
+    };
 
     if (image.group === "identity") {
+
       identityImages.push(entry);
+
     } else if (image.group === "assets") {
+
       assetImages.push(entry);
+
     } else {
-      mockupImages.push(entry);
+
+      applicationImages.push(entry);
+
     }
 
   });
 
+
   /* --------------------------------------------------------
-     01. TAB SWITCHER
+     02. PRESENTATION
   -------------------------------------------------------- */
 
   const presentation = makeElement(
@@ -1384,15 +1832,25 @@ function renderIdentity(images, container) {
   );
 
   switcher.setAttribute("role", "group");
+
   switcher.setAttribute(
     "aria-label",
     "Brand identity presentation mode"
   );
 
   const tabs = [
-    { id: "identity", label: "BRAND IDENTITY" },
-    { id: "mockup", label: "APPLICATIONS" },
-    { id: "assets", label: "ASSETS" }
+    {
+      id: "identity",
+      label: "BRAND IDENTITY"
+    },
+    {
+      id: "applications",
+      label: "APPLICATIONS"
+    },
+    {
+      id: "assets",
+      label: "ASSETS"
+    }
   ];
 
   const buttons = {};
@@ -1420,8 +1878,9 @@ function renderIdentity(images, container) {
 
   });
 
+
   /* --------------------------------------------------------
-     02. BRAND IDENTITY SLIDESHOW
+     03. BRAND IDENTITY SLIDESHOW
   -------------------------------------------------------- */
 
   const slideshow = makeElement(
@@ -1448,6 +1907,7 @@ function renderIdentity(images, container) {
   slideImage.draggable = false;
 
   slideButton.appendChild(slideImage);
+
   stage.appendChild(slideButton);
 
   const imagePlaceholder = makeElement(
@@ -1458,14 +1918,27 @@ function renderIdentity(images, container) {
 
   stage.appendChild(imagePlaceholder);
 
+
+  /* --------------------------------------------------------
+     IMAGE LOADING
+  -------------------------------------------------------- */
+
   slideImage.addEventListener("error", () => {
+
     stage.classList.add("is-missing");
+
   });
 
   slideImage.addEventListener("load", () => {
+
     stage.classList.remove("is-missing");
+
   });
 
+
+  /* --------------------------------------------------------
+     CONTROLS
+  -------------------------------------------------------- */
 
   const controls = makeElement(
     "div",
@@ -1488,33 +1961,24 @@ function renderIdentity(images, container) {
     "identity-slide-arrows"
   );
 
-  const previous = makeElement(
-    "button",
-    "",
-    "←"
+  const previous = makeElement("button");
+  const next = makeElement("button");
+
+  arrows.append(
+    previous,
+    next
   );
 
-  const next = makeElement(
-    "button",
-    "",
-    "→"
+  controls.append(
+    counter,
+    instruction,
+    arrows
   );
 
-  previous.type = "button";
-  next.type = "button";
 
-  previous.setAttribute(
-    "aria-label",
-    "Previous brand identity slide"
-  );
-
-  next.setAttribute(
-    "aria-label",
-    "Next brand identity slide"
-  );
-
-  arrows.append(previous, next);
-  controls.append(counter, instruction, arrows);
+  /* --------------------------------------------------------
+     PROGRESS
+  -------------------------------------------------------- */
 
   const progress = makeElement(
     "div",
@@ -1534,9 +1998,17 @@ function renderIdentity(images, container) {
     progress
   );
 
+
+  /* --------------------------------------------------------
+     EMPTY STATE
+  -------------------------------------------------------- */
+
   if (identityImages.length) {
+
     panels.identity.appendChild(slideshow);
+
   } else {
+
     panels.identity.appendChild(
       makeElement(
         "p",
@@ -1544,9 +2016,22 @@ function renderIdentity(images, container) {
         "IMAGES COMING SOON"
       )
     );
+
   }
 
+
+  /* --------------------------------------------------------
+     04. STATE
+  -------------------------------------------------------- */
+
   let current = 0;
+  let activeTab = "identity";
+  let navigation = null;
+
+
+  /* --------------------------------------------------------
+     05. DISPLAY SLIDE
+  -------------------------------------------------------- */
 
   function showSlide(index) {
 
@@ -1561,11 +2046,9 @@ function renderIdentity(images, container) {
 
     const entry = identityImages[current];
 
-    
     stage.classList.remove("is-missing");
 
     slideImage.src = entry.image.src;
-
     slideImage.alt = entry.image.label;
 
     slideButton.setAttribute(
@@ -1576,51 +2059,48 @@ function renderIdentity(images, container) {
     counter.textContent =
       `${pad(current + 1)} / ${pad(identityImages.length)}`;
 
-
-
     progressFill.style.width =
       `${((current + 1) / identityImages.length) * 100}%`;
 
-    previous.disabled = current === 0;
-    next.disabled =
-      current === identityImages.length - 1;
+    navigation?.sync();
 
-    
     window.dispatchEvent(
       new CustomEvent("work:image-change", {
-        detail: { index: entry.index }
+        detail: {
+          index: entry.index
+        }
       })
     );
 
-
   }
 
-  previous.addEventListener("click", () => {
-    showSlide(current - 1);
-  });
 
-  next.addEventListener("click", () => {
-    showSlide(current + 1);
-  });
+  /* --------------------------------------------------------
+     LIGHTBOX
+  -------------------------------------------------------- */
 
   slideButton.addEventListener("click", () => {
 
     if (!identityImages.length) return;
 
-    openLightbox(identityImages[current].index);
+    openLightbox(
+      identityImages[current].index
+    );
 
   });
 
 
   /* --------------------------------------------------------
-    03. MOCKUPS & ASSETS — SHARED GALLERY
+     06. APPLICATIONS & ASSETS
   -------------------------------------------------------- */
 
-  const mockupGallery = createStandardGallery(
-    mockupImages,
+  const applicationGallery = createStandardGallery(
+    applicationImages,
     {
       instruction: "EXPLORE THE APPLICATIONS",
-      isActive: () => !panels.mockup.hidden
+
+      isActive: () =>
+        activeTab === "applications"
     }
   );
 
@@ -1628,19 +2108,24 @@ function renderIdentity(images, container) {
     assetImages,
     {
       instruction: "EXPLORE THE ASSETS",
-      isActive: () => !panels.assets.hidden
+
+      isActive: () =>
+        activeTab === "assets"
     }
   );
 
-  panels.mockup.appendChild(mockupGallery.panel);
-  panels.assets.appendChild(assetGallery.panel);
+  panels.applications.appendChild(
+    applicationGallery.panel
+  );
+
+  panels.assets.appendChild(
+    assetGallery.panel
+  );
 
 
   /* --------------------------------------------------------
-     04. TAB NAVIGATION
+     07. TAB NAVIGATION
   -------------------------------------------------------- */
-
-  let activeTab = "identity";
 
   function switchView(mode) {
 
@@ -1664,21 +2149,31 @@ function renderIdentity(images, container) {
 
     });
 
-    
-    if (mode === "mockup") {
-      mockupGallery.refresh();
+    if (mode === "applications") {
+
+      applicationGallery.refresh();
+
     }
 
     if (mode === "assets") {
+
       assetGallery.refresh();
+
     }
 
-    if (mode === "identity" && identityImages.length) {
+    if (
+      mode === "identity" &&
+      identityImages.length
+    ) {
+
       showSlide(current);
+
     }
 
+    navigation?.sync();
 
   }
+
 
   tabs.forEach(tab => {
 
@@ -1689,51 +2184,51 @@ function renderIdentity(images, container) {
 
   });
 
+
   /* --------------------------------------------------------
-     05. KEYBOARD NAVIGATION
+     08. UNIVERSAL NAVIGATION
   -------------------------------------------------------- */
 
-  registerGalleryKeyboard(
-    presentation,
-    direction => {
+  navigation = createGalleryNavigation({
 
-      if (activeTab !== "identity") {
-        return false;
-      }
+    element: presentation,
 
-      const target = current + direction;
+    previous,
+    next,
 
-      if (
-        target < 0 ||
-        target >= identityImages.length
-      ) {
-        return false;
-      }
+    getIndex: () => current,
 
-      showSlide(target);
+    getCount: () => identityImages.length,
 
-      activateGalleryArrow(
-        direction === 1 ? next : previous
-      );
+    isActive: () =>
+      activeTab === "identity",
+
+    onNavigate: direction => {
+
+      showSlide(current + direction);
 
     }
-  );
+
+  });
+
 
   /* --------------------------------------------------------
-     06. INITIALIZATION
+     09. INITIALIZATION
   -------------------------------------------------------- */
 
   presentation.append(
     switcher,
     panels.identity,
-    panels.mockup,
+    panels.applications,
     panels.assets
   );
 
   container.appendChild(presentation);
 
   if (identityImages.length) {
+
     showSlide(0);
+
   }
 
   switchView("identity");
@@ -1741,7 +2236,7 @@ function renderIdentity(images, container) {
 }
 
 /* ==========================================================
-   06. WEBSITE — INTERACTIVE EXPERIENCE
+   08. DIGITAL — INTERACTIVE WEBSITE EXPERIENCE
 ========================================================== */
 
 function renderWebsite(images, container, project) {
@@ -1752,6 +2247,7 @@ function renderWebsite(images, container, project) {
   if (presentationHeading) {
     presentationHeading.style.display = "none";
   }
+
 
   /* --------------------------------------------------------
      01. MAIN EXPERIENCE
@@ -1790,6 +2286,7 @@ function renderWebsite(images, container, project) {
       "01 / EXPERIENCE"
     )
   );
+
 
   /* --------------------------------------------------------
      02. PRESENTATION TOOLBAR
@@ -1832,6 +2329,11 @@ function renderWebsite(images, container, project) {
     galleryButton
   );
 
+
+  /* --------------------------------------------------------
+     DEVICE CONTROLS
+  -------------------------------------------------------- */
+
   const deviceControls = makeElement(
     "div",
     "live-preview-actions"
@@ -1872,6 +2374,7 @@ function renderWebsite(images, container, project) {
     deviceControls
   );
 
+
   /* --------------------------------------------------------
      03. LIVE WEBSITE PANEL
   -------------------------------------------------------- */
@@ -1884,7 +2387,9 @@ function renderWebsite(images, container, project) {
   const live = project.livePreview;
 
   const hasLiveWebsite = Boolean(
-    live && live.enabled && live.url
+    live &&
+    live.enabled &&
+    live.url
   );
 
   let stage = null;
@@ -1904,6 +2409,7 @@ function renderWebsite(images, container, project) {
     const iframe = document.createElement("iframe");
 
     iframe.src = live.url;
+
     iframe.title =
       `${project.title} interactive website`;
 
@@ -1940,6 +2446,7 @@ function renderWebsite(images, container, project) {
 
   }
 
+
   /* --------------------------------------------------------
      04. DESIGN GALLERY
   -------------------------------------------------------- */
@@ -1951,34 +2458,29 @@ function renderWebsite(images, container, project) {
 
   galleryPanel.hidden = true;
 
-
-  
-
-  /* --------------------------------------------------------
-    DESIGN GALLERY — SHARED IMAGE VIEW
-  -------------------------------------------------------- */
-
-  const designEntries = images.map((image, index) => ({
-    image,
-    index
-  }));
+  const designEntries = images.map(
+    (image, index) => ({
+      image,
+      index
+    })
+  );
 
   const designGallery = createStandardGallery(
     designEntries,
     {
       instruction: "EXPLORE THE DESIGNS",
+
       isActive: () => !galleryPanel.hidden
     }
   );
 
-  galleryPanel.appendChild(designGallery.panel);
-
-  const refreshDesignGallery = designGallery.refresh;
-
+  galleryPanel.appendChild(
+    designGallery.panel
+  );
 
 
   /* --------------------------------------------------------
-     05. DEVICE SWITCH
+     05. DEVICE SWITCHING
   -------------------------------------------------------- */
 
   function switchDevice(mode) {
@@ -1986,10 +2488,12 @@ function renderWebsite(images, container, project) {
     const isMobile = mode === "mobile";
 
     if (stage) {
+
       stage.classList.toggle(
         "mobile",
         isMobile
       );
+
     }
 
     desktopButton.classList.toggle(
@@ -2014,24 +2518,32 @@ function renderWebsite(images, container, project) {
 
   }
 
-  desktopButton.addEventListener("click", () => {
-    switchDevice("desktop");
-  });
 
-  mobileButton.addEventListener("click", () => {
-    switchDevice("mobile");
-  });
+  desktopButton.addEventListener(
+    "click",
+    () => switchDevice("desktop")
+  );
+
+  mobileButton.addEventListener(
+    "click",
+    () => switchDevice("mobile")
+  );
+
 
   /* --------------------------------------------------------
-     06. LIVE / GALLERY SWITCH
+     06. LIVE / DESIGN GALLERY SWITCHING
   -------------------------------------------------------- */
 
   function switchView(mode) {
 
-    const isInteractive = mode === "interactive";
+    const isInteractive =
+      mode === "interactive";
 
-    interactivePanel.hidden = !isInteractive;
-    galleryPanel.hidden = isInteractive;
+    interactivePanel.hidden =
+      !isInteractive;
+
+    galleryPanel.hidden =
+      isInteractive;
 
     interactiveButton.classList.toggle(
       "active",
@@ -2054,22 +2566,29 @@ function renderWebsite(images, container, project) {
     );
 
     deviceControls.hidden =
-      !isInteractive || !hasLiveWebsite;
-    
-    const imageInformation = container.querySelector(
-      ".work-image-information"
-    );
+      !isInteractive ||
+      !hasLiveWebsite;
+
+    const imageInformation =
+      container.querySelector(
+        ".work-image-information"
+      );
 
     if (imageInformation) {
-      imageInformation.hidden = isInteractive;
+
+      imageInformation.hidden =
+        isInteractive;
+
     }
 
-    
     if (!isInteractive) {
-      refreshDesignGallery();
+
+      designGallery.refresh();
+
     }
 
   }
+
 
   interactiveButton.addEventListener(
     "click",
@@ -2081,15 +2600,10 @@ function renderWebsite(images, container, project) {
     () => switchView("gallery")
   );
 
+
   /* --------------------------------------------------------
-     07. INITIALIZE
+     07. INITIALIZATION
   -------------------------------------------------------- */
-
-  switchDevice("desktop");
-
-  switchView(
-    hasLiveWebsite ? "interactive" : "gallery"
-  );
 
   experience.append(
     heading,
@@ -2100,22 +2614,34 @@ function renderWebsite(images, container, project) {
 
   container.appendChild(experience);
 
+  switchDevice("desktop");
+
+  switchView(
+    hasLiveWebsite
+      ? "interactive"
+      : "gallery"
+  );
+
 }
 
-
 /* ==========================================================
-   07. UI/UX — CINEMATIC SCREEN SPOTLIGHT
+   09. UI/UX — CINEMATIC SCREEN SPOTLIGHT
 
-   Horizontal screen sequence
+   Horizontal screen previews
    Natural-height LUMEN introduction
-   Scrollable long screenshots
+   Scrollable screenshots
    Fullscreen image viewing
-   Keyboard navigation
+   Universal gallery navigation
 ========================================================== */
 
 function renderUIUX(images, container) {
 
   if (!images.length) return;
+
+
+  /* --------------------------------------------------------
+     01. STRUCTURE
+  -------------------------------------------------------- */
 
   const gallery = makeElement(
     "div",
@@ -2130,10 +2656,11 @@ function renderUIUX(images, container) {
   const projectId = getProjectId();
 
   let current = 0;
+  let navigation = null;
 
-  
+
   /* --------------------------------------------------------
-     01. HORIZONTAL PREVIEW RAILS
+     02. HORIZONTAL PREVIEW RAILS
   -------------------------------------------------------- */
 
   const leftRail = makeElement(
@@ -2145,6 +2672,7 @@ function renderUIUX(images, container) {
     "div",
     "uiux-preview-rail uiux-preview-rail-right"
   );
+
 
   function createRailPreview(image, index) {
 
@@ -2164,6 +2692,7 @@ function renderUIUX(images, container) {
 
     img.src = image.src;
     img.alt = image.label;
+
     img.loading = "lazy";
     img.decoding = "async";
     img.draggable = false;
@@ -2171,12 +2700,15 @@ function renderUIUX(images, container) {
     button.appendChild(img);
 
     button.addEventListener("click", () => {
+
       goTo(index);
+
     });
 
     return button;
 
   }
+
 
   function renderPreviewRails() {
 
@@ -2193,9 +2725,13 @@ function renderUIUX(images, container) {
       );
 
       if (index < current) {
+
         leftRail.appendChild(preview);
+
       } else {
+
         rightRail.appendChild(preview);
+
       }
 
     });
@@ -2210,15 +2746,13 @@ function renderUIUX(images, container) {
       current === images.length - 1
     );
 
-    // Position the nearest previous screen
-    // directly beside the main screen.
-
     leftRail.scrollLeft =
       leftRail.scrollWidth;
 
     rightRail.scrollLeft = 0;
 
   }
+
 
   /* --------------------------------------------------------
      03. MAIN SCREEN
@@ -2269,8 +2803,9 @@ function renderUIUX(images, container) {
     rightRail
   );
 
+
   /* --------------------------------------------------------
-     04. CAPTION AND CONTROLS
+     04. CAPTION
   -------------------------------------------------------- */
 
   const details = makeElement(
@@ -2304,6 +2839,11 @@ function renderUIUX(images, container) {
     description
   );
 
+
+  /* --------------------------------------------------------
+     05. CONTROLS
+  -------------------------------------------------------- */
+
   const controls = makeElement(
     "div",
     "uiux-controls"
@@ -2325,47 +2865,46 @@ function renderUIUX(images, container) {
     "uiux-arrows"
   );
 
-  const prev = makeElement(
-    "button",
-    "",
-    "←"
+  const previous = makeElement("button");
+  const next = makeElement("button");
+
+  arrows.append(
+    previous,
+    next
   );
 
-  const next = makeElement(
-    "button",
-    "",
-    "→"
+  controls.append(
+    counter,
+    instruction,
+    arrows
   );
 
-  prev.type = "button";
-  next.type = "button";
-
-  prev.setAttribute(
-    "aria-label",
-    "Previous screen"
+  details.append(
+    copy,
+    controls
   );
 
-  next.setAttribute(
-    "aria-label",
-    "Next screen"
-  );
 
-  arrows.append(prev, next);
-  controls.append(counter, instruction, arrows);
-
-  details.append(copy, controls);
+  /* --------------------------------------------------------
+     06. PROGRESS
+  -------------------------------------------------------- */
 
   const progress = makeElement(
     "div",
     "uiux-progress"
   );
 
-  const fill = makeElement(
+  const progressFill = makeElement(
     "div",
     "uiux-progress-fill"
   );
 
-  progress.appendChild(fill);
+  progress.appendChild(progressFill);
+
+
+  /* --------------------------------------------------------
+     07. ASSEMBLE
+  -------------------------------------------------------- */
 
   gallery.append(
     stage,
@@ -2375,16 +2914,14 @@ function renderUIUX(images, container) {
 
   container.appendChild(gallery);
 
+
   /* --------------------------------------------------------
-     05. RENDER ACTIVE SCREEN
+     08. RENDER ACTIVE SCREEN
   -------------------------------------------------------- */
 
   function renderScreen() {
 
     const active = images[current];
-
-    // Preserve the intro-screen behavior.
-    // Only LUMEN's first image uses natural height.
 
     const isIntroScreen =
       projectId === "lumen" &&
@@ -2406,21 +2943,21 @@ function renderUIUX(images, container) {
     );
 
     mainButton.onclick = () => {
+
       openLightbox(current);
+
     };
 
     renderPreviewRails();
-
-    const story = active;
 
     eyebrow.textContent =
       `${pad(current + 1)} / ${pad(images.length)} — THE INTERFACE`;
 
     heading.textContent =
-      story.label;
+      active.label;
 
     description.textContent =
-      story.description || "";
+      active.description || "";
 
     description.hidden =
       !description.textContent;
@@ -2428,20 +2965,17 @@ function renderUIUX(images, container) {
     counter.textContent =
       `${pad(current + 1)} / ${pad(images.length)}`;
 
-    prev.disabled = current === 0;
-
-    next.disabled =
-      current === images.length - 1;
-
-    fill.style.width =
+    progressFill.style.width =
       `${((current + 1) / images.length) * 100}%`;
+
+    navigation?.sync();
 
   }
 
-  /* --------------------------------------------------------
-     06. NAVIGATION
-  -------------------------------------------------------- */
 
+  /* --------------------------------------------------------
+     09. SCREEN NAVIGATION
+  -------------------------------------------------------- */
 
   function goTo(index) {
 
@@ -2457,35 +2991,43 @@ function renderUIUX(images, container) {
 
     renderScreen();
 
-    // Synchronize the image information below.
-
     window.dispatchEvent(
       new CustomEvent("work:image-change", {
-        detail: { index: current }
+        detail: {
+          index: current
+        }
       })
     );
 
   }
 
 
-  prev.addEventListener("click", () => {
-    goTo(current - 1);
+  /* --------------------------------------------------------
+     10. UNIVERSAL GALLERY NAVIGATION
+  -------------------------------------------------------- */
+
+  navigation = createGalleryNavigation({
+
+    element: gallery,
+
+    previous,
+    next,
+
+    getIndex: () => current,
+
+    getCount: () => images.length,
+
+    onNavigate: direction => {
+
+      goTo(current + direction);
+
+    }
+
   });
 
-  next.addEventListener("click", () => {
-    goTo(current + 1);
-  });
-
-  registerGalleryKeyboard(
-    gallery,
-    direction => goTo(current + direction)
-  );
 
   /* --------------------------------------------------------
-     07. INITIAL DISPLAY
-
-     Keep this call: without it, the gallery
-     opens as an empty rectangle.
+     11. INITIAL DISPLAY
   -------------------------------------------------------- */
 
   renderScreen();
@@ -2494,7 +3036,11 @@ function renderUIUX(images, container) {
 
 
 /* ==========================================================
-   PHOTOGRAPHY — MINIMAL IMAGE GALLERY
+   10. PHOTOGRAPHY — MINIMAL IMAGE GALLERY
+
+   No arrow navigation.
+   No additional labels.
+   Images open in the shared lightbox.
 ========================================================== */
 
 function renderPhotography(images, container) {
@@ -2530,12 +3076,17 @@ function renderPhotography(images, container) {
 }
 
 /* ==========================================================
-   POSTERS — CIRCULAR FEATURED GALLERY
+   11. POSTERS — REVOLVING CAROUSEL
 ========================================================== */
 
 function renderPosters(images, container) {
 
   if (!images.length) return;
+
+
+  /* --------------------------------------------------------
+     01. STRUCTURE
+  -------------------------------------------------------- */
 
   const gallery = makeElement(
     "section",
@@ -2572,55 +3123,28 @@ function renderPosters(images, container) {
     slot.appendChild(button);
     stage.appendChild(slot);
 
-    return { offset, slot, button, image };
+    return {
+      offset,
+      slot,
+      button,
+      image
+    };
 
   });
 
-  const details = makeElement(
-    "div",
-    "poster-carousel-details"
-  );
 
-  const caption = makeElement(
-    "span",
-    "micro"
-  );
-
-  const counter = makeElement(
-    "span",
-    "micro"
-  );
-
-  details.append(caption, counter);
+  /* --------------------------------------------------------
+     02. CONTROLS
+  -------------------------------------------------------- */
 
   const controls = makeElement(
     "div",
     "poster-carousel-controls"
   );
 
-  const previous = makeElement(
-    "button",
-    "",
-    "←"
-  );
-
-  const next = makeElement(
-    "button",
-    "",
-    "→"
-  );
-
-  previous.type = "button";
-  next.type = "button";
-
-  previous.setAttribute(
-    "aria-label",
-    "Previous poster"
-  );
-
-  next.setAttribute(
-    "aria-label",
-    "Next poster"
+  const counter = makeElement(
+    "span",
+    "micro"
   );
 
   const instruction = makeElement(
@@ -2629,12 +3153,13 @@ function renderPosters(images, container) {
     "EXPLORE THE POSTERS"
   );
 
-  
-  
   const arrows = makeElement(
     "div",
     "poster-carousel-arrows"
   );
+
+  const previous = makeElement("button");
+  const next = makeElement("button");
 
   arrows.append(previous, next);
 
@@ -2644,6 +3169,10 @@ function renderPosters(images, container) {
     arrows
   );
 
+
+  /* --------------------------------------------------------
+     03. PROGRESS
+  -------------------------------------------------------- */
 
   const progress = makeElement(
     "div",
@@ -2658,39 +3187,91 @@ function renderPosters(images, container) {
   progress.appendChild(progressFill);
 
 
-  
+  /* --------------------------------------------------------
+     04. ASSEMBLE
+  -------------------------------------------------------- */
+
   gallery.append(
     stage,
     controls,
     progress
   );
 
-
   container.appendChild(gallery);
+
+
+  /* --------------------------------------------------------
+     05. STATE
+  -------------------------------------------------------- */
 
   let current = 0;
   let busy = false;
+  let navigation = null;
 
-  function wrap(index) {
-    return (
-      (index % images.length) + images.length
-    ) % images.length;
+  const dimensions = new Map();
+
+
+  /* --------------------------------------------------------
+     06. IMAGE LOADING
+  -------------------------------------------------------- */
+
+  async function preparePoster(index) {
+
+    if (
+      index < 0 ||
+      index >= images.length
+    ) {
+      return;
+    }
+
+    if (dimensions.has(index)) {
+      return;
+    }
+
+    const image = new Image();
+
+    image.src = images[index].src;
+
+    try {
+
+      await image.decode();
+
+    } catch (error) {
+
+      // The normal image remains available.
+
+    }
+
+    dimensions.set(index, {
+      width: image.naturalWidth || 1,
+      height: image.naturalHeight || 1
+    });
+
   }
+
+
+  /* --------------------------------------------------------
+     07. RENDER CAROUSEL
+  -------------------------------------------------------- */
 
   function render() {
 
     slots.forEach(({ offset, slot, button, image }) => {
 
-      const index = wrap(current + offset);
+      const index = current + offset;
+
+      const available =
+        index >= 0 &&
+        index < images.length;
+
+      slot.hidden = !available;
+
+      if (!available) {
+        image.removeAttribute("src");
+        return;
+      }
+
       const poster = images[index];
-
-      // One poster should not appear three times.
-      const duplicate =
-        images.length === 1 && offset !== 0;
-
-      slot.hidden = duplicate;
-
-      if (duplicate) return;
 
       image.src = poster.src;
       image.alt = poster.label;
@@ -2710,317 +3291,387 @@ function renderPosters(images, container) {
         if (busy) return;
 
         if (offset === 0) {
+
           openLightbox(current);
+
         } else {
+
           navigate(offset);
+
         }
 
       };
 
     });
 
-    caption.textContent = images[current].label;
-
     counter.textContent =
       `${pad(current + 1)} / ${pad(images.length)}`;
-
-    // Keep the image information synchronized.
-    window.dispatchEvent(
-      new CustomEvent("work:image-change", {
-        detail: { index: current }
-      })
-    );
 
     progressFill.style.width =
       `${((current + 1) / images.length) * 100}%`;
 
+    navigation?.sync();
 
-    previous.disabled = images.length < 2;
-    next.disabled = images.length < 2;
+    window.dispatchEvent(
+      new CustomEvent("work:image-change", {
+        detail: {
+          index: current
+        }
+      })
+    );
 
   }
 
-   /* --------------------------------------------------------
-     POSTER CAROUSEL — CONTINUOUS MOVEMENT
+
+  /* --------------------------------------------------------
+     08. POSTER GEOMETRY
+  -------------------------------------------------------- */
+
+  function getPosterRect(index, slotIndex) {
+
+    const slot = slots[slotIndex].slot;
+
+    const slotRect =
+      slot.getBoundingClientRect();
+
+    const referenceImage =
+      slots[slotIndex].image;
+
+    const maxHeightValue =
+      getComputedStyle(referenceImage).maxHeight;
+
+    const parsedHeight =
+      parseFloat(maxHeightValue);
+
+    const heightLimit =
+      Number.isFinite(parsedHeight)
+        ? parsedHeight
+        : window.innerHeight;
+
+    const size = dimensions.get(index) || {
+      width: 1,
+      height: 1
+    };
+
+    const ratio =
+      size.width / size.height;
+
+    const width = Math.min(
+      size.width,
+      slotRect.width,
+      heightLimit * ratio
+    );
+
+    const height = width / ratio;
+
+    return {
+      left:
+        slotRect.left +
+        (slotRect.width - width) / 2,
+
+      top:
+        slotRect.top +
+        (slotRect.height - height) / 2,
+
+      width,
+      height
+    };
+
+  }
+
+
+  /* --------------------------------------------------------
+     09. ANIMATION
   -------------------------------------------------------- */
 
   async function navigate(direction) {
 
-    if (busy || images.length < 2) return;
+    if (busy) return;
+
+    const nextIndex = current + direction;
+
+    if (
+      nextIndex < 0 ||
+      nextIndex >= images.length
+    ) {
+      return;
+    }
 
     busy = true;
+    navigation?.sync();
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    const nextIndex = wrap(current + direction);
-
-    // Load the upcoming posters before moving anything.
-    const upcomingIndexes = [
-      nextIndex - 1,
-      nextIndex,
-      nextIndex + 1
-    ];
-
-    await Promise.all(
-      upcomingIndexes.map(index => {
-
-        const source = images[wrap(index)].src;
-        const preload = new Image();
-
-        preload.src = source;
-
-        return preload.decode().catch(() => {});
-
-      })
-    );
-
-    if (reducedMotion) {
-
-      current = nextIndex;
-      render();
-
-      busy = false;
-      return;
-
-    }
-
-    const duration = 620;
-    const easing = "cubic-bezier(.22, 1, .36, 1)";
-
-    const stageRect = stage.getBoundingClientRect();
-
-    const overlay = document.createElement("div");
-
-    Object.assign(overlay.style, {
-      position: "fixed",
-      inset: "0",
-      zIndex: "9999",
-      pointerEvents: "none",
-      overflow: "hidden",
-
-      // Keep moving posters inside the gallery boundaries.
-      clipPath: `inset(
-        ${Math.max(0, stageRect.top)}px
-        ${Math.max(0, window.innerWidth - stageRect.right)}px
-        ${Math.max(0, window.innerHeight - stageRect.bottom)}px
-        ${Math.max(0, stageRect.left)}px
-      )`
-    });
-
-    document.body.appendChild(overlay);
-
-    const animations = [];
-
-    // Measure where each image should sit in a given slot.
-    function getTargetRect(posterIndex, slotIndex) {
-
-      const slot = slots[slotIndex].slot;
-      const slotRect = slot.getBoundingClientRect();
-
-      const referenceImage = slots[slotIndex].image;
-      const maxHeightValue =
-        getComputedStyle(referenceImage).maxHeight;
-
-      const maxHeight = parseFloat(maxHeightValue);
-
-      const poster = images[wrap(posterIndex)];
-
-      const loaded = new Image();
-      loaded.src = poster.src;
-
-      const naturalWidth = loaded.naturalWidth || 1;
-      const naturalHeight = loaded.naturalHeight || 1;
-
-      const ratio = naturalWidth / naturalHeight;
-
-      const heightLimit = Number.isFinite(maxHeight)
-        ? maxHeight
-        : window.innerHeight;
-
-      const width = Math.min(
-        naturalWidth,
-        slotRect.width,
-        heightLimit * ratio
-      );
-
-      const height = width / ratio;
-
-      return {
-        left: slotRect.left + (slotRect.width - width) / 2,
-        top: slotRect.top + (slotRect.height - height) / 2,
-        width,
-        height
-      };
-
-    }
-
-    function animatePoster(
-      posterIndex,
-      fromRect,
-      toRect,
-      fromOpacity = 1,
-      toOpacity = 1
-    ) {
-
-      const poster = images[wrap(posterIndex)];
-
-      const image = document.createElement("img");
-
-      image.src = poster.src;
-      image.alt = poster.label || "";
-
-      Object.assign(image.style, {
-        position: "fixed",
-        left: `${fromRect.left}px`,
-        top: `${fromRect.top}px`,
-        width: `${fromRect.width}px`,
-        height: `${fromRect.height}px`,
-        maxWidth: "none",
-        maxHeight: "none",
-        objectFit: "contain",
-        pointerEvents: "none",
-        margin: "0",
-        opacity: String(fromOpacity)
-      });
-
-      overlay.appendChild(image);
-
-      animations.push(
-        image.animate(
-          [
-            {
-              left: `${fromRect.left}px`,
-              top: `${fromRect.top}px`,
-              width: `${fromRect.width}px`,
-              height: `${fromRect.height}px`,
-              opacity: fromOpacity
-            },
-            {
-              left: `${toRect.left}px`,
-              top: `${toRect.top}px`,
-              width: `${toRect.width}px`,
-              height: `${toRect.height}px`,
-              opacity: toOpacity
-            }
-          ],
-          {
-            duration,
-            easing,
-            fill: "forwards"
-          }
-        )
-      );
-
-    }
-
-    const leftImage = slots[0].image;
-    const centerImage = slots[1].image;
-    const rightImage = slots[2].image;
-
-    const leftRect = leftImage.getBoundingClientRect();
-    const centerRect = centerImage.getBoundingClientRect();
-    const rightRect = rightImage.getBoundingClientRect();
+    let overlay = null;
 
     try {
 
-      if (direction > 0) {
+      const nearby = [
+        current - 1,
+        current,
+        current + 1,
+        nextIndex - 1,
+        nextIndex,
+        nextIndex + 1
+      ].filter(index =>
+        index >= 0 &&
+        index < images.length
+      );
 
-        // LEFT: Outgoing poster moves beyond the boundary.
-        animatePoster(
-          current - 1,
-          leftRect,
-          {
-            ...leftRect,
-            left: stageRect.left - leftRect.width - 30
-          },
-          0.4,
-          0.4
-        );
+      await Promise.all(
+        [...new Set(nearby)].map(preparePoster)
+      );
 
-        // CENTRE → LEFT: Shrinks and darkens.
-        animatePoster(
-          current,
-          centerRect,
-          getTargetRect(current, 0),
-          1,
-          0.4
-        );
+      if (reducedMotion) {
 
-        // RIGHT → CENTRE: Enlarges and brightens.
-        animatePoster(
-          current + 1,
-          rightRect,
-          getTargetRect(current + 1, 1),
-          0.4,
-          1
-        );
+        current = nextIndex;
+        render();
 
-        // NEW RIGHT: Enters at the correct side opacity.
-        const incoming = getTargetRect(current + 2, 2);
+        return;
 
-        animatePoster(
-          current + 2,
-          {
-            ...incoming,
-            left: stageRect.right + 30
-          },
-          incoming,
-          0.4,
-          0.4
-        );
+      }
 
-      } else {
+      const duration = 620;
 
-        // RIGHT: Outgoing poster moves beyond the boundary.
-        animatePoster(
-          current + 1,
-          rightRect,
-          {
-            ...rightRect,
-            left: stageRect.right + 30
-          },
-          0.4,
-          0.4
-        );
+      const easing =
+        "cubic-bezier(.22, 1, .36, 1)";
 
-        // CENTRE → RIGHT: Shrinks and darkens.
-        animatePoster(
-          current,
-          centerRect,
-          getTargetRect(current, 2),
-          1,
-          0.4
-        );
+      const stageRect =
+        stage.getBoundingClientRect();
 
-        // LEFT → CENTRE: Enlarges and brightens.
-        animatePoster(
-          current - 1,
-          leftRect,
-          getTargetRect(current - 1, 1),
-          0.4,
-          1
-        );
+      overlay = document.createElement("div");
 
-        // NEW LEFT: Enters at the correct side opacity.
-        const incoming = getTargetRect(current - 2, 0);
+      Object.assign(overlay.style, {
+        position: "fixed",
+        inset: "0",
+        zIndex: "9999",
+        pointerEvents: "none",
+        overflow: "hidden",
 
-        animatePoster(
-          current - 2,
-          {
-            ...incoming,
-            left: stageRect.left - incoming.width - 30
-          },
-          incoming,
-          0.4,
-          0.4
+        clipPath: `inset(
+          ${Math.max(0, stageRect.top)}px
+          ${Math.max(0, window.innerWidth - stageRect.right)}px
+          ${Math.max(0, window.innerHeight - stageRect.bottom)}px
+          ${Math.max(0, stageRect.left)}px
+        )`
+      });
+
+      document.body.appendChild(overlay);
+
+      const animations = [];
+
+
+      /* ----------------------------------------------------
+         MOVING POSTER
+      ---------------------------------------------------- */
+
+      function animatePoster(
+        index,
+        fromRect,
+        toRect,
+        fromOpacity = 1,
+        toOpacity = 1
+      ) {
+
+        if (
+          index < 0 ||
+          index >= images.length
+        ) {
+          return;
+        }
+
+        const poster = images[index];
+
+        const image = document.createElement("img");
+
+        image.src = poster.src;
+        image.alt = poster.label || "";
+
+        Object.assign(image.style, {
+          position: "fixed",
+          left: `${fromRect.left}px`,
+          top: `${fromRect.top}px`,
+          width: `${fromRect.width}px`,
+          height: `${fromRect.height}px`,
+          maxWidth: "none",
+          maxHeight: "none",
+          objectFit: "contain",
+          pointerEvents: "none",
+          margin: "0",
+          opacity: String(fromOpacity)
+        });
+
+        overlay.appendChild(image);
+
+        animations.push(
+          image.animate(
+            [
+              {
+                left: `${fromRect.left}px`,
+                top: `${fromRect.top}px`,
+                width: `${fromRect.width}px`,
+                height: `${fromRect.height}px`,
+                opacity: fromOpacity
+              },
+              {
+                left: `${toRect.left}px`,
+                top: `${toRect.top}px`,
+                width: `${toRect.width}px`,
+                height: `${toRect.height}px`,
+                opacity: toOpacity
+              }
+            ],
+            {
+              duration,
+              easing,
+              fill: "forwards"
+            }
+          )
         );
 
       }
 
-      // Hide the static images while the four moving images
-      // occupy their positions.
+
+      /* ----------------------------------------------------
+         CURRENT POSTER POSITIONS
+      ---------------------------------------------------- */
+
+      const leftRect =
+        slots[0].image.getBoundingClientRect();
+
+      const centerRect =
+        slots[1].image.getBoundingClientRect();
+
+      const rightRect =
+        slots[2].image.getBoundingClientRect();
+
+
+      /* ----------------------------------------------------
+         FORWARD
+      ---------------------------------------------------- */
+
+      if (direction > 0) {
+
+        if (current > 0) {
+
+          animatePoster(
+            current - 1,
+            leftRect,
+            {
+              ...leftRect,
+              left:
+                stageRect.left -
+                leftRect.width -
+                30
+            },
+            .4,
+            .4
+          );
+
+        }
+
+        animatePoster(
+          current,
+          centerRect,
+          getPosterRect(current, 0),
+          1,
+          .4
+        );
+
+        animatePoster(
+          current + 1,
+          rightRect,
+          getPosterRect(current + 1, 1),
+          .4,
+          1
+        );
+
+        if (current + 2 < images.length) {
+
+          const incoming =
+            getPosterRect(current + 2, 2);
+
+          animatePoster(
+            current + 2,
+            {
+              ...incoming,
+              left: stageRect.right + 30
+            },
+            incoming,
+            .4,
+            .4
+          );
+
+        }
+
+
+      /* ----------------------------------------------------
+         BACKWARD
+      ---------------------------------------------------- */
+
+      } else {
+
+        if (current + 1 < images.length) {
+
+          animatePoster(
+            current + 1,
+            rightRect,
+            {
+              ...rightRect,
+              left: stageRect.right + 30
+            },
+            .4,
+            .4
+          );
+
+        }
+
+        animatePoster(
+          current,
+          centerRect,
+          getPosterRect(current, 2),
+          1,
+          .4
+        );
+
+        animatePoster(
+          current - 1,
+          leftRect,
+          getPosterRect(current - 1, 1),
+          .4,
+          1
+        );
+
+        if (current - 2 >= 0) {
+
+          const incoming =
+            getPosterRect(current - 2, 0);
+
+          animatePoster(
+            current - 2,
+            {
+              ...incoming,
+              left:
+                stageRect.left -
+                incoming.width -
+                30
+            },
+            incoming,
+            .4,
+            .4
+          );
+
+        }
+
+      }
+
+
+      /* ----------------------------------------------------
+         COMPLETE MOVEMENT
+      ---------------------------------------------------- */
+
       stage.style.visibility = "hidden";
 
       await Promise.all(
@@ -3029,43 +3680,74 @@ function renderPosters(images, container) {
         )
       );
 
-    } finally {
-
-      // Update the actual carousel once movement finishes.
       current = nextIndex;
+
       render();
 
-      // Restore the gallery and remove the moving images.
+    } catch (error) {
+
+      console.error(
+        "Poster carousel navigation:",
+        error
+      );
+
+    } finally {
+
       stage.style.visibility = "";
-      overlay.remove();
+
+      overlay?.remove();
 
       busy = false;
+
+      navigation?.sync();
 
     }
 
   }
 
-  previous.addEventListener(
-    "click",
-    () => navigate(-1)
-  );
 
-  next.addEventListener(
-    "click",
-    () => navigate(1)
-  );
+  /* --------------------------------------------------------
+     10. UNIVERSAL NAVIGATION
+  -------------------------------------------------------- */
 
-  registerGalleryKeyboard(
-    gallery,
-    direction => navigate(direction)
-  );
+  navigation = createGalleryNavigation({
+
+    element: gallery,
+
+    previous,
+    next,
+
+    getIndex: () => current,
+
+    getCount: () => images.length,
+
+    isBusy: () => busy,
+
+    onNavigate: direction => {
+
+      navigate(direction);
+
+    }
+
+  });
+
+
+  /* --------------------------------------------------------
+     11. INITIAL DISPLAY
+  -------------------------------------------------------- */
+
+  preparePoster(0);
+
+  if (images.length > 1) {
+    preparePoster(1);
+  }
 
   render();
 
 }
 
 /* ==========================================================
-   08. DEFAULT — STANDARD IMAGE GALLERY
+   12. DEFAULT — STANDARD IMAGE PRESENTATION
 ========================================================== */
 
 function renderDefault(images, container) {
@@ -3091,13 +3773,27 @@ function renderDefault(images, container) {
       makeImageButton(image, index)
     );
 
+    const label = makeElement(
+      "div",
+      "work-image-label"
+    );
+
+    label.append(
+      makeElement(
+        "span",
+        "",
+        image.label
+      ),
+      makeElement(
+        "span",
+        "",
+        `${pad(index + 1)} / ${pad(images.length)}`
+      )
+    );
+
     item.append(
       visual,
-      makeImageLabel(
-        image,
-        index,
-        images.length
-      )
+      label
     );
 
     grid.appendChild(item);
@@ -3109,14 +3805,18 @@ function renderDefault(images, container) {
 }
 
 
-
 /* ==========================================================
-   SHARED IMAGE INFORMATION
+   13. SHARED IMAGE INFORMATION
 ========================================================== */
 
 function renderImageInformation(images, container) {
 
   if (!images.length) return;
+
+
+  /* --------------------------------------------------------
+     01. STRUCTURE
+  -------------------------------------------------------- */
 
   const section = makeElement(
     "section",
@@ -3154,7 +3854,10 @@ function renderImageInformation(images, container) {
     "work-image-information-credits"
   );
 
-  creditRow.append(creditLabel, creditList);
+  creditRow.append(
+    creditLabel,
+    creditList
+  );
 
   section.append(
     number,
@@ -3163,9 +3866,19 @@ function renderImageInformation(images, container) {
     creditRow
   );
 
+
+  /* --------------------------------------------------------
+     02. UPDATE INFORMATION
+  -------------------------------------------------------- */
+
   function updateInformation(index) {
 
-    if (index < 0 || index >= images.length) return;
+    if (
+      index < 0 ||
+      index >= images.length
+    ) {
+      return;
+    }
 
     const image = images[index];
 
@@ -3173,27 +3886,41 @@ function renderImageInformation(images, container) {
       `${pad(index + 1)} / ${pad(images.length)} — IMAGE INFORMATION`;
 
     title.textContent =
-      image.label || `IMAGE ${pad(index + 1)}`;
+      image.label ||
+      `IMAGE ${pad(index + 1)}`;
 
     description.textContent =
       image.description || "";
 
-    description.hidden = !image.description;
+    description.hidden =
+      !image.description;
 
     creditList.replaceChildren();
+
+
+    /* ------------------------------------------------------
+       IMAGE CREDITS
+    ------------------------------------------------------ */
 
     (image.credits || []).forEach(credit => {
 
       if (typeof credit === "string") {
 
         creditList.appendChild(
-          makeElement("span", "", credit)
+          makeElement(
+            "span",
+            "",
+            credit
+          )
         );
 
         return;
+
       }
 
-      if (!credit || !credit.name) return;
+      if (!credit || !credit.name) {
+        return;
+      }
 
       const creditText = [
         credit.name,
@@ -3207,9 +3934,11 @@ function renderImageInformation(images, container) {
       );
 
       if (credit.url) {
+
         item.href = credit.url;
         item.target = "_blank";
         item.rel = "noopener noreferrer";
+
       }
 
       creditList.appendChild(item);
@@ -3221,32 +3950,48 @@ function renderImageInformation(images, container) {
 
   }
 
-  // Follow the existing gallery's active image.
+
+  /* --------------------------------------------------------
+     03. IMAGE SYNCHRONIZATION
+  -------------------------------------------------------- */
 
   window.addEventListener(
     "work:image-change",
     event => {
-      updateInformation(event.detail.index);
+
+      updateInformation(
+        event.detail.index
+      );
+
     }
   );
 
-  // Display the first image when the page loads.
+
+  /* --------------------------------------------------------
+     04. INITIALIZATION
+  -------------------------------------------------------- */
 
   updateInformation(0);
 
   container.appendChild(section);
 
+  return section;
+
 }
 
 
-
 /* ==========================================================
-   09. PROJECT RENDERER
+   14. PROJECT RENDERER
 ========================================================== */
 
 function renderWork() {
 
   const project = findProject();
+
+
+  /* --------------------------------------------------------
+     01. PROJECT NOT FOUND
+  -------------------------------------------------------- */
 
   if (!project) {
 
@@ -3271,24 +4016,33 @@ function renderWork() {
 
   }
 
+
+  /* --------------------------------------------------------
+     02. PROJECT STATE
+  -------------------------------------------------------- */
+
   workState.project = project;
 
   workState.images = normalizeImages(
     project.images
   );
 
+  const isPhotography =
+    String(project.layout).toLowerCase() === "photography" ||
+    String(project.category).toLowerCase() === "photography";
+
   document.body.classList.toggle(
     "work-is-photography",
-    project.layout === "photography" ||
-    project.category === "photography"
+    isPhotography
   );
 
   const category = getCategoryTitle(
     project.category
   );
 
+
   /* --------------------------------------------------------
-     PRESENTATION LABELS
+     03. PRESENTATION LABELS
   -------------------------------------------------------- */
 
   const presentationLabels = {
@@ -3303,6 +4057,11 @@ function renderWork() {
       "MOCKUPS & DESIGN DETAILS"
     ],
 
+    identity: [
+      "THE IDENTITY",
+      "BRAND SYSTEM & APPLICATIONS"
+    ],
+
     website: [
       "THE WEBSITE",
       "A DIGITAL EXPERIENCE"
@@ -3311,6 +4070,21 @@ function renderWork() {
     uiux: [
       "THE INTERFACE",
       "SCREENS & INTERACTIONS"
+    ],
+
+    photography: [
+      "THE PHOTOGRAPHY",
+      "A VISUAL COLLECTION"
+    ],
+
+    poster: [
+      "THE POSTERS",
+      "A VISUAL EXPLORATION"
+    ],
+
+    posters: [
+      "THE POSTERS",
+      "A VISUAL EXPLORATION"
     ],
 
     default: [
@@ -3346,15 +4120,23 @@ function renderWork() {
 
   }
 
+
   /* --------------------------------------------------------
-     PAGE CONTENT
+     04. PAGE CONTENT
   -------------------------------------------------------- */
 
   document.title =
     `${project.title} — Lou Reyes`;
 
-  $("pageDescription").content =
-    project.description || "";
+  const pageDescription =
+    $("pageDescription");
+
+  if (pageDescription) {
+
+    pageDescription.content =
+      project.description || "";
+
+  }
 
   $("workHeroImage").src =
     project.image;
@@ -3377,13 +4159,19 @@ function renderWork() {
   $("workBack").href =
     `collection.html?category=${encodeURIComponent(project.category)}`;
 
+
   /* --------------------------------------------------------
-     PROJECT-SPECIFIC PRESENTATION
+     05. PRESENTATION CONTAINER
   -------------------------------------------------------- */
 
   const container = $("workPresentation");
 
   container.replaceChildren();
+
+
+  /* --------------------------------------------------------
+     06. PROJECT PRESENTATION
+  -------------------------------------------------------- */
 
   if (!workState.images.length) {
 
@@ -3397,43 +4185,88 @@ function renderWork() {
 
   } else {
 
-    
     switch (project.layout) {
 
       case "editorial":
-        renderEditorial(workState.images, container);
+
+        renderEditorial(
+          workState.images,
+          container
+        );
+
         break;
+
 
       case "packaging":
-        renderPackaging(workState.images, container);
+
+        renderPackaging(
+          workState.images,
+          container
+        );
+
         break;
+
 
       case "identity":
-        renderIdentity(workState.images, container);
+
+        renderIdentity(
+          workState.images,
+          container
+        );
+
         break;
+
 
       case "website":
-        renderWebsite(workState.images, container, project);
+
+        renderWebsite(
+          workState.images,
+          container,
+          project
+        );
+
         break;
+
 
       case "uiux":
-        renderUIUX(workState.images, container);
+
+        renderUIUX(
+          workState.images,
+          container
+        );
+
         break;
 
+
       case "photography":
-        renderPhotography(workState.images, container);
+
+        renderPhotography(
+          workState.images,
+          container
+        );
+
         break;
+
 
       case "poster":
       case "posters":
-        renderPosters(workState.images, container);
+
+        renderPosters(
+          workState.images,
+          container
+        );
+
         break;
+
 
       default:
 
         if (project.category === "photography") {
 
-          renderPhotography(workState.images, container);
+          renderPhotography(
+            workState.images,
+            container
+          );
 
         } else if (
           ["poster", "posters"].includes(
@@ -3444,11 +4277,17 @@ function renderWork() {
           )
         ) {
 
-          renderPosters(workState.images, container);
+          renderPosters(
+            workState.images,
+            container
+          );
 
         } else {
 
-          renderDefault(workState.images, container);
+          renderDefault(
+            workState.images,
+            container
+          );
 
         }
 
@@ -3456,29 +4295,46 @@ function renderWork() {
 
     }
 
-
   }
 
-    const isPhotography =
-    String(project.layout).toLowerCase() === "photography" ||
-    String(project.category).toLowerCase() === "photography";
+
+  /* --------------------------------------------------------
+     07. IMAGE INFORMATION
+  -------------------------------------------------------- */
 
   if (!isPhotography) {
 
-    renderImageInformation(
+    const information = renderImageInformation(
       workState.images,
       container
     );
 
+    const live = project.livePreview;
+
+    if (
+      information &&
+      project.layout === "website" &&
+      live?.enabled &&
+      live.url
+    ) {
+
+      information.hidden = true;
+
+    }
+
   }
+
+
+  /* --------------------------------------------------------
+     08. NEXT PROJECT
+  -------------------------------------------------------- */
 
   renderNextProject(project);
 
 }
 
-
 /* ==========================================================
-   10. NEXT PROJECT
+   15. NEXT PROJECT
 ========================================================== */
 
 function renderNextProject(project) {
@@ -3490,6 +4346,11 @@ function renderNextProject(project) {
   const index = sameCategory.findIndex(
     item => item.id === project.id
   );
+
+
+  /* --------------------------------------------------------
+     SINGLE PROJECT
+  -------------------------------------------------------- */
 
   if (sameCategory.length <= 1) {
 
@@ -3506,10 +4367,14 @@ function renderNextProject(project) {
 
   }
 
-  const next =
-    sameCategory[
-      (index + 1) % sameCategory.length
-    ];
+
+  /* --------------------------------------------------------
+     NEXT PROJECT IN CATEGORY
+  -------------------------------------------------------- */
+
+  const next = sameCategory[
+    (index + 1) % sameCategory.length
+  ];
 
   $("workNextTitle").textContent =
     next.title;
@@ -3526,8 +4391,13 @@ function renderNextProject(project) {
 
 
 /* ==========================================================
-   11. FULLSCREEN IMAGE VIEWER
+   16. SHARED IMAGE LIGHTBOX
 ========================================================== */
+
+
+/* ----------------------------------------------------------
+   TRANSFORM
+---------------------------------------------------------- */
 
 function updateLightboxTransform() {
 
@@ -3544,6 +4414,11 @@ function updateLightboxTransform() {
 
 }
 
+
+/* ----------------------------------------------------------
+   RESET ZOOM
+---------------------------------------------------------- */
+
 function resetLightboxZoom() {
 
   workState.zoom = 1;
@@ -3553,6 +4428,11 @@ function resetLightboxZoom() {
   updateLightboxTransform();
 
 }
+
+
+/* ----------------------------------------------------------
+   DISPLAY IMAGE
+---------------------------------------------------------- */
 
 function showLightboxImage(index) {
 
@@ -3579,6 +4459,11 @@ function showLightboxImage(index) {
 
 }
 
+
+/* ----------------------------------------------------------
+   OPEN LIGHTBOX
+---------------------------------------------------------- */
+
 function openLightbox(index) {
 
   const lightbox = $("workLightbox");
@@ -3604,6 +4489,11 @@ function openLightbox(index) {
   $("lightboxClose").focus();
 
 }
+
+
+/* ----------------------------------------------------------
+   CLOSE LIGHTBOX
+---------------------------------------------------------- */
 
 function closeLightbox() {
 
@@ -3639,6 +4529,11 @@ function closeLightbox() {
 
 }
 
+
+/* ----------------------------------------------------------
+   CHANGE ZOOM
+---------------------------------------------------------- */
+
 function changeLightboxZoom(amount) {
 
   workState.zoom = Math.max(
@@ -3660,30 +4555,54 @@ function changeLightboxZoom(amount) {
 
 }
 
+
+/* ==========================================================
+   LIGHTBOX INITIALIZATION
+========================================================== */
+
 function initializeLightbox() {
+
+
+  /* --------------------------------------------------------
+     CLOSE
+  -------------------------------------------------------- */
 
   $("lightboxClose").addEventListener(
     "click",
     closeLightbox
   );
 
+
+  /* --------------------------------------------------------
+     IMAGE NAVIGATION
+  -------------------------------------------------------- */
+
   $("lightboxPrev").addEventListener(
     "click",
     () => {
+
       showLightboxImage(
         workState.lightboxIndex - 1
       );
+
     }
   );
 
   $("lightboxNext").addEventListener(
     "click",
     () => {
+
       showLightboxImage(
         workState.lightboxIndex + 1
       );
+
     }
   );
+
+
+  /* --------------------------------------------------------
+     ZOOM CONTROLS
+  -------------------------------------------------------- */
 
   $("lightboxZoomIn").addEventListener(
     "click",
@@ -3700,8 +4619,9 @@ function initializeLightbox() {
     resetLightboxZoom
   );
 
+
   /* --------------------------------------------------------
-     LIGHTBOX KEYBOARD
+     KEYBOARD
   -------------------------------------------------------- */
 
   document.addEventListener(
@@ -3717,6 +4637,7 @@ function initializeLightbox() {
       if (event.key === "Escape") {
 
         event.preventDefault();
+
         closeLightbox();
 
       }
@@ -3747,6 +4668,7 @@ function initializeLightbox() {
       ) {
 
         event.preventDefault();
+
         changeLightboxZoom(.25);
 
       }
@@ -3754,9 +4676,15 @@ function initializeLightbox() {
       if (event.key === "-") {
 
         event.preventDefault();
+
         changeLightboxZoom(-.25);
 
       }
+
+
+      /* ----------------------------------------------------
+         FOCUS CONTAINMENT
+      ---------------------------------------------------- */
 
       if (event.key === "Tab") {
 
@@ -3769,6 +4697,7 @@ function initializeLightbox() {
         if (!focusable.length) return;
 
         const first = focusable[0];
+
         const last = focusable[
           focusable.length - 1
         ];
@@ -3779,6 +4708,7 @@ function initializeLightbox() {
         ) {
 
           event.preventDefault();
+
           last.focus();
 
         } else if (
@@ -3787,6 +4717,7 @@ function initializeLightbox() {
         ) {
 
           event.preventDefault();
+
           first.focus();
 
         }
@@ -3796,8 +4727,9 @@ function initializeLightbox() {
     }
   );
 
+
   /* --------------------------------------------------------
-     LIGHTBOX DRAGGING
+     POINTER DRAGGING
   -------------------------------------------------------- */
 
   const stage = $("lightboxStage");
@@ -3808,7 +4740,9 @@ function initializeLightbox() {
     "pointerdown",
     event => {
 
-      if (workState.zoom <= 1) return;
+      if (workState.zoom <= 1) {
+        return;
+      }
 
       drag = {
         x: event.clientX,
@@ -3825,6 +4759,7 @@ function initializeLightbox() {
 
     }
   );
+
 
   stage.addEventListener(
     "pointermove",
@@ -3843,15 +4778,15 @@ function initializeLightbox() {
     }
   );
 
+
   function stopDrag() {
 
     drag = null;
 
-    stage.classList.remove(
-      "dragging"
-    );
+    stage.classList.remove("dragging");
 
   }
+
 
   stage.addEventListener(
     "pointerup",
@@ -3863,8 +4798,9 @@ function initializeLightbox() {
     stopDrag
   );
 
+
   /* --------------------------------------------------------
-     LIGHTBOX WHEEL ZOOM
+     WHEEL ZOOM
   -------------------------------------------------------- */
 
   stage.addEventListener(
@@ -3884,59 +4820,96 @@ function initializeLightbox() {
       );
 
     },
-    { passive: false }
+    {
+      passive: false
+    }
   );
 
 }
 
-
 /* ==========================================================
-   12. THEME
+   17. THEME
 ========================================================== */
 
 function initializeTheme() {
 
   const light = $("lightTheme");
   const dark = $("darkTheme");
+  const themeColor = $("themeColor");
 
-  function applyTheme(theme) {
+  function applyTheme(theme, save = false) {
 
     const next =
       theme === "light" ? "light" : "dark";
 
+    const isLight = next === "light";
+
     document.documentElement.dataset.theme =
       next;
 
-    localStorage.setItem(
-      "lou-reyes-theme",
-      next
-    );
+    if (light) {
 
-    light.classList.toggle(
-      "active",
-      next === "light"
-    );
+      light.classList.toggle(
+        "active",
+        isLight
+      );
 
-    dark.classList.toggle(
-      "active",
-      next === "dark"
-    );
+      light.setAttribute(
+        "aria-pressed",
+        String(isLight)
+      );
 
-    $("themeColor").content =
-      next === "light"
-        ? "#e9e7e1"
-        : "#111111";
+    }
+
+    if (dark) {
+
+      dark.classList.toggle(
+        "active",
+        !isLight
+      );
+
+      dark.setAttribute(
+        "aria-pressed",
+        String(!isLight)
+      );
+
+    }
+
+    if (themeColor) {
+
+      themeColor.content =
+        isLight ? "#e9e7e1" : "#111111";
+
+    }
+
+    if (save) {
+
+      try {
+
+        localStorage.setItem(
+          "lou-reyes-theme",
+          next
+        );
+
+      } catch (error) {
+
+        // Theme switching remains available.
+
+      }
+
+    }
 
   }
 
-  light.addEventListener(
+
+  light?.addEventListener(
     "click",
-    () => applyTheme("light")
+    () => applyTheme("light", true)
   );
 
-  dark.addEventListener(
+  dark?.addEventListener(
     "click",
-    () => applyTheme("dark")
+    () => applyTheme("dark", true)
   );
 
   applyTheme(
@@ -3947,7 +4920,7 @@ function initializeTheme() {
 
 
 /* ==========================================================
-   13. FULLSCREEN NAVIGATION
+   18. FULLSCREEN NAVIGATION
 ========================================================== */
 
 function initializeMenu() {
@@ -3955,6 +4928,13 @@ function initializeMenu() {
   const button = $("menuButton");
   const menu = $("menuScreen");
   const label = $("menuLabel");
+
+  if (!button || !menu) return;
+
+
+  /* --------------------------------------------------------
+     MENU STATE
+  -------------------------------------------------------- */
 
   function setMenu(open) {
 
@@ -4001,14 +4981,26 @@ function initializeMenu() {
 
   }
 
+
+  /* --------------------------------------------------------
+     TOGGLE
+  -------------------------------------------------------- */
+
   button.addEventListener(
     "click",
     () => {
+
       setMenu(
         !menu.classList.contains("open")
       );
+
     }
   );
+
+
+  /* --------------------------------------------------------
+     ESCAPE
+  -------------------------------------------------------- */
 
   document.addEventListener(
     "keydown",
@@ -4020,12 +5012,18 @@ function initializeMenu() {
       ) {
 
         setMenu(false);
+
         button.focus();
 
       }
 
     }
   );
+
+
+  /* --------------------------------------------------------
+     NAVIGATION LINKS
+  -------------------------------------------------------- */
 
   menu.querySelectorAll("a").forEach(link => {
 
@@ -4040,7 +5038,7 @@ function initializeMenu() {
 
 
 /* ==========================================================
-   14. INITIALIZATION
+   19. INITIALIZATION
 ========================================================== */
 
 function initializeWorkPage() {
@@ -4048,6 +5046,11 @@ function initializeWorkPage() {
   initializeTheme();
   initializeMenu();
   initializeLightbox();
+
+
+  /* --------------------------------------------------------
+     PORTFOLIO DATA
+  -------------------------------------------------------- */
 
   if (
     typeof PROJECTS === "undefined" ||
@@ -4069,9 +5072,44 @@ function initializeWorkPage() {
 
   }
 
-  renderWork();
+
+  /* --------------------------------------------------------
+     RENDER PROJECT
+  -------------------------------------------------------- */
+
+  try {
+
+    renderWork();
+
+  } catch (error) {
+
+    console.error(
+      "Work page initialization:",
+      error
+    );
+
+    document.documentElement.classList.add(
+      "work-error"
+    );
+
+    $("workTitle").textContent =
+      "PRESENTATION UNAVAILABLE.";
+
+    document.documentElement.classList.add(
+      "work-ready"
+    );
+
+    return;
+
+  }
+
+
+  /* --------------------------------------------------------
+     HERO IMAGE
+  -------------------------------------------------------- */
 
   const heroImage = $("workHeroImage");
+
 
   function revealWorkPage() {
 
@@ -4081,15 +5119,18 @@ function initializeWorkPage() {
 
   }
 
+
   if (
     !heroImage ||
     !heroImage.getAttribute("src")
   ) {
 
     revealWorkPage();
+
     return;
 
   }
+
 
   if (heroImage.complete) {
 
@@ -4113,11 +5154,17 @@ function initializeWorkPage() {
 
 }
 
+
+/* ==========================================================
+   START
+========================================================== */
+
 if (document.readyState === "loading") {
 
   document.addEventListener(
     "DOMContentLoaded",
-    initializeWorkPage
+    initializeWorkPage,
+    { once: true }
   );
 
 } else {
