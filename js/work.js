@@ -4729,73 +4729,308 @@ function initializeLightbox() {
 
 
   /* --------------------------------------------------------
-     POINTER DRAGGING
+   TOUCH NAVIGATION, PINCH ZOOM AND POINTER DRAGGING
   -------------------------------------------------------- */
 
   const stage = $("lightboxStage");
 
-  let drag = null;
+  const activePointers = new Map();
+
+  let gesture = null;
+
+  const SWIPE_DISTANCE = 55;
+  const SWIPE_LIMIT = 100;
+  const MAX_ZOOM = 4;
+
+  function pointerDistance(a, b) {
+    return Math.hypot(
+      b.x - a.x,
+      b.y - a.y
+    );
+  }
+
+  function clampZoom(value) {
+    return Math.max(
+      1,
+      Math.min(MAX_ZOOM, value)
+    );
+  }
+
+  function resetGesture() {
+    gesture = null;
+    stage.classList.remove("dragging");
+  }
 
   stage.addEventListener(
     "pointerdown",
     event => {
 
-      if (workState.zoom <= 1) {
+      if (!event.isPrimary && event.pointerType === "mouse") {
         return;
       }
 
-      drag = {
+      activePointers.set(event.pointerId, {
         x: event.clientX,
-        y: event.clientY,
-        panX: workState.panX,
-        panY: workState.panY
-      };
+        y: event.clientY
+      });
 
-      stage.setPointerCapture(
-        event.pointerId
-      );
+      stage.setPointerCapture(event.pointerId);
 
-      stage.classList.add("dragging");
+      const pointers = [...activePointers.values()];
+
+      if (pointers.length === 1) {
+
+        gesture = {
+          type: "single",
+
+          startX: event.clientX,
+          startY: event.clientY,
+
+          panX: workState.panX,
+          panY: workState.panY,
+
+          zoom: workState.zoom,
+
+          pointerType: event.pointerType,
+
+          moved: false
+        };
+
+        if (workState.zoom > 1) {
+          stage.classList.add("dragging");
+        }
+
+      }
+
+      if (pointers.length === 2) {
+
+        gesture = {
+          type: "pinch",
+
+          distance: pointerDistance(
+            pointers[0],
+            pointers[1]
+          ),
+
+          zoom: workState.zoom,
+
+          panX: workState.panX,
+          panY: workState.panY
+        };
+
+        stage.classList.add("dragging");
+
+      }
 
     }
   );
-
 
   stage.addEventListener(
     "pointermove",
     event => {
 
-      if (!drag) return;
+      if (!activePointers.has(event.pointerId)) {
+        return;
+      }
 
-      workState.panX =
-        drag.panX + event.clientX - drag.x;
+      activePointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY
+      });
 
-      workState.panY =
-        drag.panY + event.clientY - drag.y;
+      if (!gesture) return;
 
-      updateLightboxTransform();
+      const pointers = [...activePointers.values()];
+
+      /* TWO-FINGER PINCH */
+
+      if (
+        gesture.type === "pinch" &&
+        pointers.length === 2
+      ) {
+
+        const distance = pointerDistance(
+          pointers[0],
+          pointers[1]
+        );
+
+        const scale = distance / Math.max(
+          gesture.distance,
+          1
+        );
+
+        workState.zoom = clampZoom(
+          gesture.zoom * scale
+        );
+
+        const midpointX =
+          (pointers[0].x + pointers[1].x) / 2;
+
+        const midpointY =
+          (pointers[0].y + pointers[1].y) / 2;
+
+        const rect = stage.getBoundingClientRect();
+
+        const offsetX =
+          midpointX - (rect.left + rect.width / 2);
+
+        const offsetY =
+          midpointY - (rect.top + rect.height / 2);
+
+        const zoomRatio =
+          workState.zoom / Math.max(gesture.zoom, 1);
+
+        workState.panX =
+          gesture.panX + offsetX * (1 - zoomRatio);
+
+        workState.panY =
+          gesture.panY + offsetY * (1 - zoomRatio);
+
+        if (workState.zoom === 1) {
+          workState.panX = 0;
+          workState.panY = 0;
+        }
+
+        updateLightboxTransform();
+
+        return;
+      }
+
+      /* SINGLE-POINTER MOVEMENT */
+
+      if (
+        gesture.type === "single" &&
+        pointers.length === 1
+      ) {
+
+        const dx =
+          event.clientX - gesture.startX;
+
+        const dy =
+          event.clientY - gesture.startY;
+
+        if (Math.hypot(dx, dy) > 8) {
+          gesture.moved = true;
+        }
+
+        /* PAN WHEN ZOOMED */
+
+        if (workState.zoom > 1) {
+
+          workState.panX = gesture.panX + dx;
+          workState.panY = gesture.panY + dy;
+
+          updateLightboxTransform();
+
+        }
+
+      }
 
     }
   );
 
+  function finishPointer(event, cancelled = false) {
 
-  function stopDrag() {
+    if (!activePointers.has(event.pointerId)) {
+      return;
+    }
 
-    drag = null;
+    const wasSingleGesture =
+      gesture &&
+      gesture.type === "single" &&
+      activePointers.size === 1;
 
-    stage.classList.remove("dragging");
+    if (
+      !cancelled &&
+      wasSingleGesture &&
+      gesture.pointerType === "touch" &&
+      workState.zoom === 1
+    ) {
+
+      const dx =
+        event.clientX - gesture.startX;
+
+      const dy =
+        event.clientY - gesture.startY;
+
+      const horizontalSwipe =
+        Math.abs(dx) >= SWIPE_DISTANCE &&
+        Math.abs(dx) > Math.abs(dy) * 1.4;
+
+      const verticalWithinLimit =
+        Math.abs(dy) < SWIPE_LIMIT;
+
+      if (
+        horizontalSwipe &&
+        verticalWithinLimit
+      ) {
+
+        if (dx < 0) {
+
+          showLightboxImage(
+            workState.lightboxIndex + 1
+          );
+
+        } else {
+
+          showLightboxImage(
+            workState.lightboxIndex - 1
+          );
+
+        }
+
+      }
+
+    }
+
+    activePointers.delete(event.pointerId);
+
+    if (
+      stage.hasPointerCapture(event.pointerId)
+    ) {
+      stage.releasePointerCapture(event.pointerId);
+    }
+
+    if (activePointers.size === 0) {
+
+      resetGesture();
+
+    } else if (gesture?.type === "pinch") {
+
+      /*
+        After a pinch, require a new gesture
+        before allowing swipe navigation.
+      */
+
+      gesture = null;
+
+      stage.classList.remove("dragging");
+
+    }
 
   }
 
-
   stage.addEventListener(
     "pointerup",
-    stopDrag
+    event => finishPointer(event)
   );
 
   stage.addEventListener(
     "pointercancel",
-    stopDrag
+    event => finishPointer(event, true)
+  );
+
+  stage.addEventListener(
+    "lostpointercapture",
+    event => {
+
+      activePointers.delete(event.pointerId);
+
+      if (activePointers.size === 0) {
+        resetGesture();
+      }
+
+    }
   );
 
 
