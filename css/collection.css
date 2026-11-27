@@ -444,9 +444,22 @@
   }
 
   .collection-topline {
-    justify-content: flex-end;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    margin-top: 65px;
+
     font-size: 8px;
     line-height: 1.6;
+    letter-spacing: .1em;
+  }
+
+  .collection-topline #collectionEyebrow {
+    display: block;
+    max-width: 100%;
+
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
   .collection-hero-bottom {
