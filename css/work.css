@@ -2641,7 +2641,7 @@ body.work-lightbox-open {
 
 
   /* ========================================================
-     LIGHTBOX
+    LIGHTBOX
   ======================================================== */
 
   .work-lightbox-toolbar,
@@ -2650,18 +2650,26 @@ body.work-lightbox-open {
   }
 
   .work-lightbox-footer {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
+    gap: 12px;
+  }
 
-    gap: 15px;
+  .work-lightbox-footer #lightboxCounter {
+    flex-shrink: 0;
   }
 
   .work-lightbox-zoom {
-    order: 3;
+    display: none;
+  }
 
-    width: 100%;
+  .work-lightbox-arrows {
+    margin-left: auto;
+    gap: 12px;
+  }
 
-    justify-content: center;
+  .work-lightbox-stage {
+    touch-action: none;
   }
 
   .work-lightbox-stage img {
@@ -2739,9 +2747,6 @@ body.work-lightbox-open {
 
   /* ========================================================
      UNIVERSAL GALLERY CONTROLS
-
-     Arrow dimensions remain identical across
-     every category at this breakpoint.
   ======================================================== */
 
   .artbook-controls,
@@ -2852,9 +2857,8 @@ body.work-lightbox-open {
     font-size: 35px;
   }
 
-
   /* ========================================================
-     LIGHTBOX
+    LIGHTBOX
   ======================================================== */
 
   .work-lightbox-toolbar,
@@ -2862,25 +2866,60 @@ body.work-lightbox-open {
     gap: 10px;
   }
 
-  .work-lightbox-zoom,
   .work-lightbox-arrows {
     gap: 8px;
   }
 
-  .work-lightbox-zoom button,
   .work-lightbox-arrows button {
-    min-width: 30px;
-    min-height: 30px;
+    min-width: 36px;
+    min-height: 36px;
   }
 
 }
 
+  /* ==========================================================
+    MOBILE LANDSCAPE LIGHTBOX
+  ========================================================== */
+
+  @media (orientation: landscape)
+        and (max-height: 600px)
+        and (pointer: coarse) {
+
+    .work-lightbox-toolbar {
+      padding: 10px 3%;
+      gap: 16px;
+    }
+
+    .work-lightbox-toolbar #lightboxTitle {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .work-lightbox-toolbar #lightboxClose {
+      flex-shrink: 0;
+    }
+
+    .work-lightbox-footer {
+      display: none;
+    }
+
+    .work-lightbox-stage {
+      flex: 1;
+      min-height: 0;
+      touch-action: none;
+    }
+
+    .work-lightbox-stage img {
+      padding: 8px;
+    }
+
+  }
+
 
 /* ==========================================================
    18. ACCESSIBILITY — POINTER HOVER
-
-   Hover feedback applies only to devices
-   with a precise hover-capable pointer.
 ========================================================== */
 
 @media (hover: hover) and (pointer: fine) {
